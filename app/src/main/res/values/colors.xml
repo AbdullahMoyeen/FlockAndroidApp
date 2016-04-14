@@ -3,5 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#263238</color>
-    <color name="colorListCellContent">#FF8B8B8B</color>
+    <color name="colorListCellText">#000000</color>
+    <color name="colorListCellIcon">#FF8B8B8B</color>
 </resources>

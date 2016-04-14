@@ -24,14 +24,14 @@
             android:id="@+id/textViewEventName"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:textColor="@color/colorListCellContent"
+            android:textColor="@color/colorListCellText"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textViewEventDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorListCellContent"
+            android:textColor="@color/colorListCellText"
             android:textSize="12sp" />
 
     </LinearLayout>

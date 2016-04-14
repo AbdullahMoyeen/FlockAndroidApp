@@ -57,13 +57,13 @@ public class HomeEventsCellAdapter extends BaseAdapter {
 
         UserEventModel userEvent = userEvents.get(position);
         if (userEvent.event.getEventCategory().equals("Sports"))
-            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_soccer_ball_o).colorRes(R.color.colorListCellContent));
+            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_soccer_ball_o).colorRes(R.color.colorListCellIcon));
         else if (userEvent.event.getEventCategory().equals("Music"))
-            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_music).colorRes(R.color.colorListCellContent));
+            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_music).colorRes(R.color.colorListCellIcon));
         else if (userEvent.event.getEventCategory().equals("Movie"))
-            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_film).colorRes(R.color.colorListCellContent));
+            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_film).colorRes(R.color.colorListCellIcon));
         else if (userEvent.event.getEventCategory().equals("Other"))
-            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorListCellContent));
+            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorListCellIcon));
         textViewEventName.setText(userEvent.event.getEventName());
         textViewEventDesc.setText(userEvent.event.getEventDescription());
 
