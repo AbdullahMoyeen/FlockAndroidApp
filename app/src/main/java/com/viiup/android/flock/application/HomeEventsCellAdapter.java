@@ -11,8 +11,11 @@ import android.widget.TextView;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserEventModel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -52,19 +55,19 @@ public class HomeEventsCellAdapter extends BaseAdapter {
         }
 
         ImageView imageViewEvent = (ImageView) convertView.findViewById(R.id.imageViewEvent);
+        TextView textViewGroupName = (TextView) convertView.findViewById(R.id.textViewGroupName);
         TextView textViewEventName = (TextView) convertView.findViewById(R.id.textViewEventName);
+        TextView textViewEventStartDateTime = (TextView) convertView.findViewById(R.id.textViewEventStartDateTime);
         TextView textViewEventDesc = (TextView) convertView.findViewById(R.id.textViewEventDesc);
 
         UserEventModel userEvent = userEvents.get(position);
-        if (userEvent.event.getEventCategory().equals("Sports"))
-            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_soccer_ball_o).colorRes(R.color.colorListCellIcon));
-        else if (userEvent.event.getEventCategory().equals("Music"))
-            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_music).colorRes(R.color.colorListCellIcon));
-        else if (userEvent.event.getEventCategory().equals("Movie"))
-            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_film).colorRes(R.color.colorListCellIcon));
-        else if (userEvent.event.getEventCategory().equals("Other"))
-            imageViewEvent.setImageDrawable(new IconDrawable(this.context, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorListCellIcon));
+
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+
+        imageViewEvent.setImageDrawable(CommonHelper.getIconDrawableByEventCategory(this.context, userEvent.event.getEventCategory()));
+        textViewGroupName.setText(userEvent.event.getGroupName());
         textViewEventName.setText(userEvent.event.getEventName());
+        textViewEventStartDateTime.setText(dateFormat.format(userEvent.event.getEventStartDatetime()));
         textViewEventDesc.setText(userEvent.event.getEventDescription());
 
         return convertView;

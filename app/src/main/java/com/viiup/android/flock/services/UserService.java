@@ -7,6 +7,7 @@ import com.viiup.android.flock.models.UserEventModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 /**
  * Created by AbdullahMoyeen on 4/13/16.
@@ -31,7 +32,7 @@ public class UserService {
         for (int i = 0; i < 10; i++) {
             UserEventModel userEvent = new UserEventModel();
             userEvent.event = new EventModel();
-            userEvent.event.setEventDescription("Enjoy shopping in Historic Downtown Grapevine as well as a variety of Artisan and Marketplace vendors throughout the festival. Take your kids to the museum exhibits, or to KidCave for exciting activities and shows, and don't forget about the Carnival & Midway! Enjoy non-stop live entertainment on multiple stages throughout the festival, as well as a variety of craft brew experiences and wine pavilions.");
+
             if (i == 2 || i == 5 || i == 7)
                 userEvent.event.setEventCategory("Sports");
             else if (i == 1 || i == 4 || i == 8)
@@ -41,12 +42,15 @@ public class UserService {
             else if (i == 3 || i == 9)
                 userEvent.event.setEventCategory("Other");
             userEvent.event.setEventName(userEvent.event.getEventCategory() + " Event");
+            userEvent.event.setGroupName(userEvent.event.getEventCategory() + " Group");
+            userEvent.event.setEventStartDatetime(new Date());
+            userEvent.event.setEventDescription("Enjoy shopping in Historic Downtown Grapevine as well as a variety of Artisan and Marketplace vendors throughout the festival. Take your kids to the museum exhibits, or to KidCave for exciting activities and shows, and don't forget about the Carnival & Midway! Enjoy non-stop live entertainment on multiple stages throughout the festival, as well as a variety of craft brew experiences and wine pavilions.");
+
             userEvents.add(userEvent);
         }
 
         Gson gson = new Gson();
-        String userEventsJson = gson.toJson(userEvents);
 
-        return userEventsJson;
+        return gson.toJson(userEvents);
     }
 }

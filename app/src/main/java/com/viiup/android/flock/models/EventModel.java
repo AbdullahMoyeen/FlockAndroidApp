@@ -6,14 +6,17 @@ import java.util.Date;
  * Created by AbdullahMoyeen on 4/13/16.
  */
 public class EventModel {
+
     private int eventId;
     private String createUser;
     private Date createDate;
     private String updateUser;
     private Date updateDate;
     private int groupId;
+    private String groupName;
     private String eventName;
     private String eventDescription;
+    private String eventCategory;
     private Date eventStartDatetime;
     private Date eventEndDatetime;
     private String eventAddressLine1;
@@ -25,7 +28,6 @@ public class EventModel {
     private float eventLatitude;
     private float eventLongitude;
     private boolean privateEvent;
-    private String eventCategory;
 
     public int getEventId() {
         return eventId;
@@ -75,6 +77,14 @@ public class EventModel {
         this.groupId = groupId;
     }
 
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
     public String getEventName() {
         return eventName;
     }
@@ -89,6 +99,14 @@ public class EventModel {
 
     public void setEventDescription(String eventDescription) {
         this.eventDescription = eventDescription;
+    }
+
+    public String getEventCategory() {
+        return eventCategory;
+    }
+
+    public void setEventCategory(String eventCategory) {
+        this.eventCategory = eventCategory;
     }
 
     public Date getEventStartDatetime() {
@@ -177,13 +195,5 @@ public class EventModel {
 
     public void setPrivateEvent(boolean privateEvent) {
         this.privateEvent = privateEvent;
-    }
-
-    public String getEventCategory() {
-        return eventCategory;
-    }
-
-    public void setEventCategory(String eventCategory) {
-        this.eventCategory = eventCategory;
     }
 }

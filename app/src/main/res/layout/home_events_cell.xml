@@ -20,17 +20,16 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="5dp"
             android:layout_gravity="center_horizontal"
-            android:contentDescription="blah" />
+            android:contentDescription="@string/image_description" />
 
         <TextView
             android:id="@+id/textViewGroupName"
-            android:layout_width="70dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/colorListCellText"
+            android:textColor="@color/colorListCellIcon"
             android:textSize="12sp"
-            android:textAlignment="center"
-            android:text="Android Group"/>
+            android:textAlignment="center"/>
 
     </LinearLayout>
 
@@ -48,12 +47,11 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/textViewEventDateTime"
+            android:id="@+id/textViewEventStartDateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorListCellText"
-            android:textSize="14sp"
-            android:text="04/14/2016 7:00 pm"/>
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/textViewEventDesc"
