@@ -1,0 +1,50 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    tools:context="com.viiup.android.flock.application.HomeEventsCellAdapter">
+
+    <ImageView
+        android:id="@+id/imageViewEvent"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="blah" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewEventName"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:textColor="@color/colorListCellContent"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textViewEventDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorListCellContent"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/switchRsvp"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:layout_marginLeft="10dp"
+        android:text=""
+        android:textOn="Yes"
+        android:textOff="No"
+        android:focusable="false"/>
+
+</LinearLayout>
