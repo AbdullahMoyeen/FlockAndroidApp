@@ -1,5 +1,7 @@
 package com.viiup.android.flock.services;
 
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.viiup.android.flock.models.EventModel;
@@ -23,6 +25,10 @@ public class UserService {
         return gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>(){}.getType());
     }
 
+    public void setUserRsvp(int userId, int eventId, boolean isAttending){
+
+    }
+
     // Remove this method once getUserEventsByUserId() is ready
     private String getDummyUserEvents() {
 
@@ -42,10 +48,12 @@ public class UserService {
             else if (i == 3 || i == 9)
                 userEvent.event.setEventCategory("Other");
 
+            userEvent.event.setEventId(i);
             userEvent.event.setEventName(userEvent.event.getEventCategory() + " Event");
             userEvent.event.setGroupName(userEvent.event.getEventCategory() + " Group");
             userEvent.event.setEventStartDatetime(new Date());
             userEvent.event.setEventDescription("Enjoy shopping in Historic Downtown Grapevine as well as a variety of Artisan and Marketplace vendors throughout the festival. Take your kids to the museum exhibits, or to KidCave for exciting activities and shows, and don't forget about the Carnival & Midway! Enjoy non-stop live entertainment on multiple stages throughout the festival, as well as a variety of craft brew experiences and wine pavilions.");
+            userEvent.setIsAttending(random.nextBoolean());
             userEvent.event.setAttendeeCount(random.nextInt(200));
             userEvent.event.setEventAddressLine1("800 W Campbell Rd");
             userEvent.event.setEventCity("Richardson");
