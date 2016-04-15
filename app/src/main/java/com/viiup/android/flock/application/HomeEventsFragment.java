@@ -62,12 +62,12 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "Item: " + (position + 1), Toast.LENGTH_SHORT).show();
 
-//        Gson gson = new Gson();
-//        UserEventModel userEvent = userEvents.get(position);
-//        String userEventJson = gson.toJson(userEvent);
-//        Intent eventDetailsIntent = new Intent(this.getContext(), EventDetailsActivity.class);
-//
-//        eventDetailsIntent.putExtra("userEventJson", userEventJson);
-//        startActivity(eventDetailsIntent);
+        Gson gson = new Gson();
+        UserEventModel userEvent = userEvents.get(position);
+        String userEventJson = gson.toJson(userEvent);
+        Intent eventDetailsIntent = new Intent(this.getContext(), EventDetailsActivity.class);
+
+        eventDetailsIntent.putExtra("userEventJson", userEventJson);
+        startActivity(eventDetailsIntent);
     }
 }

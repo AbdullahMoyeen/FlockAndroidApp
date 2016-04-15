@@ -13,8 +13,18 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".EventDetailsActivity"
+            android:label="@string/title_activity_event_details"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.viiup.android.flock.application.HomeActivity" />
         </activity>
     </application>
 
