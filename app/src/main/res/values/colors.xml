@@ -7,5 +7,6 @@
     <color name="colorSecondaryBar">#0f9d58</color>
     <color name="colorContentBackground">#ecf7f4</color>
     <color name="colorContentIcon">#FF8B8B8B</color>
+    <color name="colorBarText">#FFFFFF</color>
     <color name="colorContentText">#000000</color>
 </resources>

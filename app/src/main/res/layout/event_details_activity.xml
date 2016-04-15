@@ -1,27 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="com.viiup.android.flock.application.EventDetailsActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay"
-        android:background="@android:color/background_dark">
+        android:fitsSystemWindows="true">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorActionBar"
-            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay">
-        </android.support.v7.widget.Toolbar>
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_dark"
+            android:paddingTop="@dimen/appbar_padding_top"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorActionBar"
+                android:textAlignment="center"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-</android.support.design.widget.CoordinatorLayout>
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/secondaryBar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/colorSecondaryBar"
+                android:gravity="center"
+                android:textColor="@color/colorBarText"
+                android:textSize="14sp" />
+
+        </android.support.design.widget.AppBarLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <ScrollView
+        android:id="@+id/eventDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorContentBackground"
+        android:layout_below="@+id/appBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorContentBackground"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/textViewAttendeeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorContentText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewEventStartDateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewAttendeeCount"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorContentText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewEventDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewEventStartDateTime"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorContentText"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/imageViewGroup"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/textViewEventDescription"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="30dp"
+                android:contentDescription="@string/image_description" />
+
+            <TextView
+                android:id="@+id/textViewGroupName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageViewGroup"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorContentIcon"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewEventAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewGroupName"
+                android:layout_marginTop="30dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorContentText"
+                android:textSize="16sp" />
+
+            <Switch
+                android:id="@+id/switchRsvp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewEventAddress"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="30dp"
+                android:focusable="false"
+                android:text=""
+                android:textOff="No"
+                android:textOn="Yes" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

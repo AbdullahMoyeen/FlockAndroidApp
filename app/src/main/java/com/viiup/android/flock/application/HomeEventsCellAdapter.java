@@ -58,7 +58,7 @@ public class HomeEventsCellAdapter extends BaseAdapter {
         TextView textViewGroupName = (TextView) convertView.findViewById(R.id.textViewGroupName);
         TextView textViewEventName = (TextView) convertView.findViewById(R.id.textViewEventName);
         TextView textViewEventStartDateTime = (TextView) convertView.findViewById(R.id.textViewEventStartDateTime);
-        TextView textViewEventDesc = (TextView) convertView.findViewById(R.id.textViewEventDesc);
+        TextView textViewEventDescription = (TextView) convertView.findViewById(R.id.textViewEventDescription);
 
         UserEventModel userEvent = userEvents.get(position);
 
@@ -68,7 +68,7 @@ public class HomeEventsCellAdapter extends BaseAdapter {
         textViewGroupName.setText(userEvent.event.getGroupName());
         textViewEventName.setText(userEvent.event.getEventName());
         textViewEventStartDateTime.setText(dateFormat.format(userEvent.event.getEventStartDatetime()));
-        textViewEventDesc.setText(userEvent.event.getEventDescription());
+        textViewEventDescription.setText(userEvent.event.getEventDescription());
 
         return convertView;
     }

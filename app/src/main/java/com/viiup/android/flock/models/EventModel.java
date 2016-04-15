@@ -28,6 +28,7 @@ public class EventModel {
     private float eventLatitude;
     private float eventLongitude;
     private boolean privateEvent;
+    private int attendeeCount;
 
     public int getEventId() {
         return eventId;
@@ -195,5 +196,13 @@ public class EventModel {
 
     public void setPrivateEvent(boolean privateEvent) {
         this.privateEvent = privateEvent;
+    }
+
+    public int getAttendeeCount() {
+        return attendeeCount;
+    }
+
+    public void setAttendeeCount(int attendeeCount) {
+        this.attendeeCount = attendeeCount;
     }
 }

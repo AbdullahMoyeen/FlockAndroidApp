@@ -60,7 +60,6 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity(), "Item: " + (position + 1), Toast.LENGTH_SHORT).show();
 
         Gson gson = new Gson();
         UserEventModel userEvent = userEvents.get(position);

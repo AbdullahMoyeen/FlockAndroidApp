@@ -54,7 +54,7 @@
             android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/textViewEventDesc"
+            android:id="@+id/textViewEventDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorContentText"
@@ -66,8 +66,8 @@
         android:id="@+id/switchRsvp"
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:layout_marginLeft="10dp"
+        android:layout_gravity="end"
+        android:layout_marginStart="10dp"
         android:focusable="false"
         android:text=""
         android:textOff="No"
