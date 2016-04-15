@@ -1,6 +1,7 @@
 package com.viiup.android.flock.application;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
@@ -31,14 +32,12 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
     }
 
     public static HomeEventsFragment newInstance() {
-        HomeEventsFragment fragment = new HomeEventsFragment();
-        return fragment;
+        return new HomeEventsFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_events_fragment, container, false);
-        return view;
+        return inflater.inflate(R.layout.home_events_fragment, container, false);
     }
 
     @Override
@@ -62,5 +61,13 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Toast.makeText(getActivity(), "Item: " + (position + 1), Toast.LENGTH_SHORT).show();
+
+//        Gson gson = new Gson();
+//        UserEventModel userEvent = userEvents.get(position);
+//        String userEventJson = gson.toJson(userEvent);
+//        Intent eventDetailsIntent = new Intent(this.getContext(), EventDetailsActivity.class);
+//
+//        eventDetailsIntent.putExtra("userEventJson", userEventJson);
+//        startActivity(eventDetailsIntent);
     }
 }

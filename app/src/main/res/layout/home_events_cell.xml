@@ -27,7 +27,7 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/colorListCellIcon"
+            android:textColor="@color/colorContentIcon"
             android:textSize="12sp"
             android:textAlignment="center"/>
 
@@ -43,21 +43,21 @@
             android:id="@+id/textViewEventName"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:textColor="@color/colorListCellText"
+            android:textColor="@color/colorContentText"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textViewEventStartDateTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorListCellText"
+            android:textColor="@color/colorContentText"
             android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/textViewEventDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorListCellText"
+            android:textColor="@color/colorContentText"
             android:textSize="12sp" />
 
     </LinearLayout>

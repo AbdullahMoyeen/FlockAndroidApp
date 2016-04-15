@@ -15,14 +15,21 @@ public class CommonHelper {
 
         IconDrawable iconDrawable;
 
-        if (eventCategory.equals("Sports"))
-            iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_soccer_ball_o).colorRes(R.color.colorListCellIcon);
-        else if (eventCategory.equals("Music"))
-            iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_music).colorRes(R.color.colorListCellIcon);
-        else if (eventCategory.equals("Movie"))
-            iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_film).colorRes(R.color.colorListCellIcon);
-        else
-            iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorListCellIcon);
+        switch (eventCategory) {
+
+            case "Sports":
+                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_soccer_ball_o).colorRes(R.color.colorContentIcon);
+                break;
+            case "Music":
+                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_music).colorRes(R.color.colorContentIcon);
+                break;
+            case "Movie":
+                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_film).colorRes(R.color.colorContentIcon);
+                break;
+            default:
+                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorContentIcon);
+                break;
+        }
 
         return iconDrawable;
     }
