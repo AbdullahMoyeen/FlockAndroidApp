@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +36,12 @@ public class HomeEventsCellAdapter extends BaseAdapter {
     }
 
     Context context;
+    ListView listView;
     List<UserEventModel> userEvents;
 
-    HomeEventsCellAdapter(Context context, List<UserEventModel> userEvents) {
+    HomeEventsCellAdapter(Context context, ListView listView, List<UserEventModel> userEvents) {
         this.context = context;
+        this.listView = listView;
         this.userEvents = userEvents;
     }
 
@@ -54,15 +57,17 @@ public class HomeEventsCellAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return userEvents.indexOf(getItem(position));
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         CellItemsViewHolder cellItemsViewHolder;
+        final UserEventModel userEvent = userEvents.get(position);
 
         if (convertView == null) {
+
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.home_events_cell, null);
 
@@ -74,14 +79,10 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewEventDescription = (TextView) convertView.findViewById(R.id.textViewEventDescription);
             cellItemsViewHolder.switchRsvp = (Switch) convertView.findViewById(R.id.switchRsvp);
 
-//            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
-
             convertView.setTag(cellItemsViewHolder);
         } else {
             cellItemsViewHolder = (CellItemsViewHolder) convertView.getTag();
         }
-
-        final UserEventModel userEvent = userEvents.get(position);
 
         if (userEvent != null) {
 
@@ -92,7 +93,9 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewEventName.setText(userEvent.event.getEventName());
             cellItemsViewHolder.textViewEventStartDateTime.setText(dateFormat.format(userEvent.event.getEventStartDatetime()));
             cellItemsViewHolder.textViewEventDescription.setText(userEvent.event.getEventDescription());
+            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchRsvp.setChecked(userEvent.isAttending());
+            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
         }
 
         return convertView;
@@ -102,11 +105,14 @@ public class HomeEventsCellAdapter extends BaseAdapter {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
-            Toast.makeText(context, "Clicked: eventId switch " + isOn, Toast.LENGTH_SHORT).show();
+            final int position = listView.getPositionForView(buttonView);
 
-//            Toast.makeText(context, "Clicked: eventId " + userEvent.event.getEventId() + " " + isOn, Toast.LENGTH_SHORT).show();
-//            UserService userService = new UserService();
-//            userService.setUserRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn);
+//            Toast.makeText(context, "changed event " + userEvents.get(position).event.getEventId() + " to " + isOn, Toast.LENGTH_SHORT).show();
+
+            UserService userService = new UserService();
+            userService.setUserRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn);
+
+            userEvents.get(position).setIsAttending(isOn);
         }
     };
 }

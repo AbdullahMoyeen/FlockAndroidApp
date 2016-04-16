@@ -35,20 +35,20 @@ public class UserService {
         List<UserEventModel> userEvents = new ArrayList<>();
         Random random = new Random();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             UserEventModel userEvent = new UserEventModel();
             userEvent.event = new EventModel();
 
-            if (i == 2 || i == 5 || i == 7)
+            if ((i%10) == 2 || (i%10) == 5 || (i%10) == 7)
                 userEvent.event.setEventCategory("Sports");
-            else if (i == 1 || i == 4 || i == 8)
+            else if ((i%10) == 1 || (i%10) == 4 || (i%10) == 8)
                 userEvent.event.setEventCategory("Music");
-            else if (i == 0 || i == 6)
+            else if ((i%10) == 0 || (i%10) == 6)
                 userEvent.event.setEventCategory("Movie");
-            else if (i == 3 || i == 9)
+            else if ((i%10) == 3 || (i%10) == 9)
                 userEvent.event.setEventCategory("Other");
 
-            userEvent.event.setEventId(i);
+            userEvent.event.setEventId(i+1);
             userEvent.event.setEventName(userEvent.event.getEventCategory() + " Event");
             userEvent.event.setGroupName(userEvent.event.getEventCategory() + " Group");
             userEvent.event.setEventStartDatetime(new Date());

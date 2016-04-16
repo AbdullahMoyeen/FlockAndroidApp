@@ -1,5 +1,6 @@
 package com.viiup.android.flock.application;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -42,6 +44,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
 
         SharedPreferences mPref = this.getActivity().getPreferences(Context.MODE_PRIVATE);
@@ -53,7 +56,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         UserService userService = new UserService();
         userEvents = userService.getUserEventsByUserId(loggedInUser.getUserId());
 
-        adapter = new HomeEventsCellAdapter(getActivity(), userEvents);
+        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
@@ -67,6 +70,16 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         Intent eventDetailsIntent = new Intent(this.getContext(), EventDetailsActivity.class);
 
         eventDetailsIntent.putExtra("userEventJson", userEventJson);
-        startActivity(eventDetailsIntent);
+        startActivityForResult(eventDetailsIntent, position);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Activity.RESULT_OK) {
+            boolean isAttending = data.getBooleanExtra("isAttending", userEvents.get(requestCode).isAttending());
+            userEvents.get(requestCode).setIsAttending(isAttending);
+            this.getListView().setAdapter(this.getListView().getAdapter());
+        }
     }
 }
