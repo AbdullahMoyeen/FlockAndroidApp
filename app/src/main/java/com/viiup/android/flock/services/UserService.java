@@ -1,83 +1,173 @@
 package com.viiup.android.flock.services;
 
-import android.widget.Toast;
+import android.os.AsyncTask;
+import android.util.Base64;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.viiup.android.flock.models.EventModel;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserGroupModel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
-import java.util.Random;
+import java.util.List;
 
 /**
  * Created by AbdullahMoyeen on 4/13/16.
  */
 public class UserService {
 
-    public List<UserEventModel> getUserEventsByUserId(int userId){
-
-        String userEventsJson = getDummyUserEvents();
-        Gson gson = new Gson();
-
-        return gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>(){}.getType());
+    public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
+        // Call Events rest API
+        try {
+            AsyncEventsRESTAPICaller asyncEventsRESTAPICaller = new AsyncEventsRESTAPICaller();
+            asyncEventsRESTAPICaller.setDelegate(callback);
+            asyncEventsRESTAPICaller.execute(userId);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public void setUserEventRsvp(int userId, int eventId, boolean isAttending){
-
-    }
-
-    public List<UserGroupModel> getUserGroupsByUserId(int userId){
-
-        String userGroupsJson = getDummyUserEvents();
-        Gson gson = new Gson();
-
-        return gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>(){}.getType());
-    }
-
-    public void setUserGroupMemberShip(int userId, int groupId, boolean isMember){
+    public void setUserEventRsvp(int userId, int eventId, boolean isAttending) {
 
     }
 
-    // Remove this method once getUserEventsByUserId() is ready
-    private String getDummyUserEvents() {
+    public List<UserGroupModel> getUserGroupsByUserId(int userId) {
 
-        List<UserEventModel> userEvents = new ArrayList<>();
-        Random random = new Random();
+//        String userGroupsJson = getDummyUserEvents();
+//        Gson gson = new Gson();
+//
+//        return gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>() {
+//        }.getType());
+        return null;
+    }
 
-        for (int i = 0; i < 100; i++) {
-            UserEventModel userEvent = new UserEventModel();
-            userEvent.event = new EventModel();
+    public void setUserGroupMemberShip(int userId, int groupId, boolean isMember) {
 
-            if ((i%10) == 2 || (i%10) == 5 || (i%10) == 7)
-                userEvent.event.setEventCategory("Sports");
-            else if ((i%10) == 1 || (i%10) == 4 || (i%10) == 8)
-                userEvent.event.setEventCategory("Music");
-            else if ((i%10) == 0 || (i%10) == 6)
-                userEvent.event.setEventCategory("Movie");
-            else if ((i%10) == 3 || (i%10) == 9)
-                userEvent.event.setEventCategory("Other");
+    }
 
-            userEvent.event.setEventId(i+1);
-            userEvent.event.setEventName(userEvent.event.getEventCategory() + " Event");
-            userEvent.event.setGroupName(userEvent.event.getEventCategory() + " Group");
-            userEvent.event.setEventStartDatetime(new Date());
-            userEvent.event.setEventDescription("Enjoy shopping in Historic Downtown Grapevine as well as a variety of Artisan and Marketplace vendors throughout the festival. Take your kids to the museum exhibits, or to KidCave for exciting activities and shows, and don't forget about the Carnival & Midway! Enjoy non-stop live entertainment on multiple stages throughout the festival, as well as a variety of craft brew experiences and wine pavilions.");
-            userEvent.setIsAttending(random.nextBoolean());
-            userEvent.event.setAttendeeCount(random.nextInt(200));
-            userEvent.event.setEventAddressLine1("800 W Campbell Rd");
-            userEvent.event.setEventCity("Richardson");
-            userEvent.event.setEventStateCode("TX");
-            userEvent.event.setEventPostalCode("75080");
+    /*
+        Service method that makes API call and returns JSON string
+     */
+    private String makeAPICall(String urlToCall) {
+        String urlString = urlToCall;
+        String resultToDisplay = "";
+        InputStream in = null;
 
-            userEvents.add(userEvent);
+        // HTTP Get
+        try {
+
+            URL url = new URL(urlString);
+
+            HttpURLConnection myURLConnection = (HttpURLConnection) url.openConnection();
+            String userCredentials = "aam065000@utdallas.edu:Abcd1234";
+            String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
+            myURLConnection.setRequestProperty("Authorization", basicAuth);
+            myURLConnection.setRequestMethod("GET");
+
+            in = new BufferedInputStream(myURLConnection.getInputStream());
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+
+            return e.getMessage();
+
         }
 
-        Gson gson = new Gson();
+        if (in != null) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            try {
+                resultToDisplay = br.readLine();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+                return e.getMessage();
+            }
+        }
+        return resultToDisplay;
+    }
 
-        return gson.toJson(userEvents);
+    /*
+        Service method for building Gson from Gsonbuilder to parse dates properly.
+     */
+    private Gson getGson() {
+        try {
+            // Creates the json object which will manage the information received
+            GsonBuilder builder = new GsonBuilder();
+
+            // Register an adapter to manage the date types as long values
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                        throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            // Get the Gson from builder
+            Gson gson = builder.create();
+
+            return gson;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        // Exception....
+        return null;
+    }
+
+    /*
+        Async task for calling the REST API from application on background thread.
+        The task accepts the user Id as integer and returns the JSON response.
+     */
+    private class AsyncEventsRESTAPICaller extends AsyncTask<Integer, String, List<UserEventModel>> {
+
+        // Call back interface for communicating with caller
+        IAsyncEventResponse delegate = null;
+
+        // Setter for the delegate to return response
+        public void setDelegate(IAsyncEventResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected List<UserEventModel> doInBackground(Integer... params) {
+
+            String urlString = "http://192.168.56.1:8080/api/user/events?userId=" + params[0];
+            String resultToDisplay = makeAPICall(urlString);
+
+            // Parse and return event list
+            try {
+                Gson gson = getGson();
+                return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {
+                }.getType());
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            // Exception case...
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<UserEventModel> userEventModelList) {
+            try {
+                // Return the events list to the caller
+                delegate.postUserEvents(userEventModelList);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserModel;
+import com.viiup.android.flock.services.IAsyncEventResponse;
 import com.viiup.android.flock.services.UserService;
 
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ import java.util.List;
 /**
  * Created by AbdullahMoyeen on 4/11/16.
  */
-public class HomeEventsFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class HomeEventsFragment extends ListFragment implements AdapterView.OnItemClickListener,
+        IAsyncEventResponse {
 
     HomeEventsCellAdapter adapter;
     private List<UserEventModel> userEvents;
@@ -67,10 +69,10 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         UserModel loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
 
         UserService userService = new UserService();
-        userEvents = userService.getUserEventsByUserId(loggedInUser.getUserId());
+        userService.getUserEventsByUserId(1, this);
 
-        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
-        setListAdapter(adapter);
+//        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+//        setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 
@@ -94,5 +96,11 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
             userEvents.get(requestCode).setIsAttending(isAttending);
             this.getListView().setAdapter(this.getListView().getAdapter());
         }
+    }
+
+    @Override
+    public void postUserEvents(List<UserEventModel> userEvents) {
+        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+        setListAdapter(adapter);
     }
 }
