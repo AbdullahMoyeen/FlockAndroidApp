@@ -2,7 +2,6 @@ package com.viiup.android.flock.application;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.joanzapata.iconify.Iconify;
-import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.viiup.android.flock.helpers.CommonHelper;
-import com.viiup.android.flock.helpers.FontManager;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.services.UserService;
 
