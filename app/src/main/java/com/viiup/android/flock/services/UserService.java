@@ -149,9 +149,10 @@ public class UserService {
             // Parse and return event list
             try {
                 Gson gson = getGson();
-                return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {
-                }.getType());
-
+                if(gson != null) {
+                    return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {
+                    }.getType());
+                }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
