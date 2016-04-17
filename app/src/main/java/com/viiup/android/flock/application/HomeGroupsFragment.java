@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.viiup.android.flock.models.UserGroupModel;
 import com.viiup.android.flock.models.UserModel;
+import com.viiup.android.flock.services.IAsyncGroupResponse;
 import com.viiup.android.flock.services.UserService;
 
 import java.util.List;
@@ -23,7 +24,8 @@ import java.util.List;
 /**
  * Created by AbdullahMoyeen on 4/11/16.
  */
-public class HomeGroupsFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class HomeGroupsFragment extends ListFragment implements AdapterView.OnItemClickListener,
+        IAsyncGroupResponse {
 
     HomeGroupsCellAdapter adapter;
     private List<UserGroupModel> userGroups;
@@ -52,10 +54,10 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
         UserModel loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
 
         UserService userService = new UserService();
-        userGroups = userService.getUserGroupsByUserId(loggedInUser.getUserId());
+        userService.getUserGroupsByUserId(1, this);
 
-        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
-        setListAdapter(adapter);
+//        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+//        setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 
@@ -78,6 +80,16 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
             boolean isMember = data.getBooleanExtra("isMember", userGroups.get(requestCode).isMember());
             userGroups.get(requestCode).setMember(isMember);
             this.getListView().setAdapter(this.getListView().getAdapter());
+        }
+    }
+
+    @Override
+    public void postUserGroups(List<UserGroupModel> userGroups) {
+        try {
+            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+            setListAdapter(adapter);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }

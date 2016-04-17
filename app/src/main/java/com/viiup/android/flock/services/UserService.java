@@ -40,18 +40,19 @@ public class UserService {
         }
     }
 
-    public void setUserEventRsvp(int userId, int eventId, boolean isAttending) {
-
+    public void getUserGroupsByUserId(int userId, IAsyncGroupResponse callback) {
+        // Call Events rest API
+        try {
+            AsyncGroupsRESTAPICaller asyncGroupsRESTAPICaller = new AsyncGroupsRESTAPICaller();
+            asyncGroupsRESTAPICaller.setDelegate(callback);
+            asyncGroupsRESTAPICaller.execute(userId);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public List<UserGroupModel> getUserGroupsByUserId(int userId) {
+    public void setUserEventRsvp(int userId, int eventId, boolean isAttending) {
 
-//        String userGroupsJson = getDummyUserEvents();
-//        Gson gson = new Gson();
-//
-//        return gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>() {
-//        }.getType());
-        return null;
     }
 
     public void setUserGroupMemberShip(int userId, int groupId, boolean isMember) {
@@ -127,8 +128,51 @@ public class UserService {
     }
 
     /*
+    Async task for calling the REST API from application on background thread.
+    The task accepts the user Id as integer and returns the list of user group models.
+ */
+    private class AsyncGroupsRESTAPICaller extends AsyncTask<Integer, String, List<UserGroupModel>> {
+
+        // Call back interface for communicating with caller
+        IAsyncGroupResponse delegate = null;
+
+        public void setDelegate(IAsyncGroupResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected List<UserGroupModel> doInBackground(Integer... params) {
+            // Make API call
+            try {
+                String urlToCall = "http://192.168.56.1:8080/api/user/groups?userId=" + params[0];
+                String resultsToParse = makeAPICall(urlToCall);
+
+                // Parse the JSON
+                Gson gson = getGson();
+                if (gson != null) {
+                    return gson.fromJson(resultsToParse, new TypeToken<List<UserGroupModel>>() {
+                    }.getType());
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<UserGroupModel> userGroupModels) {
+            try {
+                // Post the data
+                delegate.postUserGroups(userGroupModels);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    /*
         Async task for calling the REST API from application on background thread.
-        The task accepts the user Id as integer and returns the JSON response.
+        The task accepts the user Id as integer and returns the list of user event models.
      */
     private class AsyncEventsRESTAPICaller extends AsyncTask<Integer, String, List<UserEventModel>> {
 
@@ -143,13 +187,15 @@ public class UserService {
         @Override
         protected List<UserEventModel> doInBackground(Integer... params) {
 
-            String urlString = "http://192.168.56.1:8080/api/user/events?userId=" + params[0];
-            String resultToDisplay = makeAPICall(urlString);
-
-            // Parse and return event list
+            // Make API call
             try {
+                String urlString = "http://192.168.56.1:8080/api/user/events?userId=" + params[0];
+                String resultToDisplay = makeAPICall(urlString);
+
+                // Parse and return event list
+
                 Gson gson = getGson();
-                if(gson != null) {
+                if (gson != null) {
                     return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {
                     }.getType());
                 }
