@@ -40,7 +40,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String userEventJson = getIntent().getStringExtra("userEventJson");
         userEvent = gson.fromJson(userEventJson, UserEventModel.class);
-        System.out.println(userEvent.isAttending());
 
         TextView textViewSecondaryBar = (TextView) findViewById(R.id.secondaryBar);
         TextView textViewAttendeeCount = (TextView) findViewById(R.id.textViewAttendeeCount);

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.viiup.android.flock.application.GroupDetailsActivity">
+
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/background_dark"
+            android:paddingTop="@dimen/appbar_padding_top"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorActionBar"
+                android:textAlignment="center"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/secondaryBar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/colorSecondaryBar"
+                android:gravity="center"
+                android:textColor="@color/colorBarText"
+                android:textSize="14sp" />
+
+        </android.support.design.widget.AppBarLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <ScrollView
+        android:id="@+id/groupDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorContentBackground"
+        android:layout_below="@+id/appBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorContentBackground"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/textViewMembersCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorContentText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewEventsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewMembersCount"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorContentText"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewGroupDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewEventsCount"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/colorContentText"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/imageViewGroup"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/textViewGroupDescription"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="30dp"
+                android:contentDescription="@string/image_description" />
+
+            <!--<TextView-->
+                <!--android:id="@+id/textViewGroupName"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/imageViewGroup"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textColor="@color/colorContentIcon"-->
+                <!--android:textSize="16sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/textViewEventAddress"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/textViewGroupName"-->
+                <!--android:layout_marginTop="30dp"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textColor="@color/colorContentText"-->
+                <!--android:textSize="16sp" />-->
+
+            <Switch
+                android:id="@+id/switchMembership"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageViewGroup"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="30dp"
+                android:focusable="false"
+                android:text=""
+                android:textOff="OUT"
+                android:textOn="IN" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
