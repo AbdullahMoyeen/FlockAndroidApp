@@ -18,21 +18,19 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
     }
 
     public static HomeGroupsFragment newInstance() {
-        HomeGroupsFragment fragment = new HomeGroupsFragment();
-        return fragment;
+        return new HomeGroupsFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_events_fragment, container, false);
-        return view;
+        return inflater.inflate(R.layout.home_groups_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         String[] userGroups = new String[]{"Group 1", "Group 2", "Group 3", "Group 4", "Group 5", "Group 6", "Group 7", "Group 8", "Group 9", "Group 10"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, userGroups);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, userGroups);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }

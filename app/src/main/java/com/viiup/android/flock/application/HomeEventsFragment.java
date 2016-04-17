@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,7 +40,19 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home_events_fragment, container, false);
+
+        View view = inflater.inflate(R.layout.home_events_fragment, container, false);
+
+        Button buttonNearbyEvents = (Button) view.findViewById(R.id.buttonNearbyEvents);
+        buttonNearbyEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mapIntent = new Intent(getContext(), MapActivity.class);
+                startActivity(mapIntent);
+            }
+        });
+
+        return view;
     }
 
     @Override
@@ -67,8 +80,8 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         Gson gson = new Gson();
         UserEventModel userEvent = userEvents.get(position);
         String userEventJson = gson.toJson(userEvent);
-        Intent eventDetailsIntent = new Intent(this.getContext(), EventDetailsActivity.class);
 
+        Intent eventDetailsIntent = new Intent(this.getContext(), EventDetailsActivity.class);
         eventDetailsIntent.putExtra("userEventJson", userEventJson);
         startActivityForResult(eventDetailsIntent, position);
     }

@@ -9,4 +9,5 @@
     <color name="colorContentIcon">#FF8B8B8B</color>
     <color name="colorBarText">#FFFFFF</color>
     <color name="colorContentText">#000000</color>
+    <color name="colorButton">#FF2DA7CC</color>
 </resources>

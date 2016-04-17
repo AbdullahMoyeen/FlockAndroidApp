@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.viiup.android.flock.models.EventModel;
 import com.viiup.android.flock.models.UserEventModel;
+import com.viiup.android.flock.models.UserGroupModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,19 @@ public class UserService {
         return gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>(){}.getType());
     }
 
-    public void setUserRsvp(int userId, int eventId, boolean isAttending){
+    public void setUserEventRsvp(int userId, int eventId, boolean isAttending){
+
+    }
+
+    public List<UserGroupModel> getUserGroupsByUserId(int userId){
+
+        String userGroupsJson = getDummyUserEvents();
+        Gson gson = new Gson();
+
+        return gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>(){}.getType());
+    }
+
+    public void setUserGroupMemberShip(int userId, int groupId, boolean isMember){
 
     }
 

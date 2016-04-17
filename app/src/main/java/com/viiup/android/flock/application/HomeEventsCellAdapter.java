@@ -110,7 +110,7 @@ public class HomeEventsCellAdapter extends BaseAdapter {
 //            Toast.makeText(context, "changed event " + userEvents.get(position).event.getEventId() + " to " + isOn, Toast.LENGTH_SHORT).show();
 
             UserService userService = new UserService();
-            userService.setUserRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn);
+            userService.setUserEventRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn);
 
             userEvents.get(position).setIsAttending(isOn);
         }

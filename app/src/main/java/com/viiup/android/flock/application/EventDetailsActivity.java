@@ -97,7 +97,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 //            Toast.makeText(buttonView.getContext(), "changed event " + userEvent.event.getEventId() + " to " + isOn, Toast.LENGTH_SHORT).show();
 
             UserService userService = new UserService();
-            userService.setUserRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn);
+            userService.setUserEventRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn);
 
             userEvent.setIsAttending(isOn);
         }
