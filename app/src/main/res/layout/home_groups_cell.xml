@@ -1,6 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/homeEventCell"
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:orientation="horizontal"
@@ -9,7 +8,7 @@
     android:paddingEnd="10dp"
     android:paddingTop="5dp"
     android:descendantFocusability="blocksDescendants"
-    tools:context="com.viiup.android.flock.application.HomeEventsCellAdapter">
+    tools:context="com.viiup.android.flock.application.HomeGroupsCellAdapter">
 
     <LinearLayout
         android:layout_width="70dp"
@@ -17,7 +16,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imageViewEvent"
+            android:id="@+id/imageViewGroup"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="15dp"
@@ -26,7 +25,7 @@
             android:contentDescription="@string/image_description" />
 
         <TextView
-            android:id="@+id/textViewGroupName"
+            android:id="@+id/textViewGroupCategory"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -43,21 +42,21 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textViewEventName"
+            android:id="@+id/textViewGroupName"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:textColor="@color/colorContentText"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/textViewEventStartDateTime"
+            android:id="@+id/textViewGroupMembersCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorContentText"
             android:textSize="14sp"/>
 
         <TextView
-            android:id="@+id/textViewEventDescription"
+            android:id="@+id/textViewGroupDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorContentText"
@@ -66,13 +65,13 @@
     </LinearLayout>
 
     <Switch
-        android:id="@+id/switchRsvp"
+        android:id="@+id/switchMembership"
         android:layout_width="100dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:layout_marginStart="10dp"
         android:text=""
-        android:textOff="NO"
-        android:textOn="YES" />
+        android:textOff="OUT"
+        android:textOn="IN" />
 
 </LinearLayout>

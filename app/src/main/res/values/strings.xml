@@ -3,6 +3,9 @@
     <string name="action_settings">Settings</string>
     <string name="image_description">Image</string>
     <string name="title_activity_event_details">Back</string>
+    <string name="title_activity_group_details">Back</string>
     <string name="title_activity_location">Location</string>
     <string name="nearby_events">NEARBY EVENTS</string>
+    <string name="fa_icon_ok">&#xf00c;</string>
+    <string name="fa_icon_remove">&#xf00d;</string>
 </resources>

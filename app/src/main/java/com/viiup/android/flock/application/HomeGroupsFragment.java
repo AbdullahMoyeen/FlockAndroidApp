@@ -1,5 +1,9 @@
 package com.viiup.android.flock.application;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -9,10 +13,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.viiup.android.flock.models.UserGroupModel;
+import com.viiup.android.flock.models.UserModel;
+import com.viiup.android.flock.services.UserService;
+
+import java.util.List;
+
 /**
  * Created by AbdullahMoyeen on 4/11/16.
  */
 public class HomeGroupsFragment extends ListFragment implements AdapterView.OnItemClickListener {
+
+    HomeGroupsCellAdapter adapter;
+    private List<UserGroupModel> userGroups;
 
     public HomeGroupsFragment() {
     }
@@ -28,15 +42,42 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
-        String[] userGroups = new String[]{"Group 1", "Group 2", "Group 3", "Group 4", "Group 5", "Group 6", "Group 7", "Group 8", "Group 9", "Group 10"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, userGroups);
+
+        SharedPreferences mPref = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        String loggedInUserJson = mPref.getString("loggedInUserJson", null);
+
+        Gson gson = new Gson();
+        UserModel loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
+
+        UserService userService = new UserService();
+        userGroups = userService.getUserGroupsByUserId(loggedInUser.getUserId());
+
+        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
         setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Toast.makeText(getActivity(), "Item: " + (position + 1), Toast.LENGTH_SHORT).show();
+
+        Gson gson = new Gson();
+        UserGroupModel userGroup = userGroups.get(position);
+        String userGroupJson = gson.toJson(userGroup);
+
+        Intent groupDetailsIntent = new Intent(this.getContext(), GroupDetailsActivity.class);
+        groupDetailsIntent.putExtra("userGroupJson", userGroupJson);
+        startActivityForResult(groupDetailsIntent, position);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Activity.RESULT_OK) {
+            boolean isMember = data.getBooleanExtra("isMember", userGroups.get(requestCode).isMember());
+            userGroups.get(requestCode).setMember(isMember);
+            this.getListView().setAdapter(this.getListView().getAdapter());
+        }
     }
 }
