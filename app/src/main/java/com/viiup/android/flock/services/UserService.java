@@ -196,8 +196,7 @@ public class UserService {
 
                 Gson gson = getGson();
                 if (gson != null) {
-                    return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {
-                    }.getType());
+                    return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {}.getType());
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());

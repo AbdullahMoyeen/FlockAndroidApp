@@ -46,7 +46,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.event_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Gson gson = new Gson();

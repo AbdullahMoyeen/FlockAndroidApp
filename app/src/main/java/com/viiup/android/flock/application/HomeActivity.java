@@ -18,7 +18,10 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserModel;
+
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private HomeTabPagerAdapter mHomeTabPagerAdapter;
+    public List<UserEventModel> userEvents;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -79,7 +83,10 @@ public class HomeActivity extends AppCompatActivity {
                 Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getResources().getString(R.string.nearby_events), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Gson gson = new Gson();
+                        String userEventsJson = gson.toJson(userEvents);
                         Intent mapIntent = new Intent(v.getContext(), MapActivity.class);
+                        mapIntent.putExtra("userEventsJson", userEventsJson);
                         startActivity(mapIntent);
                     }
                 });

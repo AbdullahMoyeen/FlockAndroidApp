@@ -42,7 +42,6 @@ public class GroupDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.group_details_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Gson gson = new Gson();
