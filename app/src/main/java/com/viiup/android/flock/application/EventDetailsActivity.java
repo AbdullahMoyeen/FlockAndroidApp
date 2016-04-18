@@ -1,7 +1,6 @@
 package com.viiup.android.flock.application;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,14 +10,11 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.services.UserService;
-
-import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

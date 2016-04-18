@@ -7,30 +7,10 @@
     android:padding="0dp"
     tools:context="com.viiup.android.flock.application.HomeEventsFragment">
 
-    <FrameLayout
-        android:id="@+id/buttonFrame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:background="@color/colorButton">
-
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:id="@+id/buttonNearbyEvents"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:text="@string/nearby_events"
-            android:textColor="@color/colorBarText" />
-
-    </FrameLayout>
-
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonFrame"
         android:background="@color/colorContentBackground"/>
 
     <TextView

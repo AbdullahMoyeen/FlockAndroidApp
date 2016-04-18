@@ -14,12 +14,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viiup.android.flock.helpers.CommonHelper;
-import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserGroupModel;
 import com.viiup.android.flock.services.UserService;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 public class GroupDetailsActivity extends AppCompatActivity {
 
