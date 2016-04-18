@@ -27,8 +27,7 @@ import java.util.List;
 /**
  * Created by AbdullahMoyeen on 4/11/16.
  */
-public class HomeEventsFragment extends ListFragment implements AdapterView.OnItemClickListener,
-        IAsyncEventResponse {
+public class HomeEventsFragment extends ListFragment implements AdapterView.OnItemClickListener, IAsyncEventResponse {
 
     HomeEventsCellAdapter adapter;
     private List<UserEventModel> userEvents;
@@ -69,7 +68,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         UserModel loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
 
         UserService userService = new UserService();
-        userService.getUserEventsByUserId(1, this);
+        userService.getUserEventsByUserId(loggedInUser.getUserId(), this);
 
 //        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
 //        setListAdapter(adapter);
@@ -92,14 +91,22 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == Activity.RESULT_OK) {
-            boolean isAttending = data.getBooleanExtra("isAttending", userEvents.get(requestCode).isAttending());
-            userEvents.get(requestCode).setIsAttending(isAttending);
-            this.getListView().setAdapter(this.getListView().getAdapter());
+
+            boolean isAttendingChanged = data.getBooleanExtra("isAttendingChanged", false);
+
+            if (isAttendingChanged) {
+                userEvents.get(requestCode).setIsAttending(!userEvents.get(requestCode).isAttending());
+                int attendeeCount = userEvents.get(requestCode).event.getAttendeeCount();
+                userEvents.get(requestCode).event.setAttendeeCount(userEvents.get(requestCode).isAttending() ? attendeeCount + 1 : attendeeCount - 1);
+                this.getListView().setAdapter(this.getListView().getAdapter());
+            }
         }
     }
 
     @Override
     public void postUserEvents(List<UserEventModel> userEvents) {
+
+        this.userEvents = userEvents;
         adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
         setListAdapter(adapter);
     }

@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences.Editor mPrefsEditor = mPrefs.edit();
 
         UserModel loggedInUser = new UserModel();
-        loggedInUser.setUserId(0);
+        loggedInUser.setUserId(1);
 
         Gson gson = new Gson();
         String loggedInUserJson = gson.toJson(loggedInUser);

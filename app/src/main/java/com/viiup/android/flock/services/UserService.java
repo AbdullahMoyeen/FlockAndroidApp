@@ -144,7 +144,7 @@ public class UserService {
         protected List<UserGroupModel> doInBackground(Integer... params) {
             // Make API call
             try {
-                String urlToCall = "http://192.168.56.1:8080/api/user/groups?userId=" + params[0];
+                String urlToCall = "http://192.168.0.5:8080/api/user/groups?userId=" + params[0];
                 String resultsToParse = makeAPICall(urlToCall);
 
                 // Parse the JSON
@@ -189,7 +189,7 @@ public class UserService {
 
             // Make API call
             try {
-                String urlString = "http://192.168.56.1:8080/api/user/events?userId=" + params[0];
+                String urlString = "http://192.168.0.5:8080/api/user/events?userId=" + params[0];
                 String resultToDisplay = makeAPICall(urlString);
 
                 // Parse and return event list

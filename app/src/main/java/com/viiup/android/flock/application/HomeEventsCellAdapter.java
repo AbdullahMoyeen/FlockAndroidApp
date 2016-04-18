@@ -112,6 +112,8 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             userService.setUserEventRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn);
 
             userEvents.get(position).setIsAttending(isOn);
+            int attendeeCount = userEvents.get(position).event.getAttendeeCount();
+            userEvents.get(position).event.setAttendeeCount(isOn ? attendeeCount + 1 : attendeeCount - 1);
         }
     };
 }

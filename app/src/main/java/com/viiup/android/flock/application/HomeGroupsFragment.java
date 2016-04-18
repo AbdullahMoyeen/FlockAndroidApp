@@ -54,7 +54,7 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
         UserModel loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
 
         UserService userService = new UserService();
-        userService.getUserGroupsByUserId(1, this);
+        userService.getUserGroupsByUserId(loggedInUser.getUserId(), this);
 
 //        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
 //        setListAdapter(adapter);
@@ -85,11 +85,9 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void postUserGroups(List<UserGroupModel> userGroups) {
-        try {
-            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
-            setListAdapter(adapter);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+
+        this.userGroups = userGroups;
+        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+        setListAdapter(adapter);
     }
 }
