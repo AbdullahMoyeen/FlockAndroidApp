@@ -34,9 +34,10 @@ public class HomeEventsCellAdapter extends BaseAdapter {
         Switch switchRsvp;
     }
 
-    Context context;
-    ListView listView;
-    List<UserEventModel> userEvents;
+    private Context context;
+    private ListView listView;
+    private List<UserEventModel> userEvents;
+    private CellItemsViewHolder cellItemsViewHolder;
 
     HomeEventsCellAdapter(Context context, ListView listView, List<UserEventModel> userEvents) {
         this.context = context;
@@ -62,7 +63,6 @@ public class HomeEventsCellAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        CellItemsViewHolder cellItemsViewHolder;
         final UserEventModel userEvent = userEvents.get(position);
 
         if (convertView == null) {

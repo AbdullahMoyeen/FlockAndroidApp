@@ -56,8 +56,6 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
         UserService userService = new UserService();
         userService.getUserGroupsByUserId(loggedInUser.getUserId(), this);
 
-//        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
-//        setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 
@@ -77,9 +75,20 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == Activity.RESULT_OK) {
-            boolean isMember = data.getBooleanExtra("isMember", userGroups.get(requestCode).isMember());
-            userGroups.get(requestCode).setMember(isMember);
-            this.getListView().setAdapter(this.getListView().getAdapter());
+            String membershipStatus = data.getStringExtra("membershipStatus");
+            if (membershipStatus != null) {
+                userGroups.get(requestCode).setGroupMembershipStatus(membershipStatus);
+                if(membershipStatus.equals("P")){
+                    int pendingMemberCount = userGroups.get(requestCode).group.getPendingMemberCount();
+                    userGroups.get(requestCode).group.setPendingMemberCount(pendingMemberCount + 1);
+                }
+                else if (membershipStatus.equals("I")){
+                    int activeMemberCount = userGroups.get(requestCode).group.getActiveMemberCount();
+                    userGroups.get(requestCode).group.setActiveMemberCount(activeMemberCount - 1);
+                }
+
+                this.getListView().setAdapter(this.getListView().getAdapter());
+            }
         }
     }
 

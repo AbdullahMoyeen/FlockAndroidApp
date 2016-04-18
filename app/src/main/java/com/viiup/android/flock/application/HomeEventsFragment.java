@@ -70,8 +70,6 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         UserService userService = new UserService();
         userService.getUserEventsByUserId(loggedInUser.getUserId(), this);
 
-//        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
-//        setListAdapter(adapter);
         getListView().setOnItemClickListener(this);
     }
 

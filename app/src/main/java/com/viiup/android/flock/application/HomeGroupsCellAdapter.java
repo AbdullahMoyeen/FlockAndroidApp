@@ -2,6 +2,8 @@ package com.viiup.android.flock.application;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserGroupModel;
@@ -32,9 +35,10 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
         Switch switchMembership;
     }
 
-    Context context;
-    ListView listView;
-    List<UserGroupModel> userGroups;
+    private Context context;
+    private ListView listView;
+    private List<UserGroupModel> userGroups;
+    private CellItemsViewHolder cellItemsViewHolder;
 
     HomeGroupsCellAdapter(Context context, ListView listView, List<UserGroupModel> userGroups) {
         this.context = context;
@@ -60,7 +64,6 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        CellItemsViewHolder cellItemsViewHolder;
         final UserGroupModel userGroup = userGroups.get(position);
 
         if (convertView == null) {
@@ -89,25 +92,44 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewGroupMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " members");
             cellItemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
             cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(null);
-            cellItemsViewHolder.switchMembership.setChecked(userGroup.isMember());
-            cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
+            cellItemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
+            if (userGroup.getGroupMembershipStatus().equals("A")) {
+                cellItemsViewHolder.switchMembership.setTextOn("IN");
+            }
+            if (userGroup.getGroupMembershipStatus().equals("P")) {
+                cellItemsViewHolder.switchMembership.setEnabled(false);
+            } else {
+                cellItemsViewHolder.switchMembership.setEnabled(true);
+            }
+            cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(switchMembershipOnCheckedChangeListener);
         }
 
         return convertView;
     }
 
-    private CompoundButton.OnCheckedChangeListener switchRsvpOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    private CompoundButton.OnCheckedChangeListener switchMembershipOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
             final int position = listView.getPositionForView(buttonView);
 
-//            Toast.makeText(context, "changed event " + userEvents.get(position).event.getEventId() + " to " + isOn, Toast.LENGTH_SHORT).show();
-
             UserService userService = new UserService();
-            userService.setUserGroupMemberShip(userGroups.get(position).getUserId(), userGroups.get(position).group.getGroupId(), isOn);
+            userService.setUserGroupMembership(userGroups.get(position).getUserId(), userGroups.get(position).group.getGroupId(), isOn);
 
-            userGroups.get(position).setMember(isOn);
+            if (isOn) {
+                Toast.makeText(context, "your join request has been sent", Toast.LENGTH_LONG).show();
+                int pendingMemberCount = userGroups.get(position).group.getPendingMemberCount();
+                userGroups.get(position).setGroupMembershipStatus("P");
+                userGroups.get(position).group.setPendingMemberCount(pendingMemberCount + 1);
+                cellItemsViewHolder.switchMembership.setTextOn("PEN");
+                cellItemsViewHolder.switchMembership.setEnabled(false);
+            } else {
+                int activeMemberCount = userGroups.get(position).group.getActiveMemberCount();
+                userGroups.get(position).setGroupMembershipStatus("I");
+                userGroups.get(position).group.setActiveMemberCount(activeMemberCount - 1);
+            }
+
+            listView.setAdapter(listView.getAdapter());
         }
     };
 }

@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viiup.android.flock.helpers.CommonHelper;
@@ -22,7 +23,18 @@ import java.text.SimpleDateFormat;
 
 public class GroupDetailsActivity extends AppCompatActivity {
 
+    private static class ItemsViewHolder {
+        TextView textViewSecondaryBar;
+        TextView textViewMembersCount;
+        TextView textViewEventsCount;
+        TextView textViewGroupDescription;
+        ImageView imageViewGroup;
+        Switch switchMembership;
+    }
+
+    private ItemsViewHolder itemsViewHolder;
     private UserGroupModel userGroup;
+    private String membershipStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +53,29 @@ public class GroupDetailsActivity extends AppCompatActivity {
         String userGroupJson = getIntent().getStringExtra("userGroupJson");
         userGroup = gson.fromJson(userGroupJson, UserGroupModel.class);
 
-        TextView textViewSecondaryBar = (TextView) findViewById(R.id.secondaryBar);
-        TextView textViewMembersCount = (TextView) findViewById(R.id.textViewMembersCount);
-        TextView textViewEventsCount = (TextView) findViewById(R.id.textViewEventsCount);
-        TextView textViewGroupDescription = (TextView) findViewById(R.id.textViewGroupDescription);
-        ImageView imageViewGroup = (ImageView) findViewById(R.id.imageViewGroup);
-        Switch switchMembership = (Switch) findViewById(R.id.switchMembership);
+        itemsViewHolder = new ItemsViewHolder();
+        itemsViewHolder.textViewSecondaryBar = (TextView) findViewById(R.id.secondaryBar);
+        itemsViewHolder.textViewMembersCount = (TextView) findViewById(R.id.textViewMembersCount);
+        itemsViewHolder.textViewEventsCount = (TextView) findViewById(R.id.textViewEventsCount);
+        itemsViewHolder.textViewGroupDescription = (TextView) findViewById(R.id.textViewGroupDescription);
+        itemsViewHolder.imageViewGroup = (ImageView) findViewById(R.id.imageViewGroup);
+        itemsViewHolder.switchMembership = (Switch) findViewById(R.id.switchMembership);
 
-        textViewSecondaryBar.setText(userGroup.group.getGroupName().toUpperCase());
-        textViewMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " members");
-        textViewEventsCount.setText(Integer.toString(userGroup.group.getUpcomingEventCount()) + " upcoming events");
-        textViewGroupDescription.setText(userGroup.group.getGroupDescription());
-        imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByGroupCategory(this, userGroup.group.getGroupCategory()));
-        switchMembership.setChecked(userGroup.isMember());
-        switchMembership.setOnCheckedChangeListener(switchMembershipOnCheckedChangeListener);
+        itemsViewHolder.textViewSecondaryBar.setText(userGroup.group.getGroupName().toUpperCase());
+        itemsViewHolder.textViewMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " members");
+        itemsViewHolder.textViewEventsCount.setText(Integer.toString(userGroup.group.getUpcomingEventCount()) + " upcoming events");
+        itemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
+        itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByGroupCategory(this, userGroup.group.getGroupCategory()));
+        itemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
+        if (userGroup.getGroupMembershipStatus().equals("A")) {
+            itemsViewHolder.switchMembership.setTextOn("IN");
+        }
+        if (userGroup.getGroupMembershipStatus().equals("P")) {
+            itemsViewHolder.switchMembership.setEnabled(false);
+        } else {
+            itemsViewHolder.switchMembership.setEnabled(true);
+        }
+        itemsViewHolder.switchMembership.setOnCheckedChangeListener(switchMembershipOnCheckedChangeListener);
     }
 
     @Override
@@ -66,7 +87,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
             // up button
             case android.R.id.home:
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("isMember", userGroup.isMember());
+                returnIntent.putExtra("membershipStatus", membershipStatus);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
@@ -87,12 +108,24 @@ public class GroupDetailsActivity extends AppCompatActivity {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
-//            Toast.makeText(buttonView.getContext(), "changed event " + userGroup.event.getEventId() + " to " + isOn, Toast.LENGTH_SHORT).show();
-
             UserService userService = new UserService();
-            userService.setUserGroupMemberShip(userGroup.getUserId(), userGroup.group.getGroupId(), isOn);
+            userService.setUserGroupMembership(userGroup.getUserId(), userGroup.group.getGroupId(), isOn);
 
-            userGroup.setMember(isOn);
+            if (isOn) {
+                Toast.makeText(buttonView.getContext(), "your join request has been sent", Toast.LENGTH_LONG).show();
+                int pendingMemberCount = userGroup.group.getPendingMemberCount();
+                userGroup.setGroupMembershipStatus("P");
+                userGroup.group.setPendingMemberCount(pendingMemberCount + 1);
+                itemsViewHolder.switchMembership.setEnabled(false);
+            }
+            else{
+                int activeMemberCount = userGroup.group.getActiveMemberCount();
+                userGroup.setGroupMembershipStatus("I");
+                userGroup.group.setActiveMemberCount(activeMemberCount - 1);
+                itemsViewHolder.textViewMembersCount.setText(userGroup.group.getActiveMemberCount() + " members");
+            }
+
+            membershipStatus = userGroup.getGroupMembershipStatus();
         }
     };
 }

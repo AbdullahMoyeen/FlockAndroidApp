@@ -6,7 +6,7 @@ package com.viiup.android.flock.models;
 public class UserGroupModel {
 
     private int userId;
-    private boolean isMember;
+    private String groupMembershipStatus;
     public GroupModel group;
 
     public int getUserId() {
@@ -17,11 +17,11 @@ public class UserGroupModel {
         this.userId = userId;
     }
 
-    public boolean isMember() {
-        return isMember;
+    public String getGroupMembershipStatus() {
+        return groupMembershipStatus;
     }
 
-    public void setMember(boolean member) {
-        isMember = member;
+    public void setGroupMembershipStatus(String groupMembershipStatus) {
+        this.groupMembershipStatus = groupMembershipStatus;
     }
 }

@@ -55,7 +55,7 @@ public class UserService {
 
     }
 
-    public void setUserGroupMemberShip(int userId, int groupId, boolean isMember) {
+    public void setUserGroupMembership(int userId, int groupId, boolean isMember) {
 
     }
 

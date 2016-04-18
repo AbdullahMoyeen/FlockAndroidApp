@@ -120,7 +120,7 @@
                 android:focusable="false"
                 android:text=""
                 android:textOff="OUT"
-                android:textOn="IN" />
+                android:textOn="PENDING" />
 
         </RelativeLayout>
 

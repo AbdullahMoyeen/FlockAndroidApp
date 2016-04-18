@@ -36,7 +36,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         Switch switchRsvp;
     }
 
-    private ItemsViewHolder itemsViewHolder = new ItemsViewHolder();
+    private ItemsViewHolder itemsViewHolder;
     private UserEventModel userEvent;
     private boolean isAttendingChanged = false;
 
@@ -57,6 +57,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         String userEventJson = getIntent().getStringExtra("userEventJson");
         userEvent = gson.fromJson(userEventJson, UserEventModel.class);
 
+        itemsViewHolder = new ItemsViewHolder();
         itemsViewHolder.textViewSecondaryBar = (TextView) findViewById(R.id.secondaryBar);
         itemsViewHolder.textViewAttendeeCount = (TextView) findViewById(R.id.textViewAttendeeCount);
         itemsViewHolder.textViewEventStartDateTime = (TextView) findViewById(R.id.textViewEventStartDateTime);
