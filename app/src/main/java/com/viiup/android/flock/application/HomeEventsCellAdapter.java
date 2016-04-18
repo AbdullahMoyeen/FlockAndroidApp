@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserEventModel;
+import com.viiup.android.flock.services.IAsyncPutRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 import java.text.DateFormat;
@@ -94,26 +95,36 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewEventDescription.setText(userEvent.event.getEventDescription());
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchRsvp.setChecked(userEvent.isAttending());
-            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
+//            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
+            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(new RsvpOnCheckedChangeListener());
         }
 
         return convertView;
     }
 
-    private CompoundButton.OnCheckedChangeListener switchRsvpOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    /*
+        Helper class acting as OnCheckedChangeListener
+     */
+    private class RsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
+
         @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
-
-            final int position = listView.getPositionForView(buttonView);
-
-//            Toast.makeText(context, "changed event " + userEvents.get(position).event.getEventId() + " to " + isOn, Toast.LENGTH_SHORT).show();
-
-            UserService userService = new UserService();
-            userService.setUserEventRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn);
+        public void putRequestResponse(String response, int position) {
+            boolean isOn = false;
+            if(response.equalsIgnoreCase("OK")){
+                isOn = true;
+            }
 
             userEvents.get(position).setIsAttending(isOn);
             int attendeeCount = userEvents.get(position).event.getAttendeeCount();
             userEvents.get(position).event.setAttendeeCount(isOn ? attendeeCount + 1 : attendeeCount - 1);
         }
-    };
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
+            final int position = listView.getPositionForView(buttonView);
+            UserService userService = new UserService();
+            userService.setUserEventRsvp(userEvents.get(position).getUserId(),
+                    userEvents.get(position).event.getEventId(), isOn, position, this);
+        }
+    }
 }

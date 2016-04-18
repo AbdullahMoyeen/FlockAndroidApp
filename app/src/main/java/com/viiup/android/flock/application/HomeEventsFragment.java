@@ -87,7 +87,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void postUserEvents(List<UserEventModel> userEvents) {
-
+        // Bind the adapter to list view
         this.userEvents = userEvents;
         ((HomeActivity)this.getActivity()).userEvents = userEvents;
         adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);

@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -51,8 +52,14 @@ public class UserService {
         }
     }
 
-    public void setUserEventRsvp(int userId, int eventId, boolean isAttending) {
-
+    public void setUserEventRsvp(int userId, int eventId, boolean isAttending, int position, IAsyncPutRequestResponse delegate) {
+        try {
+            AsyncEventRSVPRESTAPICaller asyncEventRSVPRESTAPICaller = new AsyncEventRSVPRESTAPICaller();
+            asyncEventRSVPRESTAPICaller.setDelegate(delegate);
+            asyncEventRSVPRESTAPICaller.execute(userId, eventId, isAttending,position);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void setUserGroupMembership(int userId, int groupId, boolean isMember) {
@@ -60,43 +67,85 @@ public class UserService {
     }
 
     /*
+        Service method for calling REST API with "Put" request
+     */
+    private String makePutAPICall(String urlToCall) {
+        String urlString = urlToCall;
+        HttpURLConnection putRequestConnection = null;
+
+        // HTTP Put
+        try {
+            // Construct URL from string
+            URL url = new URL(urlString);
+
+            // Open HTTP connection and provide authentication information.
+            putRequestConnection = (HttpURLConnection) url.openConnection();
+            String userCredentials = "aam065000@utdallas.edu:Abcd1234";
+            String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
+            putRequestConnection.setRequestProperty("Authorization", basicAuth);
+            putRequestConnection.setRequestMethod("PUT");
+
+            // Make the HTTP Put call
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(putRequestConnection.getOutputStream());
+            outputStreamWriter.flush();
+            outputStreamWriter.close();
+
+            // Get the response
+            int respCode = putRequestConnection.getResponseCode();
+            String respMsg = putRequestConnection.getResponseMessage();
+
+            // Return response
+            return respMsg;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return e.getMessage();
+        } finally {
+            // release the connection if made
+            if (putRequestConnection != null) putRequestConnection.disconnect();
+        }
+    }
+
+    /*
         Service method that makes API call and returns JSON string
      */
-    private String makeAPICall(String urlToCall) {
+    private String makeGetAPICall(String urlToCall) {
         String urlString = urlToCall;
         String resultToDisplay = "";
         InputStream in = null;
+        HttpURLConnection myURLConnection = null;
 
         // HTTP Get
         try {
 
+            // Construct URL from string
             URL url = new URL(urlString);
 
-            HttpURLConnection myURLConnection = (HttpURLConnection) url.openConnection();
+            //Construct and fill up HttpURLConnection instance
+            myURLConnection = (HttpURLConnection) url.openConnection();
             String userCredentials = "aam065000@utdallas.edu:Abcd1234";
             String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
             myURLConnection.setRequestProperty("Authorization", basicAuth);
             myURLConnection.setRequestMethod("GET");
 
+            // Make the call to the server
             in = new BufferedInputStream(myURLConnection.getInputStream());
 
+            // Read the data from input stream
+            if (in != null) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                resultToDisplay = br.readLine();
+            }
         } catch (Exception e) {
 
             System.out.println(e.getMessage());
-
             return e.getMessage();
-
+        } finally {
+            // Release the connection if created..
+            if (myURLConnection != null) myURLConnection.disconnect();
         }
 
-        if (in != null) {
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            try {
-                resultToDisplay = br.readLine();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-                return e.getMessage();
-            }
-        }
+        // Return the response - JSON in this case.
         return resultToDisplay;
     }
 
@@ -129,6 +178,40 @@ public class UserService {
 
     /*
     Async task for calling the REST API from application on background thread.
+    The task makes PUT request for setting up RSVP status for event.
+    */
+    private class AsyncEventRSVPRESTAPICaller extends AsyncTask {
+        // Delegate to represent caller
+        private IAsyncPutRequestResponse delegate = null;
+
+        // Cache params
+        Object[] params = null;
+
+        public void setDelegate(IAsyncPutRequestResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        // HTTP PUT call
+        @Override
+        protected Object doInBackground(Object[] params) {
+            // Cache params
+            this.params = params;
+
+            String urlToCall = "http://192.168.56.1:8080/api/user/events/rsvp?userId=" + params[0] +
+                    "&eventId=" + params[1] + "&isAttending=" + params[2];
+
+            // Call the PUT API
+            return makePutAPICall(urlToCall);
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            delegate.putRequestResponse(o.toString(),Integer.parseInt(params[3].toString()));
+        }
+    }
+
+    /*
+    Async task for calling the REST API from application on background thread.
     The task accepts the user Id as integer and returns the list of user group models.
  */
     private class AsyncGroupsRESTAPICaller extends AsyncTask<Integer, String, List<UserGroupModel>> {
@@ -144,8 +227,8 @@ public class UserService {
         protected List<UserGroupModel> doInBackground(Integer... params) {
             // Make API call
             try {
-                String urlToCall = "http://192.168.0.5:8080/api/user/groups?userId=" + params[0];
-                String resultsToParse = makeAPICall(urlToCall);
+                String urlToCall = "http://192.168.56.1:8080/api/user/groups?userId=" + params[0];
+                String resultsToParse = makeGetAPICall(urlToCall);
 
                 // Parse the JSON
                 Gson gson = getGson();
@@ -189,8 +272,8 @@ public class UserService {
 
             // Make API call
             try {
-                String urlString = "http://192.168.0.5:8080/api/user/events?userId=" + params[0];
-                String resultToDisplay = makeAPICall(urlString);
+                String urlString = "http://192.168.56.1:8080/api/user/events?userId=" + params[0];
+                String resultToDisplay = makeGetAPICall(urlString);
 
                 // Parse and return event list
 

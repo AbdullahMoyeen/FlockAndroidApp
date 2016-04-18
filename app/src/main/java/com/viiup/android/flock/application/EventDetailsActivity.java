@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserEventModel;
+import com.viiup.android.flock.services.IAsyncPutRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 import java.text.DateFormat;
@@ -72,7 +73,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewGroupName.setText(userEvent.event.getGroupName());
         itemsViewHolder.textViewEventAddress.setText(userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode());
         itemsViewHolder.switchRsvp.setChecked(userEvent.isAttending());
-        itemsViewHolder.switchRsvp.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
+//        itemsViewHolder.switchRsvp.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
+        itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new RsvpOnCheckedChangeListener());
     }
 
     @Override
@@ -101,20 +103,33 @@ public class EventDetailsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
-    private CompoundButton.OnCheckedChangeListener switchRsvpOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    /*
+        Helper class acting as OnCheckedChangeListener
+     */
+    private class RsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
+
         @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
+        public void putRequestResponse(String response, int position) {
 
-//            Toast.makeText(buttonView.getContext(), "changed event " + userEvent.event.getEventId() + " to " + isOn, Toast.LENGTH_SHORT).show();
+            boolean isOn = false;
+            if(response.equalsIgnoreCase("OK")){
+                isOn = true;
+            }
 
-            UserService userService = new UserService();
-            userService.setUserEventRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn);
-
+            // Set other stuff on UI thread
             userEvent.setIsAttending(isOn);
             int attendeeCount = userEvent.event.getAttendeeCount();
             userEvent.event.setAttendeeCount(isOn ? attendeeCount + 1 : attendeeCount - 1);
             isAttendingChanged = !isAttendingChanged;
             itemsViewHolder.textViewAttendeeCount.setText(userEvent.event.getAttendeeCount() + " going");
         }
-    };
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
+            UserService userService = new UserService();
+            userService.setUserEventRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn,
+                    0, this);
+        }
+    }
+
 }
