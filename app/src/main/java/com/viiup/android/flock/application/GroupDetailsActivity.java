@@ -67,16 +67,15 @@ public class GroupDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewEventsCount.setText(Integer.toString(userGroup.group.getUpcomingEventCount()) + " upcoming");
         itemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByGroupCategory(this, userGroup.group.getGroupCategory()));
-        itemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
-        if (userGroup.getGroupMembershipStatus().equals("A")) {
-            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_on)));
-        }
+        itemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_off)));
         if (userGroup.getGroupMembershipStatus().equals("P")) {
             itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_pending)));
             itemsViewHolder.switchMembership.setEnabled(false);
         } else {
+            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_on)));
             itemsViewHolder.switchMembership.setEnabled(true);
         }
+        itemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
         itemsViewHolder.switchMembership.setOnCheckedChangeListener(new SwitchMembershipOnCheckedChangeListener());
     }
 

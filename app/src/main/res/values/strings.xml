@@ -8,5 +8,5 @@
     <string name="nearby_events">NEARBY EVENTS</string>
     <string name="fa_icon_on">{fa-check}</string>
     <string name="fa_icon_off">{fa-remove}</string>
-    <string name="fa_icon_pending">{fa-hourglass-start}</string>
+    <string name="fa_icon_pending">{fa-hourglass-half}</string>
 </resources>

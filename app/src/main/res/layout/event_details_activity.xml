@@ -113,7 +113,7 @@
 
             <Switch
                 android:id="@+id/switchRsvp"
-                android:layout_width="85dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/textViewEventAddress"
                 android:layout_centerInParent="true"

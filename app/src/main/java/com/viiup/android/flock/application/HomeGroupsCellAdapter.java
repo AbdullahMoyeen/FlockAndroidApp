@@ -92,17 +92,15 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewGroupMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " joined");
             cellItemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
             cellItemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_off)));
-            cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(null);
-            cellItemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
-            if (userGroup.getGroupMembershipStatus().equals("A")) {
-                cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_on)));
-            }
             if (userGroup.getGroupMembershipStatus().equals("P")) {
                 cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_pending)));
                 cellItemsViewHolder.switchMembership.setEnabled(false);
             } else {
+                cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_on)));
                 cellItemsViewHolder.switchMembership.setEnabled(true);
             }
+            cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(null);
+            cellItemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
             cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(new SwitchMembershipOnCheckedChangeListener());
         }
 
