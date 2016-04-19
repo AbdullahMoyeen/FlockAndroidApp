@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viiup.android.flock.models.UserGroupModel;
@@ -76,11 +77,10 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
             String membershipStatus = data.getStringExtra("membershipStatus");
             if (membershipStatus != null) {
                 userGroups.get(requestCode).setGroupMembershipStatus(membershipStatus);
-                if(membershipStatus.equals("P")){
+                if (membershipStatus.equals("P")) {
                     int pendingMemberCount = userGroups.get(requestCode).group.getPendingMemberCount();
                     userGroups.get(requestCode).group.setPendingMemberCount(pendingMemberCount + 1);
-                }
-                else if (membershipStatus.equals("I")){
+                } else if (membershipStatus.equals("I")) {
                     int activeMemberCount = userGroups.get(requestCode).group.getActiveMemberCount();
                     userGroups.get(requestCode).group.setActiveMemberCount(activeMemberCount - 1);
                 }
@@ -92,9 +92,21 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void postUserGroups(List<UserGroupModel> userGroups) {
+        if (userGroups != null && userGroups.size() > 0) {
+            this.userGroups = userGroups;
+            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+            setListAdapter(adapter);
+        } else {
+            Toast.makeText(this.getContext(), "No groups are available.", Toast.LENGTH_LONG).show();
+        }
+    }
 
-        this.userGroups = userGroups;
-        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
-        setListAdapter(adapter);
+    @Override
+    public void backGroundErrorHandler(Exception ex) {
+        // Print stack trace...may be add logging in future releases
+        ex.printStackTrace();
+
+        // display error message
+        Toast.makeText(this.getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
     }
 }

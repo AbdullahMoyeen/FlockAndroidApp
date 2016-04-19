@@ -6,4 +6,5 @@ package com.viiup.android.flock.services;
  */
 public interface IAsyncPutRequestResponse {
     void putRequestResponse(String response);
+    void backGroundErrorHandler(Exception ex);
 }

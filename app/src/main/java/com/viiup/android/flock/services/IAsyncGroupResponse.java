@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface IAsyncGroupResponse {
     void postUserGroups(List<UserGroupModel> userGroups);
+    void backGroundErrorHandler(Exception ex);
 }

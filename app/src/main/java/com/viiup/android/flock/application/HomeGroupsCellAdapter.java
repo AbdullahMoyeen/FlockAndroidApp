@@ -1,6 +1,7 @@
 package com.viiup.android.flock.application;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
     private ListView listView;
     private List<UserGroupModel> userGroups;
     private CellItemsViewHolder cellItemsViewHolder;
+    private ProgressDialog progressDialog;
 
     HomeGroupsCellAdapter(Context context, ListView listView, List<UserGroupModel> userGroups) {
         this.context = context;
@@ -115,6 +117,8 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
         @Override
         public void putRequestResponse(String response) {
 
+            if(progressDialog != null) progressDialog.dismiss();
+
             if (response.equalsIgnoreCase("OK")) {
                 if (isMember) {
                     Toast.makeText(context, "your join request has been sent for approval", Toast.LENGTH_SHORT).show();
@@ -136,10 +140,25 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
         }
 
         @Override
+        public void backGroundErrorHandler(Exception ex) {
+
+            if(progressDialog != null) progressDialog.dismiss();
+
+            // Print stack trace...may be add logging in future releases
+            ex.printStackTrace();
+
+            // display error message
+            Toast.makeText(context,ex.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+        @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
             this.isMember = isOn;
             this.position = listView.getPositionForView(buttonView);
+
+            // Display progress bar
+            progressDialog = ProgressDialog.show(context,"Membership","Processing membership request..");
 
             UserService userService = new UserService();
             userService.setUserGroupMembership(userGroups.get(position).getUserId(), userGroups.get(position).group.getGroupId(), isOn, this);

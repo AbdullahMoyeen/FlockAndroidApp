@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface IAsyncEventResponse {
     void postUserEvents(List<UserEventModel> userEvents);
+    void backGroundErrorHandler(Exception ex);
 }

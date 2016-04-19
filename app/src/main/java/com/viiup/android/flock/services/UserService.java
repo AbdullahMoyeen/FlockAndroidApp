@@ -31,7 +31,7 @@ import java.util.List;
 public class UserService {
 
     // Constant for holding the Web API end point used in URL
-    private final String WEBAPIENDPOINT = "http://192.168.0.5:8080";
+    private final String WEBAPIENDPOINT = "http://192.168.56.1:8080";
 
     public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
         // Call Events rest API
@@ -85,7 +85,7 @@ public class UserService {
     /*
         Service method for calling REST API with "Put" request
      */
-    private String makePutAPICall(String urlToCall) {
+    private String makePutAPICall(String urlToCall) throws IOException {
         String urlString = urlToCall;
         HttpURLConnection putRequestConnection = null;
 
@@ -115,7 +115,7 @@ public class UserService {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return e.getMessage();
+            throw e;
         } finally {
             // release the connection if made
             if (putRequestConnection != null) putRequestConnection.disconnect();
@@ -200,6 +200,10 @@ public class UserService {
         // Delegate to represent caller
         private IAsyncPutRequestResponse delegate = null;
 
+        // Exception to throw from PostExecute
+        Exception backGrounndException = null;
+
+        // Set the delegate i.e. activity that requested async task to post response
         public void setDelegate(IAsyncPutRequestResponse delegate) {
             this.delegate = delegate;
         }
@@ -211,12 +215,30 @@ public class UserService {
             // Get the URL to call
             String urlToCall = params[0].toString();
 
+            // Return value
+            Object retVal = null;
+
             // Call the PUT API
-            return makePutAPICall(urlToCall);
+            try {
+                retVal = makePutAPICall(urlToCall);
+            } catch (IOException e) {
+                e.printStackTrace();
+                // Set the exception
+                backGrounndException = e;
+            }
+
+            // Return
+            return retVal;
         }
 
         @Override
         protected void onPostExecute(Object o) {
+
+            if (backGrounndException != null) {
+                delegate.backGroundErrorHandler(backGrounndException);
+            }
+
+            // No exception, hence handle the results
             delegate.putRequestResponse(o.toString());
         }
     }
@@ -226,6 +248,9 @@ public class UserService {
     The task accepts the user Id as integer and returns the list of user group models.
  */
     private class AsyncGroupsRESTAPICaller extends AsyncTask<Integer, String, List<UserGroupModel>> {
+
+        // Exception thrown by background thread
+        Exception backGroundException = null;
 
         // Call back interface for communicating with caller
         IAsyncGroupResponse delegate = null;
@@ -249,18 +274,20 @@ public class UserService {
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                backGroundException = e;
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(List<UserGroupModel> userGroupModels) {
-            try {
-                // Post the data
-                delegate.postUserGroups(userGroupModels);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+
+            // If there is an exception in background thread, call error handler
+            if (backGroundException != null)
+                delegate.backGroundErrorHandler(backGroundException);
+
+            // Post the data
+            delegate.postUserGroups(userGroupModels);
         }
     }
 
@@ -272,6 +299,9 @@ public class UserService {
 
         // Call back interface for communicating with caller
         IAsyncEventResponse delegate = null;
+
+        // Exception during background process
+        Exception backGroundException = null;
 
         // Setter for the delegate to return response
         public void setDelegate(IAsyncEventResponse delegate) {
@@ -295,6 +325,7 @@ public class UserService {
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+                backGroundException = e;
             }
 
             // Exception case...
@@ -303,12 +334,12 @@ public class UserService {
 
         @Override
         protected void onPostExecute(List<UserEventModel> userEventModelList) {
-            try {
-                // Return the events list to the caller
-                delegate.postUserEvents(userEventModelList);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+
+            if (backGroundException != null)
+                delegate.backGroundErrorHandler(backGroundException);
+
+            // Return the events list to the caller
+            delegate.postUserEvents(userEventModelList);
         }
     }
 }
