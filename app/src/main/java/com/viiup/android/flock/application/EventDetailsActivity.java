@@ -134,6 +134,15 @@ public class EventDetailsActivity extends AppCompatActivity {
         }
 
         @Override
+        public void backGroundErrorHandler(Exception ex) {
+            // Print stack trace...may be add logging in future releases
+            ex.printStackTrace();
+
+            // display error message
+            Toast.makeText(context,ex.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+        @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
             this.isAttending = isOn;

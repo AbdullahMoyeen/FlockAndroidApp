@@ -1,6 +1,7 @@
 package com.viiup.android.flock.application;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viiup.android.flock.models.UserEventModel;
@@ -27,6 +29,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     HomeEventsCellAdapter adapter;
     public List<UserEventModel> userEvents;
+    private ProgressDialog progressDialog = null;
 
     public HomeEventsFragment() {
     }
@@ -37,6 +40,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        progressDialog = ProgressDialog.show(getContext(), "Events", "Loading events..");
         return inflater.inflate(R.layout.home_events_fragment, container, false);
     }
 
@@ -87,10 +91,26 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void postUserEvents(List<UserEventModel> userEvents) {
-        // Bind the adapter to list view
-        this.userEvents = userEvents;
-        ((HomeActivity)this.getActivity()).userEvents = userEvents;
-        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
-        setListAdapter(adapter);
+        if (userEvents != null && userEvents.size() > 0) {
+            // Bind the adapter to list view
+            this.userEvents = userEvents;
+            ((HomeActivity) this.getActivity()).userEvents = userEvents;
+            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+            setListAdapter(adapter);
+        } else {
+            Toast.makeText(this.getContext(), "Events are not available.", Toast.LENGTH_LONG).show();
+        }
+
+        // dismiss the progress
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void backGroundErrorHandler(Exception ex) {
+        // Print stack trace...may be add logging in future releases
+        ex.printStackTrace();
+
+        // display error message
+        Toast.makeText(this.getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
     }
 }
