@@ -78,7 +78,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewGroupName.setText(userEvent.event.getGroupName());
         itemsViewHolder.textViewEventAddress.setText(userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode());
         itemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
-        itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new RsvpOnCheckedChangeListener());
+        itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new SwitchRsvpOnCheckedChangeListener());
     }
 
     @Override
@@ -110,7 +110,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     /*
         Helper class acting as OnCheckedChangeListener
      */
-    private class RsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
+    private class SwitchRsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
 
         private boolean isAttending;
 

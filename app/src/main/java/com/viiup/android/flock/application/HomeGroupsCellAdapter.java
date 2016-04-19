@@ -106,8 +106,7 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private class SwitchMembershipOnCheckedChangeListener implements
-            CompoundButton.OnCheckedChangeListener, IAsyncPutRequestResponse {
+    private class SwitchMembershipOnCheckedChangeListener implements CompoundButton.OnCheckedChangeListener, IAsyncPutRequestResponse {
 
         private boolean isMember;
         private int position;
@@ -117,7 +116,7 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
 
             if (response.equalsIgnoreCase("OK")) {
                 if (isMember) {
-                    Toast.makeText(context, "your join request has been sent for approval", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "your join request has been sent for approval", Toast.LENGTH_SHORT).show();
                     int pendingMemberCount = userGroups.get(position).group.getPendingMemberCount();
                     userGroups.get(position).setGroupMembershipStatus("P");
                     userGroups.get(position).group.setPendingMemberCount(pendingMemberCount + 1);
@@ -130,19 +129,19 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
                 }
 
                 listView.setAdapter(listView.getAdapter());
+            } else {
+                Toast.makeText(context, "your membership could not be processed, please try again later", Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
-            //Cache event parameters required after async call
             this.isMember = isOn;
             this.position = listView.getPositionForView(buttonView);
 
             UserService userService = new UserService();
-            userService.setUserGroupMembership(userGroups.get(position).getUserId(),
-                    userGroups.get(position).group.getGroupId(), isOn, this);
+            userService.setUserGroupMembership(userGroups.get(position).getUserId(), userGroups.get(position).group.getGroupId(), isOn, this);
         }
     }
 }

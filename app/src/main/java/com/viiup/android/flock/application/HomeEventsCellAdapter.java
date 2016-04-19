@@ -96,7 +96,7 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewEventDescription.setText(userEvent.event.getEventDescription());
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
-            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(new RsvpOnCheckedChangeListener());
+            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(new SwitchRsvpOnCheckedChangeListener());
         }
 
         return convertView;
@@ -105,7 +105,7 @@ public class HomeEventsCellAdapter extends BaseAdapter {
     /*
         Helper class acting as OnCheckedChangeListener
      */
-    private class RsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
+    private class SwitchRsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
 
         private boolean isAttending;
         private int position;
