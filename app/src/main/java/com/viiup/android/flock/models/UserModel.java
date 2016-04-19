@@ -19,7 +19,7 @@ public class UserModel {
     private String salt;
     private int failedLoginCount;
     private String accountStatus;
-    private boolean passwordExpired;
+    private boolean isPasswordExpired;
 
     public int getUserId() {
         return userId;
@@ -117,11 +117,11 @@ public class UserModel {
         this.accountStatus = accountStatus;
     }
 
-    public boolean isPasswordExpired() {
-        return passwordExpired;
+    public boolean getIsPasswordExpired() {
+        return isPasswordExpired;
     }
 
-    public void setPasswordExpired(boolean passwordExpired) {
-        this.passwordExpired = passwordExpired;
+    public void setIsPasswordExpired(boolean isPasswordExpired) {
+        this.isPasswordExpired = isPasswordExpired;
     }
 }

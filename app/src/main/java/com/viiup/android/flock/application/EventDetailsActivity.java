@@ -77,7 +77,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByEventCategory(this, userEvent.event.getEventCategory()));
         itemsViewHolder.textViewGroupName.setText(userEvent.event.getGroupName());
         itemsViewHolder.textViewEventAddress.setText(userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode());
-        itemsViewHolder.switchRsvp.setChecked(userEvent.isAttending());
+        itemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
         itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new RsvpOnCheckedChangeListener());
     }
 

@@ -95,7 +95,7 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewEventStartDateTime.setText(dateFormat.format(userEvent.event.getEventStartDatetime()));
             cellItemsViewHolder.textViewEventDescription.setText(userEvent.event.getEventDescription());
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(null);
-            cellItemsViewHolder.switchRsvp.setChecked(userEvent.isAttending());
+            cellItemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(new RsvpOnCheckedChangeListener());
         }
 

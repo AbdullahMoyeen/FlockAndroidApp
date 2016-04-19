@@ -27,7 +27,7 @@ public class EventModel {
     private String eventKeywords;
     private float eventLatitude;
     private float eventLongitude;
-    private boolean privateEvent;
+    private boolean isPrivateEvent;
     private int attendeeCount;
 
     public int getEventId() {
@@ -190,12 +190,12 @@ public class EventModel {
         this.eventLongitude = eventLongitude;
     }
 
-    public boolean isPrivateEvent() {
-        return privateEvent;
+    public boolean getIsPrivateEvent() {
+        return isPrivateEvent;
     }
 
-    public void setPrivateEvent(boolean privateEvent) {
-        this.privateEvent = privateEvent;
+    public void setIsPrivateEvent(boolean isPrivateEvent) {
+        this.isPrivateEvent = isPrivateEvent;
     }
 
     public int getAttendeeCount() {

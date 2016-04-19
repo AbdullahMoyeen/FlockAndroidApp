@@ -19,7 +19,7 @@ public class UserEventModel {
         this.userId = userId;
     }
 
-    public boolean isAttending() {
+    public boolean getIsAttending() {
         return isAttending;
     }
 

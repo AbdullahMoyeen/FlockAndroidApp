@@ -77,9 +77,9 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
             boolean isAttendingChanged = data.getBooleanExtra("isAttendingChanged", false);
 
             if (isAttendingChanged) {
-                userEvents.get(requestCode).setIsAttending(!userEvents.get(requestCode).isAttending());
+                userEvents.get(requestCode).setIsAttending(!userEvents.get(requestCode).getIsAttending());
                 int attendeeCount = userEvents.get(requestCode).event.getAttendeeCount();
-                userEvents.get(requestCode).event.setAttendeeCount(userEvents.get(requestCode).isAttending() ? attendeeCount + 1 : attendeeCount - 1);
+                userEvents.get(requestCode).event.setAttendeeCount(userEvents.get(requestCode).getIsAttending() ? attendeeCount + 1 : attendeeCount - 1);
                 this.getListView().setAdapter(this.getListView().getAdapter());
             }
         }
