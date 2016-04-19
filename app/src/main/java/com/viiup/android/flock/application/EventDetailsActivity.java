@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.services.IAsyncPutRequestResponse;
@@ -77,6 +78,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByEventCategory(this, userEvent.event.getEventCategory()));
         itemsViewHolder.textViewGroupName.setText(userEvent.event.getGroupName());
         itemsViewHolder.textViewEventAddress.setText(userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode());
+        itemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_off)));
+        itemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_on)));
         itemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
         itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new SwitchRsvpOnCheckedChangeListener());
     }

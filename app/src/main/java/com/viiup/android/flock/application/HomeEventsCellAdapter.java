@@ -13,6 +13,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.services.IAsyncPutRequestResponse;
@@ -94,6 +95,8 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewEventName.setText(userEvent.event.getEventName());
             cellItemsViewHolder.textViewEventStartDateTime.setText(dateFormat.format(userEvent.event.getEventStartDatetime()));
             cellItemsViewHolder.textViewEventDescription.setText(userEvent.event.getEventDescription());
+            cellItemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_off)));
+            cellItemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_on)));
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(new SwitchRsvpOnCheckedChangeListener());

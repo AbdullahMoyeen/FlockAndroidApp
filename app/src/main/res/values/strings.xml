@@ -6,6 +6,7 @@
     <string name="title_activity_group_details">Back</string>
     <string name="title_activity_location">Back</string>
     <string name="nearby_events">NEARBY EVENTS</string>
-    <string name="fa_icon_ok">&#xf00c;</string>
-    <string name="fa_icon_remove">&#xf00d;</string>
+    <string name="fa_icon_on">{fa-check}</string>
+    <string name="fa_icon_off">{fa-remove}</string>
+    <string name="fa_icon_pending">{fa-hourglass-start}</string>
 </resources>

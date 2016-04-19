@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserGroupModel;
 import com.viiup.android.flock.services.IAsyncPutRequestResponse;
@@ -68,9 +69,10 @@ public class GroupDetailsActivity extends AppCompatActivity {
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByGroupCategory(this, userGroup.group.getGroupCategory()));
         itemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
         if (userGroup.getGroupMembershipStatus().equals("A")) {
-            itemsViewHolder.switchMembership.setTextOn("IN");
+            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_on)));
         }
         if (userGroup.getGroupMembershipStatus().equals("P")) {
+            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_pending)));
             itemsViewHolder.switchMembership.setEnabled(false);
         } else {
             itemsViewHolder.switchMembership.setEnabled(true);

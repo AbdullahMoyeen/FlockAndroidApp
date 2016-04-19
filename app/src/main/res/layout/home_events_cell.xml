@@ -33,6 +33,7 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/colorContentIcon"
             android:textSize="12sp"
+            android:text="{fa-android}"
             android:textAlignment="center"/>
 
     </LinearLayout>
@@ -68,12 +69,11 @@
 
     <Switch
         android:id="@+id/switchRsvp"
-        android:layout_width="100dp"
+        android:layout_width="85dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:layout_marginStart="10dp"
-        android:text=""
-        android:textOff="NO"
-        android:textOn="YES" />
+        android:switchMinWidth="0dp"
+        android:text="" />
 
 </LinearLayout>

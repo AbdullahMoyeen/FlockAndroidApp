@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     tools:context="com.viiup.android.flock.application.GroupDetailsActivity">
 
     <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -89,38 +90,15 @@
                 android:layout_marginTop="30dp"
                 android:contentDescription="@string/image_description" />
 
-            <!--<TextView-->
-                <!--android:id="@+id/textViewGroupName"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/imageViewGroup"-->
-                <!--android:layout_centerInParent="true"-->
-                <!--android:layout_marginTop="5dp"-->
-                <!--android:textAlignment="center"-->
-                <!--android:textColor="@color/colorContentIcon"-->
-                <!--android:textSize="16sp" />-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/textViewEventAddress"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/textViewGroupName"-->
-                <!--android:layout_marginTop="30dp"-->
-                <!--android:textAlignment="center"-->
-                <!--android:textColor="@color/colorContentText"-->
-                <!--android:textSize="16sp" />-->
-
             <Switch
                 android:id="@+id/switchMembership"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="85dp"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/imageViewGroup"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="30dp"
-                android:focusable="false"
-                android:text=""
-                android:textOff="OUT"
-                android:textOn="PENDING" />
+                android:switchMinWidth="0dp"
+                android:text="" />
 
         </RelativeLayout>
 
