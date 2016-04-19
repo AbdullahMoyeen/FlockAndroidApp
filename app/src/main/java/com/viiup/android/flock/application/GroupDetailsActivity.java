@@ -107,7 +107,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
             userService.setUserGroupMembership(userGroup.getUserId(), userGroup.group.getGroupId(), isOn);
 
             if (isOn) {
-                Toast.makeText(buttonView.getContext(), "your join request has been sent", Toast.LENGTH_LONG).show();
+                Toast.makeText(buttonView.getContext(), "your join request has been sent for approval", Toast.LENGTH_LONG).show();
                 int pendingMemberCount = userGroup.group.getPendingMemberCount();
                 userGroup.setGroupMembershipStatus("P");
                 userGroup.group.setPendingMemberCount(pendingMemberCount + 1);

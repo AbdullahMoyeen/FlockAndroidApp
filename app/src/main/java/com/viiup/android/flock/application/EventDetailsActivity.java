@@ -1,6 +1,7 @@
 package com.viiup.android.flock.application;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viiup.android.flock.helpers.CommonHelper;
@@ -33,6 +35,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         Switch switchRsvp;
     }
 
+    private Context context;
     private ItemsViewHolder itemsViewHolder;
     private UserEventModel userEvent;
     private boolean isAttendingChanged = false;
@@ -41,6 +44,8 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        context = this;
 
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
 
@@ -73,7 +78,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewGroupName.setText(userEvent.event.getGroupName());
         itemsViewHolder.textViewEventAddress.setText(userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode());
         itemsViewHolder.switchRsvp.setChecked(userEvent.isAttending());
-//        itemsViewHolder.switchRsvp.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
         itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new RsvpOnCheckedChangeListener());
     }
 
@@ -108,28 +112,31 @@ public class EventDetailsActivity extends AppCompatActivity {
      */
     private class RsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
 
+        private boolean isAttending;
+
         @Override
-        public void putRequestResponse(String response, int position) {
+        public void putRequestResponse(String response) {
 
-            boolean isOn = false;
-            if(response.equalsIgnoreCase("OK")){
-                isOn = true;
+            if(response.equalsIgnoreCase("OK")) {
+
+                userEvent.setIsAttending(this.isAttending);
+                int attendeeCount = userEvent.event.getAttendeeCount();
+                userEvent.event.setAttendeeCount(this.isAttending ? attendeeCount + 1 : attendeeCount - 1);
+                isAttendingChanged = !isAttendingChanged;
+                itemsViewHolder.textViewAttendeeCount.setText(userEvent.event.getAttendeeCount() + " going");
             }
-
-            // Set other stuff on UI thread
-            userEvent.setIsAttending(isOn);
-            int attendeeCount = userEvent.event.getAttendeeCount();
-            userEvent.event.setAttendeeCount(isOn ? attendeeCount + 1 : attendeeCount - 1);
-            isAttendingChanged = !isAttendingChanged;
-            itemsViewHolder.textViewAttendeeCount.setText(userEvent.event.getAttendeeCount() + " going");
+            else{
+                Toast.makeText(context, "your rsvp could not be processed, please try again later", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
+
+            this.isAttending = isOn;
+
             UserService userService = new UserService();
-            userService.setUserEventRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn,
-                    0, this);
+            userService.setUserEventRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn, this);
         }
     }
-
 }

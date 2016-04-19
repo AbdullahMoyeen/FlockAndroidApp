@@ -5,5 +5,5 @@ package com.viiup.android.flock.services;
  * This interface is used as call back to communicate PUT request response back to caller.
  */
 public interface IAsyncPutRequestResponse {
-    void putRequestResponse(String response, int position);
+    void putRequestResponse(String response);
 }

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserEventModel;
@@ -95,7 +96,6 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewEventDescription.setText(userEvent.event.getEventDescription());
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchRsvp.setChecked(userEvent.isAttending());
-//            cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(switchRsvpOnCheckedChangeListener);
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(new RsvpOnCheckedChangeListener());
         }
 
@@ -107,24 +107,31 @@ public class HomeEventsCellAdapter extends BaseAdapter {
      */
     private class RsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
 
-        @Override
-        public void putRequestResponse(String response, int position) {
-            boolean isOn = false;
-            if(response.equalsIgnoreCase("OK")){
-                isOn = true;
-            }
+        private boolean isAttending;
+        private int position;
 
-            userEvents.get(position).setIsAttending(isOn);
-            int attendeeCount = userEvents.get(position).event.getAttendeeCount();
-            userEvents.get(position).event.setAttendeeCount(isOn ? attendeeCount + 1 : attendeeCount - 1);
+        @Override
+        public void putRequestResponse(String response) {
+
+            if(response.equalsIgnoreCase("OK")) {
+
+                userEvents.get(position).setIsAttending(this.isAttending);
+                int attendeeCount = userEvents.get(this.position).event.getAttendeeCount();
+                userEvents.get(this.position).event.setAttendeeCount(this.isAttending ? attendeeCount + 1 : attendeeCount - 1);
+            }
+            else{
+                Toast.makeText(context, "your rsvp could not be processed, please try again later", Toast.LENGTH_SHORT).show();
+            }
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
-            final int position = listView.getPositionForView(buttonView);
+
+            this.isAttending = isOn;
+            this.position = listView.getPositionForView(buttonView);
+
             UserService userService = new UserService();
-            userService.setUserEventRsvp(userEvents.get(position).getUserId(),
-                    userEvents.get(position).event.getEventId(), isOn, position, this);
+            userService.setUserEventRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn, this);
         }
     }
 }

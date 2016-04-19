@@ -115,7 +115,7 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             userService.setUserGroupMembership(userGroups.get(position).getUserId(), userGroups.get(position).group.getGroupId(), isOn);
 
             if (isOn) {
-                Toast.makeText(context, "your join request has been sent", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "your join request has been sent for approval", Toast.LENGTH_LONG).show();
                 int pendingMemberCount = userGroups.get(position).group.getPendingMemberCount();
                 userGroups.get(position).setGroupMembershipStatus("P");
                 userGroups.get(position).group.setPendingMemberCount(pendingMemberCount + 1);

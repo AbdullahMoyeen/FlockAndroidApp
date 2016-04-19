@@ -52,11 +52,11 @@ public class UserService {
         }
     }
 
-    public void setUserEventRsvp(int userId, int eventId, boolean isAttending, int position, IAsyncPutRequestResponse delegate) {
+    public void setUserEventRsvp(int userId, int eventId, boolean isAttending, IAsyncPutRequestResponse delegate) {
         try {
             AsyncEventRSVPRESTAPICaller asyncEventRSVPRESTAPICaller = new AsyncEventRSVPRESTAPICaller();
             asyncEventRSVPRESTAPICaller.setDelegate(delegate);
-            asyncEventRSVPRESTAPICaller.execute(userId, eventId, isAttending,position);
+            asyncEventRSVPRESTAPICaller.execute(userId, eventId, isAttending);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -197,8 +197,7 @@ public class UserService {
             // Cache params
             this.params = params;
 
-            String urlToCall = "http://192.168.56.1:8080/api/user/events/rsvp?userId=" + params[0] +
-                    "&eventId=" + params[1] + "&isAttending=" + params[2];
+            String urlToCall = "http://192.168.56.1:8080/api/user/events/rsvp?userId=" + params[0] + "&eventId=" + params[1] + "&isAttending=" + params[2];
 
             // Call the PUT API
             return makePutAPICall(urlToCall);
@@ -206,7 +205,7 @@ public class UserService {
 
         @Override
         protected void onPostExecute(Object o) {
-            delegate.putRequestResponse(o.toString(),Integer.parseInt(params[3].toString()));
+            delegate.putRequestResponse(o.toString());
         }
     }
 
@@ -279,7 +278,8 @@ public class UserService {
 
                 Gson gson = getGson();
                 if (gson != null) {
-                    return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {}.getType());
+                    return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {
+                    }.getType());
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
