@@ -88,7 +88,7 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByGroupCategory(this.context, userGroup.group.getGroupCategory()));
             cellItemsViewHolder.textViewGroupCategory.setText(userGroup.group.getGroupCategory());
             cellItemsViewHolder.textViewGroupName.setText(userGroup.group.getGroupName());
-            cellItemsViewHolder.textViewGroupMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " members");
+            cellItemsViewHolder.textViewGroupMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " joined");
             cellItemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
             cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));

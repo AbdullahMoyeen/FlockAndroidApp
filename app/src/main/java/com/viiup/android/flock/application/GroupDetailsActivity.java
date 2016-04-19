@@ -62,8 +62,8 @@ public class GroupDetailsActivity extends AppCompatActivity {
         itemsViewHolder.switchMembership = (Switch) findViewById(R.id.switchMembership);
 
         itemsViewHolder.textViewSecondaryBar.setText(userGroup.group.getGroupName().toUpperCase());
-        itemsViewHolder.textViewMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " members");
-        itemsViewHolder.textViewEventsCount.setText(Integer.toString(userGroup.group.getUpcomingEventCount()) + " upcoming events");
+        itemsViewHolder.textViewMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " joined");
+        itemsViewHolder.textViewEventsCount.setText(Integer.toString(userGroup.group.getUpcomingEventCount()) + " upcoming");
         itemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByGroupCategory(this, userGroup.group.getGroupCategory()));
         itemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
@@ -122,7 +122,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
                     int activeMemberCount = userGroup.group.getActiveMemberCount();
                     userGroup.setGroupMembershipStatus("I");
                     userGroup.group.setActiveMemberCount(activeMemberCount - 1);
-                    itemsViewHolder.textViewMembersCount.setText(userGroup.group.getActiveMemberCount() + " members");
+                    itemsViewHolder.textViewMembersCount.setText(userGroup.group.getActiveMemberCount() + " joined");
                 }
 
                 membershipStatus = userGroup.getGroupMembershipStatus();
