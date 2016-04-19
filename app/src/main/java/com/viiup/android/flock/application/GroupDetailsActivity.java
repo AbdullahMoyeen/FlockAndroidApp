@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserGroupModel;
+import com.viiup.android.flock.services.IAsyncPutRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 public class GroupDetailsActivity extends AppCompatActivity {
@@ -99,28 +100,65 @@ public class GroupDetailsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
+    private class SwitchMembershipOnCheckedChangeListener implements
+            CompoundButton.OnCheckedChangeListener, IAsyncPutRequestResponse {
+
+        private boolean isMember;
+
+        @Override
+        public void putRequestResponse(String response) {
+
+            if (response.equalsIgnoreCase("OK")) {
+                if (isMember) {
+                    int pendingMemberCount = userGroup.group.getPendingMemberCount();
+                    userGroup.setGroupMembershipStatus("P");
+                    userGroup.group.setPendingMemberCount(pendingMemberCount + 1);
+                    itemsViewHolder.switchMembership.setEnabled(false);
+                } else {
+                    int activeMemberCount = userGroup.group.getActiveMemberCount();
+                    userGroup.setGroupMembershipStatus("I");
+                    userGroup.group.setActiveMemberCount(activeMemberCount - 1);
+                    itemsViewHolder.textViewMembersCount.setText(userGroup.group.getActiveMemberCount() + " members");
+                }
+
+                membershipStatus = userGroup.getGroupMembershipStatus();
+            }
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
+
+            this.isMember = isOn;
+            UserService userService = new UserService();
+            userService.setUserGroupMembership(userGroup.getUserId(), userGroup.group.getGroupId(),
+                    isOn, this);
+            Toast.makeText(buttonView.getContext(), "your join request has been sent for approval",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
     private CompoundButton.OnCheckedChangeListener switchMembershipOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
-            UserService userService = new UserService();
-            userService.setUserGroupMembership(userGroup.getUserId(), userGroup.group.getGroupId(), isOn);
-
-            if (isOn) {
-                Toast.makeText(buttonView.getContext(), "your join request has been sent for approval", Toast.LENGTH_LONG).show();
-                int pendingMemberCount = userGroup.group.getPendingMemberCount();
-                userGroup.setGroupMembershipStatus("P");
-                userGroup.group.setPendingMemberCount(pendingMemberCount + 1);
-                itemsViewHolder.switchMembership.setEnabled(false);
-            }
-            else{
-                int activeMemberCount = userGroup.group.getActiveMemberCount();
-                userGroup.setGroupMembershipStatus("I");
-                userGroup.group.setActiveMemberCount(activeMemberCount - 1);
-                itemsViewHolder.textViewMembersCount.setText(userGroup.group.getActiveMemberCount() + " members");
-            }
-
-            membershipStatus = userGroup.getGroupMembershipStatus();
+//            UserService userService = new UserService();
+//            userService.setUserGroupMembership(userGroup.getUserId(), userGroup.group.getGroupId(), isOn);
+//
+//            if (isOn) {
+//                Toast.makeText(buttonView.getContext(), "your join request has been sent for approval", Toast.LENGTH_LONG).show();
+//                int pendingMemberCount = userGroup.group.getPendingMemberCount();
+//                userGroup.setGroupMembershipStatus("P");
+//                userGroup.group.setPendingMemberCount(pendingMemberCount + 1);
+//                itemsViewHolder.switchMembership.setEnabled(false);
+//            }
+//            else{
+//                int activeMemberCount = userGroup.group.getActiveMemberCount();
+//                userGroup.setGroupMembershipStatus("I");
+//                userGroup.group.setActiveMemberCount(activeMemberCount - 1);
+//                itemsViewHolder.textViewMembersCount.setText(userGroup.group.getActiveMemberCount() + " members");
+//            }
+//
+//            membershipStatus = userGroup.getGroupMembershipStatus();
         }
     };
 }

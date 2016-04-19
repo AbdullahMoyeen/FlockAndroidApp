@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserGroupModel;
+import com.viiup.android.flock.services.IAsyncPutRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 import java.util.List;
@@ -99,35 +100,49 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             } else {
                 cellItemsViewHolder.switchMembership.setEnabled(true);
             }
-            cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(switchMembershipOnCheckedChangeListener);
+            cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(new SwitchMembershipOnCheckedChangeListener());
         }
 
         return convertView;
     }
 
-    private CompoundButton.OnCheckedChangeListener switchMembershipOnCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
+    private class SwitchMembershipOnCheckedChangeListener implements
+            CompoundButton.OnCheckedChangeListener, IAsyncPutRequestResponse {
+
+        private boolean isMember;
+        private int position;
+
+        @Override
+        public void putRequestResponse(String response) {
+
+            if (response.equalsIgnoreCase("OK")) {
+                if (isMember) {
+                    Toast.makeText(context, "your join request has been sent for approval", Toast.LENGTH_LONG).show();
+                    int pendingMemberCount = userGroups.get(position).group.getPendingMemberCount();
+                    userGroups.get(position).setGroupMembershipStatus("P");
+                    userGroups.get(position).group.setPendingMemberCount(pendingMemberCount + 1);
+                    cellItemsViewHolder.switchMembership.setTextOn("PEN");
+                    cellItemsViewHolder.switchMembership.setEnabled(false);
+                } else {
+                    int activeMemberCount = userGroups.get(position).group.getActiveMemberCount();
+                    userGroups.get(position).setGroupMembershipStatus("I");
+                    userGroups.get(position).group.setActiveMemberCount(activeMemberCount - 1);
+                }
+
+                listView.setAdapter(listView.getAdapter());
+            }
+        }
+
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
-            final int position = listView.getPositionForView(buttonView);
+            //Cache event parameters required after async call
+            this.isMember = isOn;
+            this.position = listView.getPositionForView(buttonView);
 
             UserService userService = new UserService();
-            userService.setUserGroupMembership(userGroups.get(position).getUserId(), userGroups.get(position).group.getGroupId(), isOn);
-
-            if (isOn) {
-                Toast.makeText(context, "your join request has been sent for approval", Toast.LENGTH_LONG).show();
-                int pendingMemberCount = userGroups.get(position).group.getPendingMemberCount();
-                userGroups.get(position).setGroupMembershipStatus("P");
-                userGroups.get(position).group.setPendingMemberCount(pendingMemberCount + 1);
-                cellItemsViewHolder.switchMembership.setTextOn("PEN");
-                cellItemsViewHolder.switchMembership.setEnabled(false);
-            } else {
-                int activeMemberCount = userGroups.get(position).group.getActiveMemberCount();
-                userGroups.get(position).setGroupMembershipStatus("I");
-                userGroups.get(position).group.setActiveMemberCount(activeMemberCount - 1);
-            }
-
-            listView.setAdapter(listView.getAdapter());
+            userService.setUserGroupMembership(userGroups.get(position).getUserId(),
+                    userGroups.get(position).group.getGroupId(), isOn, this);
         }
-    };
+    }
 }

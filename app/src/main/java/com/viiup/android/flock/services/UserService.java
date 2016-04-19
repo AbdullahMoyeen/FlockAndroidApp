@@ -30,6 +30,9 @@ import java.util.List;
  */
 public class UserService {
 
+    // Constant for holding the Web API end point used in URL
+    private final String WEBAPIENDPOINT = "http://192.168.56.1:8080";
+
     public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
         // Call Events rest API
         try {
@@ -52,18 +55,33 @@ public class UserService {
         }
     }
 
-    public void setUserEventRsvp(int userId, int eventId, boolean isAttending, IAsyncPutRequestResponse delegate) {
+    public void setUserEventRsvp(int userId, int eventId, boolean isAttending,
+                                 IAsyncPutRequestResponse delegate) {
         try {
-            AsyncEventRSVPRESTAPICaller asyncEventRSVPRESTAPICaller = new AsyncEventRSVPRESTAPICaller();
-            asyncEventRSVPRESTAPICaller.setDelegate(delegate);
-            asyncEventRSVPRESTAPICaller.execute(userId, eventId, isAttending);
+            // Build the URL
+            String urlToCall = WEBAPIENDPOINT + "/api/user/events/rsvp?userId=" + userId +
+                    "&eventId=" + eventId + "&isAttending=" + isAttending;
+
+            // Call the URL
+            AsyncPUTRequest asyncPUTRequest = new AsyncPUTRequest();
+            asyncPUTRequest.setDelegate(delegate);
+            asyncPUTRequest.execute(urlToCall);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void setUserGroupMembership(int userId, int groupId, boolean isMember) {
+    public void setUserGroupMembership(int userId, int groupId, boolean isMember,
+                                       IAsyncPutRequestResponse delegate) {
+        // Build URL
+        String urlToCall = WEBAPIENDPOINT + "/api/user/groups/membership?userId=" + userId +
+                "&groupId=" + groupId + "&isMember=" + isMember;
 
+        // Call the URL
+        AsyncPUTRequest asyncPUTRequest = new AsyncPUTRequest();
+        asyncPUTRequest.setDelegate(delegate);
+        asyncPUTRequest.execute(urlToCall);
     }
 
     /*
@@ -180,12 +198,9 @@ public class UserService {
     Async task for calling the REST API from application on background thread.
     The task makes PUT request for setting up RSVP status for event.
     */
-    private class AsyncEventRSVPRESTAPICaller extends AsyncTask {
+    private class AsyncPUTRequest extends AsyncTask {
         // Delegate to represent caller
         private IAsyncPutRequestResponse delegate = null;
-
-        // Cache params
-        Object[] params = null;
 
         public void setDelegate(IAsyncPutRequestResponse delegate) {
             this.delegate = delegate;
@@ -194,10 +209,9 @@ public class UserService {
         // HTTP PUT call
         @Override
         protected Object doInBackground(Object[] params) {
-            // Cache params
-            this.params = params;
 
-            String urlToCall = "http://192.168.56.1:8080/api/user/events/rsvp?userId=" + params[0] + "&eventId=" + params[1] + "&isAttending=" + params[2];
+            // Get the URL to call
+            String urlToCall = params[0].toString();
 
             // Call the PUT API
             return makePutAPICall(urlToCall);
@@ -226,7 +240,7 @@ public class UserService {
         protected List<UserGroupModel> doInBackground(Integer... params) {
             // Make API call
             try {
-                String urlToCall = "http://192.168.56.1:8080/api/user/groups?userId=" + params[0];
+                String urlToCall = WEBAPIENDPOINT + "/api/user/groups?userId=" + params[0];
                 String resultsToParse = makeGetAPICall(urlToCall);
 
                 // Parse the JSON
@@ -271,7 +285,7 @@ public class UserService {
 
             // Make API call
             try {
-                String urlString = "http://192.168.56.1:8080/api/user/events?userId=" + params[0];
+                String urlString = WEBAPIENDPOINT + "/api/user/events?userId=" + params[0];
                 String resultToDisplay = makeGetAPICall(urlString);
 
                 // Parse and return event list
