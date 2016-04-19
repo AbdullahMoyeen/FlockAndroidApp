@@ -31,7 +31,7 @@ import java.util.List;
 public class UserService {
 
     // Constant for holding the Web API end point used in URL
-    private final String WEBAPIENDPOINT = "http://192.168.56.1:8080";
+    private final String WEBAPIENDPOINT = "http://192.168.0.5:8080";
 
     public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
         // Call Events rest API
@@ -59,8 +59,7 @@ public class UserService {
                                  IAsyncPutRequestResponse delegate) {
         try {
             // Build the URL
-            String urlToCall = WEBAPIENDPOINT + "/api/user/events/rsvp?userId=" + userId +
-                    "&eventId=" + eventId + "&isAttending=" + isAttending;
+            String urlToCall = WEBAPIENDPOINT + "/api/user/events/rsvp?userId=" + userId + "&eventId=" + eventId + "&isAttending=" + isAttending;
 
             // Call the URL
             AsyncPUTRequest asyncPUTRequest = new AsyncPUTRequest();
@@ -75,8 +74,7 @@ public class UserService {
     public void setUserGroupMembership(int userId, int groupId, boolean isMember,
                                        IAsyncPutRequestResponse delegate) {
         // Build URL
-        String urlToCall = WEBAPIENDPOINT + "/api/user/groups/membership?userId=" + userId +
-                "&groupId=" + groupId + "&isMember=" + isMember;
+        String urlToCall = WEBAPIENDPOINT + "/api/user/groups/membership?userId=" + userId + "&groupId=" + groupId + "&isMember=" + isMember;
 
         // Call the URL
         AsyncPUTRequest asyncPUTRequest = new AsyncPUTRequest();

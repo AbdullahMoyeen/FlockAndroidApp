@@ -92,7 +92,7 @@
 
             <Switch
                 android:id="@+id/switchMembership"
-                android:layout_width="85dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/imageViewGroup"
                 android:layout_centerInParent="true"
