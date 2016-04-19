@@ -40,7 +40,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        progressDialog = ProgressDialog.show(getContext(), "Events", "Loading events..");
+        progressDialog = ProgressDialog.show(getActivity(), "Events", "Loading events..");
         return inflater.inflate(R.layout.home_events_fragment, container, false);
     }
 
@@ -102,7 +102,8 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         }
 
         // dismiss the progress
-        progressDialog.dismiss();
+        if (progressDialog != null)
+            progressDialog.dismiss();
     }
 
     @Override

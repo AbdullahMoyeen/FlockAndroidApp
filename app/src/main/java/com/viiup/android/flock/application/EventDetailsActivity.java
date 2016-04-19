@@ -1,6 +1,7 @@
 package com.viiup.android.flock.application;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private ItemsViewHolder itemsViewHolder;
     private UserEventModel userEvent;
     private boolean isAttendingChanged = false;
+    private ProgressDialog progressDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +122,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         @Override
         public void putRequestResponse(String response) {
 
+            // Dismiss progress dialogue
+            if(progressDialog != null) progressDialog.dismiss();
+
             if(response.equalsIgnoreCase("OK")) {
 
                 userEvent.setIsAttending(this.isAttending);
@@ -135,6 +140,9 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         @Override
         public void backGroundErrorHandler(Exception ex) {
+
+            if(progressDialog != null) progressDialog.dismiss();
+
             // Print stack trace...may be add logging in future releases
             ex.printStackTrace();
 
@@ -146,6 +154,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
             this.isAttending = isOn;
+
+            // Show the progress bar
+            progressDialog = ProgressDialog.show(context,"RSVP","Recording RSVP...");
 
             UserService userService = new UserService();
             userService.setUserEventRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn, this);

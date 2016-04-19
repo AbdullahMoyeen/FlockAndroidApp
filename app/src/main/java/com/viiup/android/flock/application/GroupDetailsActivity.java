@@ -1,6 +1,7 @@
 package com.viiup.android.flock.application;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
     private ItemsViewHolder itemsViewHolder;
     private UserGroupModel userGroup;
     private String membershipStatus;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,8 @@ public class GroupDetailsActivity extends AppCompatActivity {
         @Override
         public void putRequestResponse(String response) {
 
+            if(progressDialog != null) progressDialog.dismiss();
+
             if (response.equalsIgnoreCase("OK")) {
                 if (isMember) {
                     Toast.makeText(context, "your join request has been sent for approval", Toast.LENGTH_SHORT).show();
@@ -134,15 +138,20 @@ public class GroupDetailsActivity extends AppCompatActivity {
 
         @Override
         public void backGroundErrorHandler(Exception ex) {
+
+            if(progressDialog != null) progressDialog.dismiss();
+
             // Print stack trace...may be add logging in future releases
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(context,ex.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
+
+            progressDialog = ProgressDialog.show(context,"Membership","Processing membership request..");
 
             this.isMember = isOn;
             UserService userService = new UserService();

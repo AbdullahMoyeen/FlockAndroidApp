@@ -1,6 +1,7 @@
 package com.viiup.android.flock.application;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ public class HomeEventsCellAdapter extends BaseAdapter {
     private ListView listView;
     private List<UserEventModel> userEvents;
     private CellItemsViewHolder cellItemsViewHolder;
+    private ProgressDialog progressDialog = null;
 
     HomeEventsCellAdapter(Context context, ListView listView, List<UserEventModel> userEvents) {
         this.context = context;
@@ -116,24 +118,30 @@ public class HomeEventsCellAdapter extends BaseAdapter {
         @Override
         public void putRequestResponse(String response) {
 
-            if(response.equalsIgnoreCase("OK")) {
+            // Dismiss progress dialogue
+            if(progressDialog != null) progressDialog.dismiss();
+
+            if (response.equalsIgnoreCase("OK")) {
 
                 userEvents.get(position).setIsAttending(this.isAttending);
                 int attendeeCount = userEvents.get(this.position).event.getAttendeeCount();
                 userEvents.get(this.position).event.setAttendeeCount(this.isAttending ? attendeeCount + 1 : attendeeCount - 1);
-            }
-            else{
-                Toast.makeText(context, "your rsvp could not be processed, please try again later", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "RSVP request could not be processed, please try again later", Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void backGroundErrorHandler(Exception ex) {
+
+            // Dismiss progress dialogue
+            if(progressDialog != null) progressDialog.dismiss();
+
             // Print stack trace...may be add logging in future releases
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(context,ex.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -141,6 +149,9 @@ public class HomeEventsCellAdapter extends BaseAdapter {
 
             this.isAttending = isOn;
             this.position = listView.getPositionForView(buttonView);
+
+            // Show the progress bar
+            progressDialog = ProgressDialog.show(context, "RSVP", "Recording RSVP...");
 
             UserService userService = new UserService();
             userService.setUserEventRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn, this);
