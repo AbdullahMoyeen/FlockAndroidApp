@@ -13,66 +13,105 @@ public class CommonHelper {
     
     public static IconDrawable getIconDrawableByEventCategory(Context context, String eventCategory){
 
-        IconDrawable iconDrawable;
+        FontAwesomeIcons faIcon;
 
         switch (eventCategory) {
 
-            case "Sports":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_soccer_ball_o).colorRes(R.color.colorContentIcon);
+            case "Biking":
+                faIcon = FontAwesomeIcons.fa_bicycle;
+                break;
+            case "DIY":
+                faIcon = FontAwesomeIcons.fa_cogs;
+                break;
+            case "Drones":
+                faIcon = FontAwesomeIcons.fa_plane;
+                break;
+            case "Fashion":
+                faIcon = FontAwesomeIcons.fa_star;
+                break;
+            case "Fitness":
+                faIcon = FontAwesomeIcons.fa_heartbeat;
+                break;
+            case "Food & Drink":
+                faIcon = FontAwesomeIcons.fa_cutlery;
+                break;
+            case "Games":
+                faIcon = FontAwesomeIcons.fa_gamepad;
+                break;
+            case "Hacking":
+                faIcon = FontAwesomeIcons.fa_file_code_o;
+                break;
+            case "Learning":
+                faIcon = FontAwesomeIcons.fa_graduation_cap;
+                break;
+            case "Lego":
+                faIcon = FontAwesomeIcons.fa_building_o;
+                break;
+            case "Movies":
+                faIcon = FontAwesomeIcons.fa_film;
                 break;
             case "Music":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_music).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_music;
                 break;
-            case "Movie":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_film).colorRes(R.color.colorContentIcon);
+            case "Outdoor":
+                faIcon = FontAwesomeIcons.fa_tree;
+                break;
+            case "Photography":
+                faIcon = FontAwesomeIcons.fa_camera_retro;
+                break;
+            case "Reading":
+                faIcon = FontAwesomeIcons.fa_book;
+                break;
+            case "Sports":
+                faIcon = FontAwesomeIcons.fa_soccer_ball_o;
                 break;
             default:
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_calendar;
                 break;
         }
 
-        return iconDrawable;
+        return new IconDrawable(context, faIcon).colorRes(R.color.colorContentIcon);
     }
 
     public static IconDrawable getIconDrawableByGroupCategory(Context context, String groupCategory){
 
         IconDrawable iconDrawable;
+        FontAwesomeIcons faIcon;
 
         switch (groupCategory) {
 
-
             case "Adventure":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_map).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_map;
                 break;
             case "Book Club":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_book).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_book;
                 break;
             case "Fitness":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_bicycle).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_bicycle;
                 break;
             case "Games":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_gamepad).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_gamepad;
                 break;
             case "Geeks":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_flask).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_flask;
                 break;
             case "Literature":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_bookmark).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_bookmark;
                 break;
             case "Music":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_music).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_music;
                 break;
             case "Social":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_comment_o).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_comment_o;
                 break;
             case "Sports":
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_soccer_ball_o).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_soccer_ball_o;
                 break;
             default:
-                iconDrawable = new IconDrawable(context, FontAwesomeIcons.fa_users).colorRes(R.color.colorContentIcon);
+                faIcon = FontAwesomeIcons.fa_users;
                 break;
         }
 
-        return iconDrawable;
+        return new IconDrawable(context, faIcon).colorRes(R.color.colorContentIcon);
     }
 }
