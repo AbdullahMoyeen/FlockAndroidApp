@@ -91,6 +91,10 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void postUserEvents(List<UserEventModel> userEvents) {
+        // dismiss the progress
+        if (progressDialog != null)
+            progressDialog.dismiss();
+
         if (userEvents != null && userEvents.size() > 0) {
             // Bind the adapter to list view
             this.userEvents = userEvents;
@@ -100,14 +104,13 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         } else {
             Toast.makeText(this.getContext(), "Events are not available.", Toast.LENGTH_LONG).show();
         }
-
-        // dismiss the progress
-        if (progressDialog != null)
-            progressDialog.dismiss();
     }
 
     @Override
     public void backGroundErrorHandler(Exception ex) {
+
+        if(progressDialog != null) progressDialog.dismiss();
+
         // Print stack trace...may be add logging in future releases
         ex.printStackTrace();
 
