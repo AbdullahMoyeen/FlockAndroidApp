@@ -1,6 +1,7 @@
 package com.viiup.android.flock.application;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,7 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
     HomeGroupsCellAdapter adapter;
     private List<UserGroupModel> userGroups;
+    private ProgressDialog progressDialog;
 
     public HomeGroupsFragment() {
     }
@@ -38,6 +40,7 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        progressDialog = ProgressDialog.show(getActivity(), "Groups", "Loading groups..");
         return inflater.inflate(R.layout.home_groups_fragment, container, false);
     }
 
@@ -92,6 +95,10 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void postUserGroups(List<UserGroupModel> userGroups) {
+
+        // Dismiss progress dialog
+        if (progressDialog != null) progressDialog.dismiss();
+
         if (userGroups != null && userGroups.size() > 0) {
             this.userGroups = userGroups;
             adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
@@ -103,6 +110,10 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void backGroundErrorHandler(Exception ex) {
+
+        // Dismiss progress dialog
+        if (progressDialog != null) progressDialog.dismiss();
+
         // Print stack trace...may be add logging in future releases
         ex.printStackTrace();
 
