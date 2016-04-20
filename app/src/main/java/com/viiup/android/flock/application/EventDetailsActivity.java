@@ -71,7 +71,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewEventAddress = (TextView) findViewById(R.id.textViewEventAddress);
         itemsViewHolder.switchRsvp = (Switch) findViewById(R.id.switchRsvp);
 
-        DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.string.fmt_date_format));
+        DateFormat dateFormat = new SimpleDateFormat(getString(R.string.fmt_date_format));
 
         itemsViewHolder.textViewSecondaryBar.setText(userEvent.event.getEventName().toUpperCase());
         itemsViewHolder.textViewAttendeeCount.setText(userEvent.event.getAttendeeCount() + " going");
@@ -80,8 +80,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByEventCategory(this, userEvent.event.getEventCategory()));
         itemsViewHolder.textViewGroupName.setText(userEvent.event.getGroupName());
         itemsViewHolder.textViewEventAddress.setText(userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode());
-        itemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_off)));
-        itemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, context.getResources().getString(R.string.fa_icon_on)));
+        itemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, getString(R.string.fa_icon_off)));
+        itemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_on)));
         itemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
         itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new SwitchRsvpOnCheckedChangeListener());
     }
@@ -155,7 +155,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             this.isAttending = isOn;
 
             // Show the progress bar
-            progressDialog = ProgressDialog.show(context, "RSVP", getResources().getString(R.string.msg_processing_request));
+            progressDialog = ProgressDialog.show(context, "RSVP", getString(R.string.msg_processing_request));
 
             UserService userService = new UserService();
             userService.setUserEventRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn, this);

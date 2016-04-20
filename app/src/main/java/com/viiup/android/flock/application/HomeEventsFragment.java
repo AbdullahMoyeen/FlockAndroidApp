@@ -40,7 +40,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        progressDialog = ProgressDialog.show(getActivity(), "Events", "Loading events..");
+        progressDialog = ProgressDialog.show(getActivity(), "EVENTS", getString(R.string.msg_loading_data));
         return inflater.inflate(R.layout.home_events_fragment, container, false);
     }
 
@@ -102,7 +102,7 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
             adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
             setListAdapter(adapter);
         } else {
-            Toast.makeText(this.getContext(), "Events are not available.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(), R.string.msg_no_event, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -115,6 +115,6 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         ex.printStackTrace();
 
         // display error message
-        Toast.makeText(this.getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
     }
 }

@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getResources().getString(R.string.nearby_events), new View.OnClickListener() {
+                Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getString(R.string.nearby_events), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Gson gson = new Gson();

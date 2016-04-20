@@ -40,7 +40,7 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        progressDialog = ProgressDialog.show(getActivity(), "Groups", "Loading groups..");
+        progressDialog = ProgressDialog.show(getActivity(), "GROUPS", getString(R.string.msg_loading_data));
         return inflater.inflate(R.layout.home_groups_fragment, container, false);
     }
 

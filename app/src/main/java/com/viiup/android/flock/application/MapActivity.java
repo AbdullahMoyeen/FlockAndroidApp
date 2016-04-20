@@ -62,7 +62,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         TextView textViewSecondaryBar = (TextView) findViewById(R.id.secondaryBar);
-        textViewSecondaryBar.setText(getResources().getString(R.string.nearby_events));
+        textViewSecondaryBar.setText(getString(R.string.nearby_events));
     }
 
     @Override
@@ -129,7 +129,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (location != null) {
 //            onLocationChanged(location);
             LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
         }
 //        locationManager.requestLocationUpdates(bestProvider, 20000, 0, this);
     }
