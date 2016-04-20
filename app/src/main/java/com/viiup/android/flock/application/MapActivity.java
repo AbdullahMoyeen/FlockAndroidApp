@@ -111,15 +111,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mMap.clear();
 
-        for (UserEventModel userEvent : userEvents) {
-            LatLng eventLatLng = new LatLng(userEvent.event.getEventLatitude(), userEvent.event.getEventLongitude());
-            mMap.addMarker(new MarkerOptions().position(eventLatLng).title(userEvent.event.getEventName()).snippet(userEvent.event.getEventDescription()));
-            llbBuilder.include(eventLatLng);
+        if(userEvents != null) {
+            for (UserEventModel userEvent : userEvents) {
+                LatLng eventLatLng = new LatLng(userEvent.event.getEventLatitude(), userEvent.event.getEventLongitude());
+                mMap.addMarker(new MarkerOptions().position(eventLatLng).title(userEvent.event.getEventName()).snippet(userEvent.event.getEventDescription()));
+                llbBuilder.include(eventLatLng);
+                LatLngBounds llBounds = llbBuilder.build();
+                mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(llBounds, 200));
+            }
         }
-
-        LatLngBounds llBounds = llbBuilder.build();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(llBounds, 200));
-
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
