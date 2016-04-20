@@ -69,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_logo_white);
+        getSupportActionBar().setIcon(R.drawable.ic_logo_transparent);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());
