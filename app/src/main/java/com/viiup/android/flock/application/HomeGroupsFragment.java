@@ -97,7 +97,7 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
             adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
             setListAdapter(adapter);
         } else {
-            Toast.makeText(this.getContext(), "No groups are available.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getContext(), R.string.msg_no_group, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -107,6 +107,6 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
         ex.printStackTrace();
 
         // display error message
-        Toast.makeText(this.getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
     }
 }

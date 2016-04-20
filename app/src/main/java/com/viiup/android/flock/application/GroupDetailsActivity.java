@@ -114,11 +114,11 @@ public class GroupDetailsActivity extends AppCompatActivity {
         @Override
         public void putRequestResponse(String response) {
 
-            if(progressDialog != null) progressDialog.dismiss();
+            if (progressDialog != null) progressDialog.dismiss();
 
             if (response.equalsIgnoreCase("OK")) {
                 if (isMember) {
-                    Toast.makeText(context, "your join request has been sent for approval", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.msg_join_request_sent, Toast.LENGTH_SHORT).show();
                     int pendingMemberCount = userGroup.group.getPendingMemberCount();
                     userGroup.setGroupMembershipStatus("P");
                     userGroup.group.setPendingMemberCount(pendingMemberCount + 1);
@@ -132,26 +132,26 @@ public class GroupDetailsActivity extends AppCompatActivity {
 
                 membershipStatus = userGroup.getGroupMembershipStatus();
             } else {
-                Toast.makeText(context, "your membership could not be processed, please try again later", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.msg_processing_failed, Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void backGroundErrorHandler(Exception ex) {
 
-            if(progressDialog != null) progressDialog.dismiss();
+            if (progressDialog != null) progressDialog.dismiss();
 
             // Print stack trace...may be add logging in future releases
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(context, ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
-            progressDialog = ProgressDialog.show(context,"Membership","Processing membership request..");
+            progressDialog = ProgressDialog.show(context, "MEMBERSHIP", getResources().getString(R.string.msg_processing_request));
 
             this.isMember = isOn;
             UserService userService = new UserService();

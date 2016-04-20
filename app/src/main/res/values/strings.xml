@@ -11,4 +11,12 @@
     <string name="fa_icon_on">{fa-check}</string>
     <string name="fa_icon_off">{fa-remove}</string>
     <string name="fa_icon_pending">{fa-hourglass-half}</string>
+    <string name="fmt_date_format">MM/dd/yyyy hh:mm a</string>
+    <string name="msg_something_wrong">something went wrong, please report to admin</string>
+    <string name="msg_loading_data">loading data, please standby…</string>
+    <string name="msg_no_event">no upcoming event</string>
+    <string name="msg_no_group">no group found</string>
+    <string name="msg_join_request_sent">your join request has been sent for approval</string>
+    <string name="msg_processing_request">processing your request…</string>
+    <string name="msg_processing_failed">sorry, could not process your request, please try again later</string>
 </resources>

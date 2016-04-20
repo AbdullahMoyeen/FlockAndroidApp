@@ -31,7 +31,7 @@ import java.util.List;
 public class UserService {
 
     // Constant for holding the Web API end point used in URL
-    private final String WEBAPIENDPOINT = "http://192.168.1.3:8080";
+    private final String WEBAPIENDPOINT = "http://flockapi.7uputd.com";
 
     public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
         // Call Events rest API

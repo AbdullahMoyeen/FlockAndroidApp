@@ -71,7 +71,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewEventAddress = (TextView) findViewById(R.id.textViewEventAddress);
         itemsViewHolder.switchRsvp = (Switch) findViewById(R.id.switchRsvp);
 
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm a");
+        DateFormat dateFormat = new SimpleDateFormat(getResources().getString(R.string.fmt_date_format));
 
         itemsViewHolder.textViewSecondaryBar.setText(userEvent.event.getEventName().toUpperCase());
         itemsViewHolder.textViewAttendeeCount.setText(userEvent.event.getAttendeeCount() + " going");
@@ -123,31 +123,30 @@ public class EventDetailsActivity extends AppCompatActivity {
         public void putRequestResponse(String response) {
 
             // Dismiss progress dialogue
-            if(progressDialog != null) progressDialog.dismiss();
+            if (progressDialog != null) progressDialog.dismiss();
 
-            if(response.equalsIgnoreCase("OK")) {
+            if (response.equalsIgnoreCase("OK")) {
 
                 userEvent.setIsAttending(this.isAttending);
                 int attendeeCount = userEvent.event.getAttendeeCount();
                 userEvent.event.setAttendeeCount(this.isAttending ? attendeeCount + 1 : attendeeCount - 1);
                 isAttendingChanged = !isAttendingChanged;
                 itemsViewHolder.textViewAttendeeCount.setText(userEvent.event.getAttendeeCount() + " going");
-            }
-            else{
-                Toast.makeText(context, "your rsvp could not be processed, please try again later", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, R.string.msg_processing_failed, Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void backGroundErrorHandler(Exception ex) {
 
-            if(progressDialog != null) progressDialog.dismiss();
+            if (progressDialog != null) progressDialog.dismiss();
 
             // Print stack trace...may be add logging in future releases
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(context,ex.getMessage(),Toast.LENGTH_LONG).show();
+            Toast.makeText(context, R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -156,7 +155,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             this.isAttending = isOn;
 
             // Show the progress bar
-            progressDialog = ProgressDialog.show(context,"RSVP","Recording RSVP...");
+            progressDialog = ProgressDialog.show(context, "RSVP", getResources().getString(R.string.msg_processing_request));
 
             UserService userService = new UserService();
             userService.setUserEventRsvp(userEvent.getUserId(), userEvent.event.getEventId(), isOn, this);
