@@ -8,8 +8,10 @@
     <string name="title_activity_group_details">Back</string>
     <string name="title_activity_location">Back</string>
     <string name="nearby_events">NEARBY EVENTS</string>
-    <string name="fa_icon_on">{fa-check}</string>
-    <string name="fa_icon_off">{fa-remove}</string>
+    <string name="fa_icon_going">{fa-check}</string>
+    <string name="fa_icon_not_going">{fa-remove}</string>
+    <string name="fa_icon_join">{fa-user-plus}</string>
+    <string name="fa_icon_leave">{fa-user-times}</string>
     <string name="fa_icon_pending">{fa-hourglass-half}</string>
     <string name="fmt_date_format">MM/dd/yyyy hh:mm a</string>
     <string name="msg_something_wrong">something went wrong, please report to admin</string>

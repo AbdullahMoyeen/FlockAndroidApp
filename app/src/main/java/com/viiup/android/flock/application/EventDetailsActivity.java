@@ -80,8 +80,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByEventCategory(this, userEvent.event.getEventCategory()));
         itemsViewHolder.textViewGroupName.setText(userEvent.event.getGroupName());
         itemsViewHolder.textViewEventAddress.setText(userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode());
-        itemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, getString(R.string.fa_icon_off)));
-        itemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_on)));
+        itemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, getString(R.string.fa_icon_not_going)));
+        itemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_going)));
         itemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
         itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new SwitchRsvpOnCheckedChangeListener());
     }

@@ -97,8 +97,8 @@ public class HomeEventsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewEventName.setText(userEvent.event.getEventName());
             cellItemsViewHolder.textViewEventStartDateTime.setText(dateFormat.format(userEvent.event.getEventStartDatetime()));
             cellItemsViewHolder.textViewEventDescription.setText(userEvent.event.getEventDescription());
-            cellItemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, context.getString(R.string.fa_icon_off)));
-            cellItemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_on)));
+            cellItemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, context.getString(R.string.fa_icon_not_going)));
+            cellItemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_going)));
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
             cellItemsViewHolder.switchRsvp.setOnCheckedChangeListener(new SwitchRsvpOnCheckedChangeListener());
