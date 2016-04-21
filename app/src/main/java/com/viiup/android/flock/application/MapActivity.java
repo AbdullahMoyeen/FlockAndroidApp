@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -49,6 +50,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (!isGooglePlayServicesAvailable()) {
+            Toast.makeText(this, R.string.msg_google_play_unavailable, Toast.LENGTH_SHORT).show();
             finish();
         }
 
