@@ -19,11 +19,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.gson.Gson;
+import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -78,14 +81,14 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mHomeTabPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fabNearbyEvents = (FloatingActionButton) findViewById(R.id.fabNearbyEvents);
+        fabNearbyEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getString(R.string.nearby_events), new View.OnClickListener() {
+                Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getString(R.string.title_nearby_events), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Gson gson = new Gson();
@@ -100,6 +103,31 @@ public class HomeActivity extends AppCompatActivity {
                 sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
                 snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
                 snackbar.show();
+            }
+        });
+
+        FloatingActionButton fabMyEvents = (FloatingActionButton) findViewById(R.id.fabMyEvents);
+        fabMyEvents.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
+        fabMyEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_events), Snackbar.LENGTH_LONG).setAction("", null);
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
+                snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
+                snackbar.show();
+
+                List<UserEventModel> myEvents = new ArrayList<UserEventModel>();
+                for (UserEventModel userEvent: userEvents){
+                    if (userEvent.getIsAttending())
+                        myEvents.add(userEvent);
+                }
+
+                HomeEventsFragment eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
+                HomeEventsCellAdapter adapter = new HomeEventsCellAdapter(eventsFragment.getActivity(), eventsFragment.getListView(), myEvents);
+                eventsFragment.getListView().setAdapter(adapter);
+                tabLayout.getTabAt(0).select();
             }
         });
     }

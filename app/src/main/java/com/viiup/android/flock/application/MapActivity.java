@@ -64,7 +64,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         TextView textViewSecondaryBar = (TextView) findViewById(R.id.secondaryBar);
-        textViewSecondaryBar.setText(getString(R.string.nearby_events));
+        textViewSecondaryBar.setText(getString(R.string.title_nearby_events));
     }
 
     @Override

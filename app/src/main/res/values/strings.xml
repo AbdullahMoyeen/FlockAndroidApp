@@ -7,7 +7,8 @@
     <string name="title_activity_event_details">Back</string>
     <string name="title_activity_group_details">Back</string>
     <string name="title_activity_location">Back</string>
-    <string name="nearby_events">NEARBY EVENTS</string>
+    <string name="title_my_events">MY EVENTS</string>
+    <string name="title_nearby_events">NEARBY EVENTS</string>
     <string name="fa_icon_going">{fa-check}</string>
     <string name="fa_icon_not_going">{fa-remove}</string>
     <string name="fa_icon_join">{fa-user-plus}</string>
