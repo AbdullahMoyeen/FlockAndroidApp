@@ -1,5 +1,6 @@
 package com.viiup.android.flock.services;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Base64;
 
@@ -12,6 +13,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserGroupModel;
+import com.viiup.android.flock.models.UserModel;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -31,7 +33,8 @@ import java.util.List;
 public class UserService {
 
     // Constant for holding the Web API end point used in URL
-    private final String WEBAPIENDPOINT = "http://flockapi.7uputd.com";
+    final String WEBAPIENDPOINT = "http://flockapi.7uputd.com";
+    final String BASICAUTH = "Basic " + new String(Base64.encode("amh141830@utdallas.edu:Abcd1234".getBytes(), Base64.DEFAULT));
 
     public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
         // Call Events rest API
@@ -96,9 +99,7 @@ public class UserService {
 
             // Open HTTP connection and provide authentication information.
             putRequestConnection = (HttpURLConnection) url.openConnection();
-            String userCredentials = "aam065000@utdallas.edu:Abcd1234";
-            String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
-            putRequestConnection.setRequestProperty("Authorization", basicAuth);
+            putRequestConnection.setRequestProperty("Authorization", BASICAUTH);
             putRequestConnection.setRequestMethod("PUT");
 
             // Make the HTTP Put call
@@ -139,9 +140,7 @@ public class UserService {
 
             //Construct and fill up HttpURLConnection instance
             myURLConnection = (HttpURLConnection) url.openConnection();
-            String userCredentials = "aam065000@utdallas.edu:Abcd1234";
-            String basicAuth = "Basic " + new String(Base64.encode(userCredentials.getBytes(), Base64.DEFAULT));
-            myURLConnection.setRequestProperty("Authorization", basicAuth);
+            myURLConnection.setRequestProperty("Authorization", BASICAUTH);
             myURLConnection.setRequestMethod("GET");
 
             // Make the call to the server
@@ -317,7 +316,6 @@ public class UserService {
                 String resultToDisplay = makeGetAPICall(urlString);
 
                 // Parse and return event list
-
                 Gson gson = getGson();
                 if (gson != null) {
                     return gson.fromJson(resultToDisplay, new TypeToken<List<UserEventModel>>() {

@@ -7,15 +7,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserGroupModel;
 import com.viiup.android.flock.models.UserModel;
+import com.viiup.android.flock.services.IAsyncEventResponse;
 import com.viiup.android.flock.services.IAsyncGroupResponse;
 import com.viiup.android.flock.services.UserService;
 
@@ -27,9 +31,12 @@ import java.util.List;
 public class HomeGroupsFragment extends ListFragment implements AdapterView.OnItemClickListener,
         IAsyncGroupResponse {
 
-    HomeGroupsCellAdapter adapter;
+    private HomeGroupsCellAdapter adapter;
     private List<UserGroupModel> userGroups;
     private ProgressDialog progressDialog;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private UserModel loggedInUser;
 
     public HomeGroupsFragment() {
     }
@@ -49,16 +56,50 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
         super.onActivityCreated(savedInstanceState);
 
+        // Find the swipe refresh layout
+        swipeRefreshLayout = (SwipeRefreshLayout) getView().findViewById(R.id.swipe_container_groups);
+
+        // Hook up the refresh listener
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayoutListener());
+
+        // Set color skim for refresh ui
+        swipeRefreshLayout.setColorSchemeResources(R.color.darkblue, R.color.darkgreen, R.color.darkorange,
+                R.color.darkpurple);
+
         SharedPreferences mPref = this.getActivity().getPreferences(Context.MODE_PRIVATE);
         String loggedInUserJson = mPref.getString("loggedInUserJson", null);
 
         Gson gson = new Gson();
-        UserModel loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
+        loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
 
         UserService userService = new UserService();
         userService.getUserGroupsByUserId(loggedInUser.getUserId(), this);
 
         getListView().setOnItemClickListener(this);
+
+        // Attach scroll listener for list view to block swipe refresh from activating on scroll up
+        getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                boolean enabled = false;
+                if (getListView() != null && getListView().getChildCount() > 0) {
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = getListView().getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = getListView().getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enabled = firstItemVisible && topOfFirstItemVisible;
+                }
+
+                // Enable the layout
+                swipeRefreshLayout.setEnabled(enabled);
+            }
+        });
     }
 
     @Override
@@ -119,5 +160,47 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
 
         // display error message
         Toast.makeText(this.getContext(), R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
+    }
+
+    /*
+        Helper class for implementing the OnRefreshListener for swipe refresh layout and
+        IAsycGroupResponse to handle the refresh request.
+     */
+    private class SwipeRefreshLayoutListener implements SwipeRefreshLayout.OnRefreshListener,
+            IAsyncGroupResponse {
+
+        @Override
+        public void postUserGroups(List<UserGroupModel> refreshedGroups) {
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            if (userGroups != null && userGroups.size() > 0) {
+                userGroups = refreshedGroups;
+                adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+                setListAdapter(adapter);
+            } else {
+                Toast.makeText(getContext(), R.string.msg_no_group, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void backGroundErrorHandler(Exception ex) {
+            if (swipeRefreshLayout.isRefreshing()) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            // Print stack trace...may be add logging in future releases
+            ex.printStackTrace();
+
+            // display error message
+            Toast.makeText(getContext(), R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onRefresh() {
+            // Reload groups
+            UserService userService = new UserService();
+            userService.getUserGroupsByUserId(loggedInUser.getUserId(), this);
+        }
     }
 }
