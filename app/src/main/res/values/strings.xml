@@ -21,4 +21,5 @@
     <string name="msg_join_request_sent">your join request has been sent for approval</string>
     <string name="msg_processing_request">processing your request…</string>
     <string name="msg_processing_failed">sorry, could not process your request, please try again later</string>
+    <string name="msg_google_play_unavailable">google play service unavailable, please activate it to use this feature</string>
 </resources>
