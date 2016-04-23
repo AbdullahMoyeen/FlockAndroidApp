@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.joanzapata.iconify.IconDrawable;
@@ -42,6 +41,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
      */
     private HomeTabPagerAdapter mHomeTabPagerAdapter;
     private TabLayout tabLayout;
+    private FloatingActionButton fabMine;
     private HomeEventsFragment eventsFragment;
     private HomeGroupsFragment groupsFragment;
     public List<UserEventModel> userEvents;
@@ -111,21 +111,35 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             }
         });
 
-        FloatingActionButton fabMyEvents = (FloatingActionButton) findViewById(R.id.fabMyEvents);
-        fabMyEvents.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
-        fabMyEvents.setOnClickListener(new View.OnClickListener() {
+        fabMine = (FloatingActionButton) findViewById(R.id.fabMyEvents);
+        fabMine.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
+        fabMine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_events), Snackbar.LENGTH_LONG).setAction("", null);
-                View sbView = snackbar.getView();
-                sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
-                snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
-                snackbar.show();
+                if (tabLayout.getSelectedTabPosition() == 0) {
 
-                eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
-                eventsFragment.filterMyEvents();
-                tabLayout.getTabAt(0).select();
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_events), Snackbar.LENGTH_LONG).setAction("", null);
+                    View sbView = snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
+                    snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
+                    snackbar.show();
+
+                    eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
+                    eventsFragment.filterMyEvents();
+                    tabLayout.getTabAt(0).select();
+                } else {
+
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_groups), Snackbar.LENGTH_LONG).setAction("", null);
+                    View sbView = snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
+                    snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
+                    snackbar.show();
+
+                    groupsFragment = (HomeGroupsFragment) getSupportFragmentManager().getFragments().get(1);
+                    groupsFragment.filterMyGroups();
+                    tabLayout.getTabAt(1).select();
+                }
             }
         });
     }
@@ -133,9 +147,11 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         if (tab.getPosition() == 0) {
+            fabMine.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
             eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
             eventsFragment.resetToFull();
         } else {
+            fabMine.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_users).colorRes(R.color.colorBarText));
             groupsFragment = (HomeGroupsFragment) getSupportFragmentManager().getFragments().get(1);
             groupsFragment.resetToFull();
         }
