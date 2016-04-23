@@ -147,6 +147,11 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
         }
     }
 
+    public void resetToFull(){
+        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEventsFull);
+        setListAdapter(adapter);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 

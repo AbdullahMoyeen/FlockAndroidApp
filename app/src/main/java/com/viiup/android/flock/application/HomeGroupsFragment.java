@@ -147,6 +147,11 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
         }
     }
 
+    public void resetToFull(){
+        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroupsFull);
+        setListAdapter(adapter);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 

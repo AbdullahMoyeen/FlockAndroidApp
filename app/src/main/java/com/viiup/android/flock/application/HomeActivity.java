@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.joanzapata.iconify.IconDrawable;
@@ -29,7 +30,7 @@ import com.viiup.android.flock.models.UserModel;
 
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, TabLayout.OnTabSelectedListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -86,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
+        tabLayout.setOnTabSelectedListener(this);
 
         FloatingActionButton fabNearbyEvents = (FloatingActionButton) findViewById(R.id.fabNearbyEvents);
         fabNearbyEvents.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +128,27 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
                 tabLayout.getTabAt(0).select();
             }
         });
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        if (tab.getPosition() == 0) {
+            eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
+            eventsFragment.resetToFull();
+        } else {
+            groupsFragment = (HomeGroupsFragment) getSupportFragmentManager().getFragments().get(1);
+            groupsFragment.resetToFull();
+        }
+        mViewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 
     @Override
