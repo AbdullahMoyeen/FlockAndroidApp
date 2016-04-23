@@ -1,11 +1,11 @@
 package com.viiup.android.flock.models;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * Created by AbdullahMoyeen on 4/11/16.
  */
-public class UserEventModel {
+public class UserEventModel implements Serializable {
 
     private int userId;
     private boolean isAttending;

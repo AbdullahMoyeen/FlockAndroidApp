@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
 
 import com.google.gson.Gson;
@@ -26,10 +27,9 @@ import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -40,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private HomeTabPagerAdapter mHomeTabPagerAdapter;
+    private TabLayout tabLayout;
+    private HomeEventsFragment eventsFragment;
+    private HomeGroupsFragment groupsFragment;
     public List<UserEventModel> userEvents;
 
     /**
@@ -81,8 +84,9 @@ public class HomeActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mHomeTabPagerAdapter);
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
 
         FloatingActionButton fabNearbyEvents = (FloatingActionButton) findViewById(R.id.fabNearbyEvents);
         fabNearbyEvents.setOnClickListener(new View.OnClickListener() {
@@ -118,15 +122,8 @@ public class HomeActivity extends AppCompatActivity {
                 snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
                 snackbar.show();
 
-                List<UserEventModel> myEvents = new ArrayList<UserEventModel>();
-                for (UserEventModel userEvent: userEvents){
-                    if (userEvent.getIsAttending())
-                        myEvents.add(userEvent);
-                }
-
-                HomeEventsFragment eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
-                HomeEventsCellAdapter adapter = new HomeEventsCellAdapter(eventsFragment.getActivity(), eventsFragment.getListView(), myEvents);
-                eventsFragment.getListView().setAdapter(adapter);
+                eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
+                eventsFragment.filterMyEvents();
                 tabLayout.getTabAt(0).select();
             }
         });
@@ -142,6 +139,16 @@ public class HomeActivity extends AppCompatActivity {
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }
+        });
 
         return true;
     }
@@ -159,5 +166,23 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onQueryTextChange(String newText) {
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
+            return eventsFragment.onQueryTextChange(newText);
+        } else {
+            groupsFragment = (HomeGroupsFragment) getSupportFragmentManager().getFragments().get(1);
+            return groupsFragment.onQueryTextChange(newText);
+        }
+    }
+
+    public boolean onQueryTextSubmit(String query) {
+        if (tabLayout.getSelectedTabPosition() == 0) {
+            return eventsFragment.onQueryTextSubmit(query);
+        } else {
+            return groupsFragment.onQueryTextSubmit(query);
+        }
     }
 }

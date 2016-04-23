@@ -1,11 +1,12 @@
 package com.viiup.android.flock.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by AbdullahMoyeen on 4/16/16.
  */
-public class GroupModel {
+public class GroupModel implements Serializable {
 
     private int groupId;
     private String createUser;

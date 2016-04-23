@@ -1,6 +1,5 @@
 package com.viiup.android.flock.services;
 
-import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserGroupModel;
 
 import java.util.List;

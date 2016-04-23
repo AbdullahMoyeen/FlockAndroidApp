@@ -13,13 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.viiup.android.flock.models.UserEventModel;
+import com.google.gson.reflect.TypeToken;
 import com.viiup.android.flock.models.UserGroupModel;
 import com.viiup.android.flock.models.UserModel;
-import com.viiup.android.flock.services.IAsyncEventResponse;
 import com.viiup.android.flock.services.IAsyncGroupResponse;
 import com.viiup.android.flock.services.UserService;
 
@@ -28,13 +29,13 @@ import java.util.List;
 /**
  * Created by AbdullahMoyeen on 4/11/16.
  */
-public class HomeGroupsFragment extends ListFragment implements AdapterView.OnItemClickListener,
-        IAsyncGroupResponse {
+public class HomeGroupsFragment extends ListFragment implements IAsyncGroupResponse, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
 
+    private ListView groupsListView;
     private HomeGroupsCellAdapter adapter;
     private List<UserGroupModel> userGroups;
+    private List<UserGroupModel> userGroupsFull;
     private ProgressDialog progressDialog;
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private UserModel loggedInUser;
 
@@ -75,7 +76,8 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
         UserService userService = new UserService();
         userService.getUserGroupsByUserId(loggedInUser.getUserId(), this);
 
-        getListView().setOnItemClickListener(this);
+        groupsListView = getListView();
+        groupsListView.setOnItemClickListener(this);
 
         // Attach scroll listener for list view to block swipe refresh from activating on scroll up
         getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -100,6 +102,49 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
                 swipeRefreshLayout.setEnabled(enabled);
             }
         });
+    }
+
+    public boolean onQueryTextChange(String newText) {
+        filterGroups(newText);
+        return true;
+    }
+
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    public void filterGroups(String newText) {
+
+        if (userGroupsFull != null && newText != null) {
+
+            userGroups.clear();
+
+            for (UserGroupModel userGroup : userGroupsFull) {
+                if (userGroup.group.getGroupName().toLowerCase().contains(newText.toLowerCase()) || userGroup.group.getGroupDescription().toLowerCase().contains(newText.toLowerCase())) {
+                    userGroups.add(userGroup);
+                }
+            }
+
+            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+            setListAdapter(adapter);
+        }
+    }
+
+    public void filterMyGroups() {
+
+        if (userGroupsFull != null) {
+
+            userGroups.clear();
+
+            for (UserGroupModel userGroup : userGroupsFull) {
+                if (userGroup.getGroupMembershipStatus().equals("A")) {
+                    userGroups.add(userGroup);
+                }
+            }
+
+            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+            setListAdapter(adapter);
+        }
     }
 
     @Override
@@ -138,10 +183,16 @@ public class HomeGroupsFragment extends ListFragment implements AdapterView.OnIt
     public void postUserGroups(List<UserGroupModel> userGroups) {
 
         // Dismiss progress dialog
-        if (progressDialog != null) progressDialog.dismiss();
+        if (progressDialog != null)
+            progressDialog.dismiss();
 
         if (userGroups != null && userGroups.size() > 0) {
-            this.userGroups = userGroups;
+            Gson gson = new Gson();
+            String userGroupsJson = gson.toJson(userGroups);
+            this.userGroups = gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>() {
+            }.getType());
+            this.userGroupsFull = gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>() {
+            }.getType());
             adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
             setListAdapter(adapter);
         } else {

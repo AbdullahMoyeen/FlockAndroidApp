@@ -8,15 +8,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserModel;
 import com.viiup.android.flock.services.IAsyncEventResponse;
@@ -27,10 +29,12 @@ import java.util.List;
 /**
  * Created by AbdullahMoyeen on 4/11/16.
  */
-public class HomeEventsFragment extends ListFragment implements AdapterView.OnItemClickListener, IAsyncEventResponse {
+public class HomeEventsFragment extends ListFragment implements IAsyncEventResponse, SearchView.OnQueryTextListener, AdapterView.OnItemClickListener {
 
+    private ListView eventsListView;
     private HomeEventsCellAdapter adapter;
-    public List<UserEventModel> userEvents;
+    private List<UserEventModel> userEvents;
+    private List<UserEventModel> userEventsFull;
     private ProgressDialog progressDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
     private UserModel loggedInUser;
@@ -72,7 +76,8 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
         UserService userService = new UserService();
         userService.getUserEventsByUserId(loggedInUser.getUserId(), this);
 
-        getListView().setOnItemClickListener(this);
+        eventsListView = getListView();
+        eventsListView.setOnItemClickListener(this);
 
         // Attach scroll listener for list view to block swipe refresh from activating on scroll up
         getListView().setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -97,6 +102,49 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
                 swipeRefreshLayout.setEnabled(enabled);
             }
         });
+    }
+
+    public boolean onQueryTextChange(String newText) {
+        filterEvents(newText);
+        return true;
+    }
+
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    public void filterEvents(String newText) {
+
+        if (userEventsFull != null && newText != null) {
+
+            userEvents.clear();
+
+            for (UserEventModel userEvent : userEventsFull) {
+                if (userEvent.event.getEventName().toLowerCase().contains(newText.toLowerCase()) || userEvent.event.getEventDescription().toLowerCase().contains(newText.toLowerCase()) || userEvent.event.getEventKeywords().toLowerCase().contains(newText.toLowerCase())) {
+                    userEvents.add(userEvent);
+                }
+            }
+
+            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+            setListAdapter(adapter);
+        }
+    }
+
+    public void filterMyEvents() {
+
+        if (userEventsFull != null) {
+
+            userEvents.clear();
+
+            for (UserEventModel userEvent : userEventsFull) {
+                if (userEvent.getIsAttending()) {
+                    userEvents.add(userEvent);
+                }
+            }
+
+            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+            setListAdapter(adapter);
+        }
     }
 
     @Override
@@ -135,8 +183,14 @@ public class HomeEventsFragment extends ListFragment implements AdapterView.OnIt
 
         if (userEvents != null && userEvents.size() > 0) {
             // Bind the adapter to list view
-            this.userEvents = userEvents;
-            ((HomeActivity) this.getActivity()).userEvents = userEvents;
+            Gson gson = new Gson();
+            String userEventsJson = gson.toJson(userEvents);
+            this.userEvents = gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>() {
+            }.getType());
+            this.userEventsFull = gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>() {
+            }.getType());
+            ((HomeActivity) this.getActivity()).userEvents = gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>() {
+            }.getType());
             adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
             setListAdapter(adapter);
         } else {

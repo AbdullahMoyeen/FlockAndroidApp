@@ -1,6 +1,5 @@
 package com.viiup.android.flock.services;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Base64;
 
@@ -13,7 +12,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserGroupModel;
-import com.viiup.android.flock.models.UserModel;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
