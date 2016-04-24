@@ -70,12 +70,13 @@ public class GroupDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByGroupCategory(this, userGroup.group.getGroupCategory()));
         itemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, getString(R.string.fa_icon_leave)));
+        itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_pending)));
+        itemsViewHolder.switchMembership.setEnabled(true);
         if (userGroup.getGroupMembershipStatus().equals("P")) {
-            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_pending)));
             itemsViewHolder.switchMembership.setEnabled(false);
-        } else {
-            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_leave)));
-            itemsViewHolder.switchMembership.setEnabled(true);
+        } else if (userGroup.getGroupMembershipStatus().equals("A")) {
+            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_join)));
+
         }
         itemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
         itemsViewHolder.switchMembership.setOnCheckedChangeListener(new SwitchMembershipOnCheckedChangeListener());

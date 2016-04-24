@@ -64,8 +64,7 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayoutListener());
 
         // Set color skim for refresh ui
-        swipeRefreshLayout.setColorSchemeResources(R.color.darkblue, R.color.darkgreen, R.color.darkorange,
-                R.color.darkpurple);
+        swipeRefreshLayout.setColorSchemeResources(R.color.darkblue, R.color.darkgreen, R.color.darkorange, R.color.darkpurple);
 
         SharedPreferences mPref = this.getActivity().getPreferences(Context.MODE_PRIVATE);
         String loggedInUserJson = mPref.getString("loggedInUserJson", null);
@@ -125,7 +124,7 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
                 }
             }
 
-            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents, userEventsFull);
             setListAdapter(adapter);
         }
     }
@@ -142,13 +141,17 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
                 }
             }
 
-            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents, userEventsFull);
             setListAdapter(adapter);
         }
     }
 
-    public void resetToFull(){
-        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEventsFull);
+    public void resetToFull() {
+        Gson gson = new Gson();
+        String userEventsJson = gson.toJson(userEventsFull);
+        userEvents = gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>() {
+        }.getType());
+        adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents, userEventsFull);
         setListAdapter(adapter);
     }
 
@@ -172,9 +175,18 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
             boolean isAttendingChanged = data.getBooleanExtra("isAttendingChanged", false);
 
             if (isAttendingChanged) {
-                userEvents.get(requestCode).setIsAttending(!userEvents.get(requestCode).getIsAttending());
-                int attendeeCount = userEvents.get(requestCode).event.getAttendeeCount();
-                userEvents.get(requestCode).event.setAttendeeCount(userEvents.get(requestCode).getIsAttending() ? attendeeCount + 1 : attendeeCount - 1);
+
+                UserEventModel changedUserEvent = userEvents.get(requestCode);
+                int attendeeCount = changedUserEvent.event.getAttendeeCount();
+                changedUserEvent.setIsAttending(!changedUserEvent.getIsAttending());
+                changedUserEvent.event.setAttendeeCount(changedUserEvent.getIsAttending() ? attendeeCount + 1 : attendeeCount - 1);
+                for (UserEventModel userEventFromFull: userEventsFull){
+                    if (userEventFromFull.event.getEventId() == changedUserEvent.event.getEventId()){
+                        userEventFromFull.setIsAttending(changedUserEvent.getIsAttending());
+                        userEventFromFull.event.setAttendeeCount(changedUserEvent.event.getAttendeeCount());
+                        break;
+                    }
+                }
                 this.getListView().setAdapter(this.getListView().getAdapter());
             }
         }
@@ -196,7 +208,7 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
             }.getType());
             ((HomeActivity) this.getActivity()).userEvents = gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>() {
             }.getType());
-            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+            adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents, userEventsFull);
             setListAdapter(adapter);
         } else {
             Toast.makeText(this.getContext(), R.string.msg_no_event, Toast.LENGTH_SHORT).show();
@@ -227,12 +239,16 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
                 swipeRefreshLayout.setRefreshing(false);
             }
 
-            if (userEvents != null && userEvents.size() > 0) {
-                // Bind the adapter to list view
-                userEvents = refreshedEvents;
-
-                ((HomeActivity) getActivity()).userEvents = userEvents;
-                adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents);
+            if (refreshedEvents != null && refreshedEvents.size() > 0) {
+                Gson gson = new Gson();
+                String userEventsJson = gson.toJson(refreshedEvents);
+                userEvents = gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>() {
+                }.getType());
+                userEventsFull = gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>() {
+                }.getType());
+                ((HomeActivity) getActivity()).userEvents = gson.fromJson(userEventsJson, new TypeToken<List<UserEventModel>>() {
+                }.getType());
+                adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents, userEventsFull);
                 setListAdapter(adapter);
             } else {
                 Toast.makeText(getContext(), R.string.msg_no_event, Toast.LENGTH_SHORT).show();

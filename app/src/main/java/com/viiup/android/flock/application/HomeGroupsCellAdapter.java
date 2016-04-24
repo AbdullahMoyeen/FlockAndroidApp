@@ -39,13 +39,15 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
     private Context context;
     private ListView listView;
     private List<UserGroupModel> userGroups;
+    private List<UserGroupModel> userGroupsFull;
     private CellItemsViewHolder cellItemsViewHolder;
     private ProgressDialog progressDialog;
 
-    HomeGroupsCellAdapter(Context context, ListView listView, List<UserGroupModel> userGroups) {
+    HomeGroupsCellAdapter(Context context, ListView listView, List<UserGroupModel> userGroups, List<UserGroupModel> userGroupsFull) {
         this.context = context;
         this.listView = listView;
         this.userGroups = userGroups;
+        this.userGroupsFull = userGroupsFull;
     }
 
     @Override
@@ -94,12 +96,13 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewGroupMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " joined");
             cellItemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
             cellItemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getString(R.string.fa_icon_leave)));
+            cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_pending)));
+            cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_pending)));
+            cellItemsViewHolder.switchMembership.setEnabled(true);
             if (userGroup.getGroupMembershipStatus().equals("P")) {
-                cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_pending)));
                 cellItemsViewHolder.switchMembership.setEnabled(false);
-            } else {
+            } else if (userGroup.getGroupMembershipStatus().equals("A")) {
                 cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_join)));
-                cellItemsViewHolder.switchMembership.setEnabled(true);
             }
             cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
@@ -120,17 +123,35 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             if (progressDialog != null) progressDialog.dismiss();
 
             if (response.equalsIgnoreCase("OK")) {
+
+                UserGroupModel changedUserGroup = userGroups.get(position);
+                int pendingMemberCount = changedUserGroup.group.getPendingMemberCount();
+                int activeMemberCount = changedUserGroup.group.getActiveMemberCount();
+
                 if (isMember) {
-                    Toast.makeText(context, R.string.msg_join_request_sent, Toast.LENGTH_SHORT).show();
-                    int pendingMemberCount = userGroups.get(position).group.getPendingMemberCount();
-                    userGroups.get(position).setGroupMembershipStatus("P");
-                    userGroups.get(position).group.setPendingMemberCount(pendingMemberCount + 1);
-                    cellItemsViewHolder.switchMembership.setTextOn("PEN");
+
+                    changedUserGroup.setGroupMembershipStatus("P");
+                    changedUserGroup.group.setPendingMemberCount(pendingMemberCount + 1);
+                    for (UserGroupModel userGroupFromFull: userGroupsFull){
+                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()){
+                            userGroupFromFull.setGroupMembershipStatus(changedUserGroup.getGroupMembershipStatus());
+                            userGroupFromFull.group.setPendingMemberCount(changedUserGroup.group.getPendingMemberCount());
+                            break;
+                        }
+                    }
                     cellItemsViewHolder.switchMembership.setEnabled(false);
+                    Toast.makeText(context, R.string.msg_join_request_sent, Toast.LENGTH_SHORT).show();
                 } else {
-                    int activeMemberCount = userGroups.get(position).group.getActiveMemberCount();
-                    userGroups.get(position).setGroupMembershipStatus("I");
-                    userGroups.get(position).group.setActiveMemberCount(activeMemberCount - 1);
+
+                    changedUserGroup.setGroupMembershipStatus("I");
+                    changedUserGroup.group.setActiveMemberCount(activeMemberCount - 1);
+                    for (UserGroupModel userGroupFromFull: userGroupsFull){
+                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()){
+                            userGroupFromFull.setGroupMembershipStatus(changedUserGroup.getGroupMembershipStatus());
+                            userGroupFromFull.group.setActiveMemberCount(changedUserGroup.group.getActiveMemberCount());
+                            break;
+                        }
+                    }
                 }
 
                 listView.setAdapter(listView.getAdapter());

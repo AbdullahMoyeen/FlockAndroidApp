@@ -64,8 +64,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayoutListener());
 
         // Set color skim for refresh ui
-        swipeRefreshLayout.setColorSchemeResources(R.color.darkblue, R.color.darkgreen, R.color.darkorange,
-                R.color.darkpurple);
+        swipeRefreshLayout.setColorSchemeResources(R.color.darkblue, R.color.darkgreen, R.color.darkorange, R.color.darkpurple);
 
         SharedPreferences mPref = this.getActivity().getPreferences(Context.MODE_PRIVATE);
         String loggedInUserJson = mPref.getString("loggedInUserJson", null);
@@ -125,7 +124,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
                 }
             }
 
-            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups, userGroupsFull);
             setListAdapter(adapter);
         }
     }
@@ -142,13 +141,17 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
                 }
             }
 
-            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups, userGroupsFull);
             setListAdapter(adapter);
         }
     }
 
-    public void resetToFull(){
-        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroupsFull);
+    public void resetToFull() {
+        Gson gson = new Gson();
+        String userGroupsJson = gson.toJson(userGroupsFull);
+        userGroups = gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>() {
+        }.getType());
+        adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups, userGroupsFull);
         setListAdapter(adapter);
     }
 
@@ -168,15 +171,37 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == Activity.RESULT_OK) {
+
             String membershipStatus = data.getStringExtra("membershipStatus");
+
             if (membershipStatus != null) {
-                userGroups.get(requestCode).setGroupMembershipStatus(membershipStatus);
+
+                UserGroupModel changedUserGroup = userGroups.get(requestCode);
+                int pendingMemberCount = changedUserGroup.group.getPendingMemberCount();
+                int activeMemberCount = changedUserGroup.group.getActiveMemberCount();
+
                 if (membershipStatus.equals("P")) {
-                    int pendingMemberCount = userGroups.get(requestCode).group.getPendingMemberCount();
-                    userGroups.get(requestCode).group.setPendingMemberCount(pendingMemberCount + 1);
+
+                    changedUserGroup.setGroupMembershipStatus("P");
+                    changedUserGroup.group.setPendingMemberCount(pendingMemberCount + 1);
+                    for (UserGroupModel userGroupFromFull: userGroupsFull){
+                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()){
+                            userGroupFromFull.setGroupMembershipStatus(changedUserGroup.getGroupMembershipStatus());
+                            userGroupFromFull.group.setPendingMemberCount(changedUserGroup.group.getPendingMemberCount());
+                            break;
+                        }
+                    }
                 } else if (membershipStatus.equals("I")) {
-                    int activeMemberCount = userGroups.get(requestCode).group.getActiveMemberCount();
-                    userGroups.get(requestCode).group.setActiveMemberCount(activeMemberCount - 1);
+
+                    changedUserGroup.setGroupMembershipStatus("I");
+                    changedUserGroup.group.setActiveMemberCount(activeMemberCount - 1);
+                    for (UserGroupModel userGroupFromFull: userGroupsFull){
+                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()){
+                            userGroupFromFull.setGroupMembershipStatus(changedUserGroup.getGroupMembershipStatus());
+                            userGroupFromFull.group.setActiveMemberCount(changedUserGroup.group.getActiveMemberCount());
+                            break;
+                        }
+                    }
                 }
 
                 this.getListView().setAdapter(this.getListView().getAdapter());
@@ -198,7 +223,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
             }.getType());
             this.userGroupsFull = gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>() {
             }.getType());
-            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+            adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups, userGroupsFull);
             setListAdapter(adapter);
         } else {
             Toast.makeText(this.getContext(), R.string.msg_no_group, Toast.LENGTH_SHORT).show();
@@ -222,8 +247,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
         Helper class for implementing the OnRefreshListener for swipe refresh layout and
         IAsycGroupResponse to handle the refresh request.
      */
-    private class SwipeRefreshLayoutListener implements SwipeRefreshLayout.OnRefreshListener,
-            IAsyncGroupResponse {
+    private class SwipeRefreshLayoutListener implements SwipeRefreshLayout.OnRefreshListener, IAsyncGroupResponse {
 
         @Override
         public void postUserGroups(List<UserGroupModel> refreshedGroups) {
@@ -231,9 +255,14 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
                 swipeRefreshLayout.setRefreshing(false);
             }
 
-            if (userGroups != null && userGroups.size() > 0) {
-                userGroups = refreshedGroups;
-                adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups);
+            if (refreshedGroups != null && refreshedGroups.size() > 0) {
+                Gson gson = new Gson();
+                String userGroupsJson = gson.toJson(refreshedGroups);
+                userGroups = gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>() {
+                }.getType());
+                userGroupsFull = gson.fromJson(userGroupsJson, new TypeToken<List<UserGroupModel>>() {
+                }.getType());
+                adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups, userGroupsFull);
                 setListAdapter(adapter);
             } else {
                 Toast.makeText(getContext(), R.string.msg_no_group, Toast.LENGTH_SHORT).show();
