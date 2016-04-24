@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         SharedPreferences.Editor mPrefsEditor = mPrefs.edit();
 
         UserModel loggedInUser = new UserModel();
-        loggedInUser.setUserId(2);
+        loggedInUser.setUserId(1007);
 
         Gson gson = new Gson();
         String loggedInUserJson = gson.toJson(loggedInUser);
@@ -78,7 +78,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_logo_transparent);
+        getSupportActionBar().setIcon(R.drawable.ic_logo_with_name);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());

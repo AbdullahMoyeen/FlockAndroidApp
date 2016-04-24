@@ -32,7 +32,7 @@ public class UserService {
 
     // Constant for holding the Web API end point used in URL
     final String WEBAPIENDPOINT = "http://flockapi.7uputd.com";
-    final String BASICAUTH = "Basic " + new String(Base64.encode("amh141830@utdallas.edu:Abcd1234".getBytes(), Base64.DEFAULT));
+    final String BASICAUTH = "Basic " + new String(Base64.encode("viiup.utd.emse@gmail.com:7UpRocks".getBytes(), Base64.DEFAULT));
 
     public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
         // Call Events rest API
