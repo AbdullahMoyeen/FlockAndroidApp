@@ -41,13 +41,15 @@ public class HomeEventsCellAdapter extends BaseAdapter {
     private Context context;
     private ListView listView;
     private List<UserEventModel> userEvents;
+    private List<UserEventModel> userEventsFull;
     private CellItemsViewHolder cellItemsViewHolder;
     private ProgressDialog progressDialog = null;
 
-    HomeEventsCellAdapter(Context context, ListView listView, List<UserEventModel> userEvents) {
+    HomeEventsCellAdapter(Context context, ListView listView, List<UserEventModel> userEvents, List<UserEventModel> userEventsFull) {
         this.context = context;
         this.listView = listView;
         this.userEvents = userEvents;
+        this.userEventsFull = userEventsFull;
     }
 
     @Override
@@ -123,9 +125,17 @@ public class HomeEventsCellAdapter extends BaseAdapter {
 
             if (response.equalsIgnoreCase("OK")) {
 
-                userEvents.get(position).setIsAttending(this.isAttending);
-                int attendeeCount = userEvents.get(this.position).event.getAttendeeCount();
-                userEvents.get(this.position).event.setAttendeeCount(this.isAttending ? attendeeCount + 1 : attendeeCount - 1);
+                UserEventModel changedUserEvent = userEvents.get(position);
+                int attendeeCount = changedUserEvent.event.getAttendeeCount();
+                changedUserEvent.setIsAttending(this.isAttending);
+                changedUserEvent.event.setAttendeeCount(this.isAttending ? attendeeCount + 1 : attendeeCount - 1);
+                for (UserEventModel userEventFromFull: userEventsFull){
+                    if (userEventFromFull.event.getEventId() == changedUserEvent.event.getEventId()){
+                        userEventFromFull.setIsAttending(changedUserEvent.getIsAttending());
+                        userEventFromFull.event.setAttendeeCount(changedUserEvent.event.getAttendeeCount());
+                        break;
+                    }
+                }
             } else {
                 Toast.makeText(context, R.string.msg_processing_failed, Toast.LENGTH_SHORT).show();
             }
