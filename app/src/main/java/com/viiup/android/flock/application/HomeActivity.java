@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.SearchView;
 
 import com.google.gson.Gson;
@@ -39,6 +40,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
+    private SearchView searchView;
     private HomeTabPagerAdapter mHomeTabPagerAdapter;
     private TabLayout tabLayout;
     private FloatingActionButton fabMine;
@@ -175,18 +177,15 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        int searchOpenImageId = getResources().getIdentifier("android:id/search_button", null, null);
+        ImageView searchOpenImageView = (ImageView) searchView.findViewById(searchOpenImageId);
+        searchOpenImageView.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_search_plus).actionBarSize().colorRes(R.color.colorContentBackground));
+        int searchCloseImageId = getResources().getIdentifier("android:id/search_close_btn", null, null);
+        ImageView searchCLoseImageView = (ImageView) searchView.findViewById(searchCloseImageId);
+        searchCLoseImageView.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_search_minus).actionBarSize().colorRes(R.color.colorContentBackground));
         searchView.setOnQueryTextListener(this);
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                }
-            }
-        });
 
         return true;
     }
