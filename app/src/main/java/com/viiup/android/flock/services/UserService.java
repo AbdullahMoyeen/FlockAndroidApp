@@ -12,6 +12,8 @@ import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.viiup.android.flock.models.UserEventModel;
 import com.viiup.android.flock.models.UserGroupModel;
+import com.viiup.android.flock.models.UserModel;
+import com.viiup.android.flock.models.UserPasswordChangeModel;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -31,7 +33,8 @@ import java.util.List;
 public class UserService {
 
     // Constant for holding the Web API end point used in URL
-    final String WEBAPIENDPOINT = "http://flockapi.7uputd.com";
+//    final String WEBAPIENDPOINT = "http://flockapi.7uputd.com";
+    final String WEBAPIENDPOINT = "http://192.168.56.1:8080";
     final String BASICAUTH = "Basic " + new String(Base64.encode("viiup.utd.emse@gmail.com:7UpRocks".getBytes(), Base64.DEFAULT));
 
     public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
@@ -57,7 +60,7 @@ public class UserService {
     }
 
     public void setUserEventRsvp(int userId, int eventId, boolean isAttending,
-                                 IAsyncPutRequestResponse delegate) {
+                                 IAsyncRequestResponse delegate) {
         try {
             // Build the URL
             String urlToCall = WEBAPIENDPOINT + "/api/user/events/rsvp?userId=" + userId + "&eventId=" + eventId + "&isAttending=" + isAttending;
@@ -73,14 +76,97 @@ public class UserService {
     }
 
     public void setUserGroupMembership(int userId, int groupId, boolean isMember,
-                                       IAsyncPutRequestResponse delegate) {
+                                       IAsyncRequestResponse delegate) {
         // Build URL
-        String urlToCall = WEBAPIENDPOINT + "/api/user/groups/membership?userId=" + userId + "&groupId=" + groupId + "&isMember=" + isMember;
+        String urlToCall = WEBAPIENDPOINT + "/api/user/groups/membership?userId=" + userId +
+                "&groupId=" + groupId + "&isMember=" + isMember;
 
         // Call the URL
         AsyncPUTRequest asyncPUTRequest = new AsyncPUTRequest();
         asyncPUTRequest.setDelegate(delegate);
         asyncPUTRequest.execute(urlToCall);
+    }
+
+    public void signUpUser(UserModel userModel, IAsyncRequestResponse delegate) {
+
+        // Post URL for sign up
+        String urlToPost = WEBAPIENDPOINT + "/api/user/signup";
+
+        // Get the JSON for user model
+        Gson gson = new Gson();
+        String newUserJSON = gson.toJson(userModel);
+
+        // Make POST call on background
+        AsyncPostRequest asyncPostRequest = new AsyncPostRequest();
+        asyncPostRequest.setDelegate(delegate);
+        asyncPostRequest.execute(urlToPost,newUserJSON);
+    }
+
+    public void changeUserPassword( UserPasswordChangeModel userPassword, IAsyncRequestResponse delegate) {
+        // Post URL for sign up
+        String urlToPost = WEBAPIENDPOINT + "/api/user/signup";
+
+        // Get the JSON for user password
+        Gson gson = new Gson();
+        String newPasswordJSON = gson.toJson(userPassword);
+
+        // Make POST call on background
+        AsyncPostRequest asyncPostRequest = new AsyncPostRequest();
+        asyncPostRequest.setDelegate(delegate);
+        asyncPostRequest.execute(urlToPost,newPasswordJSON);
+    }
+
+    /*
+        Service method for calling REST API with "POST" request, with JSON payload.
+     */
+    private String makePostAPICall(String urlToCall, String jsonPayload) throws IOException {
+        String urlString = urlToCall;
+        HttpURLConnection postRequestConnection = null;
+        OutputStreamWriter outputStreamWriter;
+        String postResults = null;
+        InputStream in = null;
+
+        // HTTP POST
+        try {
+            // Construct URL from string
+            URL url = new URL(urlString);
+
+            // Open HTTP connection and provide authentication information.
+            postRequestConnection = (HttpURLConnection) url.openConnection();
+            postRequestConnection.setRequestProperty("Content-Type", "application/json");
+            postRequestConnection.setRequestProperty("Accept", "application/json");
+            postRequestConnection.setRequestProperty("Content-length", jsonPayload.getBytes().length + "");
+            postRequestConnection.setUseCaches(false);
+
+            // Provide authentication
+            postRequestConnection.setRequestProperty("Authorization", BASICAUTH);
+            postRequestConnection.setRequestMethod("POST");
+
+            // Make the HTTP POST call
+            outputStreamWriter = new OutputStreamWriter(postRequestConnection.getOutputStream(), "UTF-8");
+            outputStreamWriter.write(jsonPayload);
+            outputStreamWriter.close();
+
+            // Get the response
+            in = new BufferedInputStream(postRequestConnection.getInputStream());
+
+            // Read the data from input stream
+            if (in != null) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(in));
+                postResults = br.readLine();
+            } else return null;
+
+            // Return response
+            return postResults;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw e;
+        } finally {
+            // release the connection if made
+            if (postRequestConnection != null) postRequestConnection.disconnect();
+            if (in != null) in.close();
+        }
     }
 
     /*
@@ -89,6 +175,7 @@ public class UserService {
     private String makePutAPICall(String urlToCall) throws IOException {
         String urlString = urlToCall;
         HttpURLConnection putRequestConnection = null;
+        OutputStreamWriter outputStreamWriter = null;
 
         // HTTP Put
         try {
@@ -101,7 +188,7 @@ public class UserService {
             putRequestConnection.setRequestMethod("PUT");
 
             // Make the HTTP Put call
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(putRequestConnection.getOutputStream());
+            outputStreamWriter = new OutputStreamWriter(putRequestConnection.getOutputStream());
             outputStreamWriter.flush();
             outputStreamWriter.close();
 
@@ -190,18 +277,63 @@ public class UserService {
     }
 
     /*
-    Async task for calling the REST API from application on background thread.
-    The task makes PUT request for setting up RSVP status for event.
-    */
-    private class AsyncPUTRequest extends AsyncTask {
+        Helper class for making Async post request using JSON as payload.
+     */
+    private class AsyncPostRequest extends AsyncTask<String, Void, String> {
         // Delegate to represent caller
-        private IAsyncPutRequestResponse delegate = null;
+        private IAsyncRequestResponse delegate = null;
 
         // Exception to throw from PostExecute
         Exception backGrounndException = null;
 
         // Set the delegate i.e. activity that requested async task to post response
-        public void setDelegate(IAsyncPutRequestResponse delegate) {
+        public void setDelegate(IAsyncRequestResponse delegate) {
+            this.delegate = delegate;
+        }
+
+        // HTTP Post request
+        @Override
+        protected String doInBackground(String... params) {
+            String urlToCall = params[0];
+            String jsonPayload = params[1];
+            String responseJSON = null;
+
+            // Make POST API call
+            try {
+                responseJSON = makePostAPICall(urlToCall, jsonPayload);
+                return responseJSON;
+            } catch (Exception e) {
+                backGrounndException = e;
+                e.printStackTrace();
+            }
+
+            // Exception case..
+            return responseJSON;
+        }
+
+        @Override
+        protected void onPostExecute(String postResponse) {
+            // Post the results if there is no exception
+            if (backGrounndException != null)
+                delegate.responseHandler(postResponse);
+            else
+                delegate.backGroundErrorHandler(backGrounndException);
+        }
+    }
+
+    /*
+    Async task for calling the REST API from application on background thread.
+    The task makes PUT request for setting up RSVP status for event.
+    */
+    private class AsyncPUTRequest extends AsyncTask {
+        // Delegate to represent caller
+        private IAsyncRequestResponse delegate = null;
+
+        // Exception to throw from PostExecute
+        Exception backGrounndException = null;
+
+        // Set the delegate i.e. activity that requested async task to post response
+        public void setDelegate(IAsyncRequestResponse delegate) {
             this.delegate = delegate;
         }
 
@@ -236,7 +368,7 @@ public class UserService {
             }
 
             // No exception, hence handle the results
-            delegate.putRequestResponse(o.toString());
+            delegate.responseHandler(o.toString());
         }
     }
 

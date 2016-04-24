@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserGroupModel;
-import com.viiup.android.flock.services.IAsyncPutRequestResponse;
+import com.viiup.android.flock.services.IAsyncRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 public class GroupDetailsActivity extends AppCompatActivity {
@@ -107,12 +107,12 @@ public class GroupDetailsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
-    private class SwitchMembershipOnCheckedChangeListener implements CompoundButton.OnCheckedChangeListener, IAsyncPutRequestResponse {
+    private class SwitchMembershipOnCheckedChangeListener implements CompoundButton.OnCheckedChangeListener, IAsyncRequestResponse {
 
         private boolean isMember;
 
         @Override
-        public void putRequestResponse(String response) {
+        public void responseHandler(String response) {
 
             if (progressDialog != null) progressDialog.dismiss();
 

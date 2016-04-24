@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserGroupModel;
-import com.viiup.android.flock.services.IAsyncPutRequestResponse;
+import com.viiup.android.flock.services.IAsyncRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 import java.util.List;
@@ -109,13 +109,13 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private class SwitchMembershipOnCheckedChangeListener implements CompoundButton.OnCheckedChangeListener, IAsyncPutRequestResponse {
+    private class SwitchMembershipOnCheckedChangeListener implements CompoundButton.OnCheckedChangeListener, IAsyncRequestResponse {
 
         private boolean isMember;
         private int position;
 
         @Override
-        public void putRequestResponse(String response) {
+        public void responseHandler(String response) {
 
             if (progressDialog != null) progressDialog.dismiss();
 
