@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         SharedPreferences.Editor mPrefsEditor = mPrefs.edit();
 
         UserModel loggedInUser = new UserModel();
-        loggedInUser.setUserId(1007);
+        loggedInUser.setUserId(2);
 
         Gson gson = new Gson();
         String loggedInUserJson = gson.toJson(loggedInUser);

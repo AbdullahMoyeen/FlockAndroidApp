@@ -1,10 +1,9 @@
 package com.viiup.android.flock.models;
 
 /**
- * Created by AbdullahMoyeen on 4/24/16.
+ * Created by Niranjan on 4/24/2016.
  */
 public class UserPasswordChangeModel {
-
     private int userId;
     private String emailAddress;
     private String newPassword;

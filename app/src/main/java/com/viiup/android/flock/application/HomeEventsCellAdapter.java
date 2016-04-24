@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.models.UserEventModel;
-import com.viiup.android.flock.services.IAsyncPutRequestResponse;
+import com.viiup.android.flock.services.IAsyncRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 import java.text.DateFormat;
@@ -112,13 +112,13 @@ public class HomeEventsCellAdapter extends BaseAdapter {
     /*
         Helper class acting as OnCheckedChangeListener
      */
-    private class SwitchRsvpOnCheckedChangeListener implements IAsyncPutRequestResponse, CompoundButton.OnCheckedChangeListener {
+    private class SwitchRsvpOnCheckedChangeListener implements IAsyncRequestResponse, CompoundButton.OnCheckedChangeListener {
 
         private boolean isAttending;
         private int position;
 
         @Override
-        public void putRequestResponse(String response) {
+        public void responseHandler(String response) {
 
             // Dismiss progress dialogue
             if (progressDialog != null) progressDialog.dismiss();
