@@ -33,8 +33,7 @@ import java.util.List;
 public class UserService {
 
     // Constant for holding the Web API end point used in URL
-//    final String WEBAPIENDPOINT = "http://flockapi.7uputd.com";
-    final String WEBAPIENDPOINT = "http://192.168.56.1:8080";
+    final String WEBAPIENDPOINT = "http://flockapi.7uputd.com";
     final String BASICAUTH = "Basic " + new String(Base64.encode("viiup.utd.emse@gmail.com:7UpRocks".getBytes(), Base64.DEFAULT));
 
     public void getUserEventsByUserId(int userId, IAsyncEventResponse callback) {
@@ -99,10 +98,10 @@ public class UserService {
         // Make POST call on background
         AsyncPostRequest asyncPostRequest = new AsyncPostRequest();
         asyncPostRequest.setDelegate(delegate);
-        asyncPostRequest.execute(urlToPost,newUserJSON);
+        asyncPostRequest.execute(urlToPost, newUserJSON);
     }
 
-    public void changeUserPassword( UserPasswordChangeModel userPassword, IAsyncRequestResponse delegate) {
+    public void changeUserPassword(UserPasswordChangeModel userPassword, IAsyncRequestResponse delegate) {
         // Post URL for sign up
         String urlToPost = WEBAPIENDPOINT + "/api/user/signup";
 
@@ -113,7 +112,7 @@ public class UserService {
         // Make POST call on background
         AsyncPostRequest asyncPostRequest = new AsyncPostRequest();
         asyncPostRequest.setDelegate(delegate);
-        asyncPostRequest.execute(urlToPost,newPasswordJSON);
+        asyncPostRequest.execute(urlToPost, newPasswordJSON);
     }
 
     /*
