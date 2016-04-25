@@ -4,43 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     tools:context="com.viiup.android.flock.application.MapActivity">
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.design.widget.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true">
+        android:background="@android:color/background_dark"
+        android:paddingTop="@dimen/appbar_padding_top"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.design.widget.AppBarLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/background_dark"
-            android:paddingTop="@dimen/appbar_padding_top"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorActionBar"
+            android:textAlignment="center"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorActionBar"
-                android:textAlignment="center"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/secondaryBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorSecondaryBar"
+            android:gravity="center"
+            android:textColor="@color/colorBarText"
+            android:textSize="14sp" />
 
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/secondaryBar"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/colorSecondaryBar"
-                android:gravity="center"
-                android:textColor="@color/colorBarText"
-                android:textSize="14sp" />
-
-        </android.support.design.widget.AppBarLayout>
-
-    </android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
