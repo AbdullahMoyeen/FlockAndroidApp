@@ -79,6 +79,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.ic_logo_with_name);
+        getSupportActionBar().setTitle("");
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());
