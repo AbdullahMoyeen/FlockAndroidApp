@@ -10,10 +10,8 @@
     <color name="colorBarText">#FFFFFF</color>
     <color name="colorContentText">#000000</color>
     <color name="colorButton">#FF2DA7CC</color>
-
-    <!-- Colors used for swipe refresh layout progress indicator -->
-    <item name="darkblue" type="color">#FF0099CC</item>
-    <item name="darkpurple" type="color">#FF9933CC</item>
-    <item name="darkgreen" type="color">#FF669900</item>
-    <item name="darkorange" type="color">#FFFF8800</item>
+    <color name="colorFlockBird1">#e98300</color>
+    <color name="colorFlockBird2">#008542</color>
+    <color name="colorFlockBird3">#69be28</color>
+    <color name="colorFlockBird4">#c9dd03</color>
 </resources>

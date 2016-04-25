@@ -64,7 +64,7 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayoutListener());
 
         // Set color skim for refresh ui
-        swipeRefreshLayout.setColorSchemeResources(R.color.darkblue, R.color.darkgreen, R.color.darkorange, R.color.darkpurple);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorFlockBird1, R.color.colorFlockBird2, R.color.colorFlockBird3, R.color.colorFlockBird4);
 
         SharedPreferences mPref = this.getActivity().getPreferences(Context.MODE_PRIVATE);
         String loggedInUserJson = mPref.getString("loggedInUserJson", null);
