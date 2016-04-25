@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
@@ -26,32 +25,19 @@ import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
 import com.viiup.android.flock.models.UserEventModel;
-import com.viiup.android.flock.models.UserModel;
 
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, TabLayout.OnTabSelectedListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SearchView searchView;
+    private ViewPager mViewPager;
     private HomeTabPagerAdapter mHomeTabPagerAdapter;
     private TabLayout tabLayout;
     private FloatingActionButton fabMine;
     private HomeEventsFragment eventsFragment;
     private HomeGroupsFragment groupsFragment;
     public List<UserEventModel> userEvents;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,21 +46,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         Iconify.with(new FontAwesomeModule());
 
-        // Move this section to Login service
-        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor mPrefsEditor = mPrefs.edit();
-
-        UserModel loggedInUser = new UserModel();
-        loggedInUser.setUserId(2);
-
-        Gson gson = new Gson();
-        String loggedInUserJson = gson.toJson(loggedInUser);
-        mPrefsEditor.putString("loggedInUserJson", loggedInUserJson);
-        mPrefsEditor.apply();
-        // End move to Login service
-
-//        SharedPreferences mPref = getPreferences(Context.MODE_PRIVATE);
-//        String loggedInUserJson = mPref.getString("loggedInUserJson", null);
+        SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+        String loggedInUserJson = mPref.getString("loggedInUserJson", null);
 
         if (loggedInUserJson == null) {
             Intent startupIntent = new Intent(this, StartupActivity.class);
@@ -88,14 +61,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setIcon(R.drawable.ic_logo_with_name);
             getSupportActionBar().setTitle("");
-            // Create the adapter that will return a fragment for each of the three
-            // primary sections of the activity.
-            mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());
 
-            // Set up the ViewPager with the sections adapter.
+            mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());
             mViewPager = (ViewPager) findViewById(R.id.container);
             mViewPager.setAdapter(mHomeTabPagerAdapter);
-
             tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
             tabLayout.setOnTabSelectedListener(this);
@@ -181,7 +150,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_home, menu);
 
         // Associate searchable configuration with the SearchView
@@ -202,13 +171,21 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_logout) {
+
+            SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+            SharedPreferences.Editor mPrefsEditor = mPref.edit();
+            mPrefsEditor.clear();
+            mPrefsEditor.apply();
+
+            Intent startupIntent = new Intent(this, StartupActivity.class);
+            startActivity(startupIntent);
+
             return true;
         }
 

@@ -1,0 +1,13 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/startup_fragment_4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.viiup.android.flock.application.StartupFragment4">
+
+    <ImageView
+        android:id="@+id/startup_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</FrameLayout>

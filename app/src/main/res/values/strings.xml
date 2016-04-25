@@ -5,6 +5,8 @@
     <string name="search_title">Search</string>
     <string name="search_hint">start typing…</string>
     <string name="image_description">Image</string>
+    <string name="title_sign_up">JOIN NOW</string>
+    <string name="title_sign_in">SIGN IN</string>
     <string name="title_activity_event_details">Back</string>
     <string name="title_activity_group_details">Back</string>
     <string name="title_activity_location">Back</string>
@@ -26,5 +28,4 @@
     <string name="msg_processing_failed">sorry, could not process your request, please try again later</string>
     <string name="msg_google_play_unavailable">google play service unavailable, please activate it to use this feature</string>
     <string name="title_activity_startup">StartupActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

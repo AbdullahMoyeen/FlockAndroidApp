@@ -66,7 +66,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
         // Set color skim for refresh ui
         swipeRefreshLayout.setColorSchemeResources(R.color.colorFlockBird1, R.color.colorFlockBird2, R.color.colorFlockBird3, R.color.colorFlockBird4);
 
-        SharedPreferences mPref = this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences mPref = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         String loggedInUserJson = mPref.getString("loggedInUserJson", null);
 
         Gson gson = new Gson();

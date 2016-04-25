@@ -8,29 +8,40 @@
     android:fitsSystemWindows="true"
     tools:context="com.viiup.android.flock.application.StartupActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+        android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay">
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        </android.support.v7.widget.Toolbar>
+        <Button
+            android:id="@+id/buttonSignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorButton"
+            android:text="@string/title_sign_up"
+            android:textColor="@color/colorBarText"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
 
-    </android.support.design.widget.AppBarLayout>
+        <TextView
+            android:id="@+id/textViewSignIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/title_sign_in"
+            android:textColor="@color/text_link_color"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
