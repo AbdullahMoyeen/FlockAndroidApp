@@ -58,6 +58,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         super.onCreate(savedInstanceState);
 
+        Iconify.with(new FontAwesomeModule());
+
         // Move this section to Login service
         SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor mPrefsEditor = mPrefs.edit();
@@ -71,80 +73,87 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         mPrefsEditor.apply();
         // End move to Login service
 
-        Iconify.with(new FontAwesomeModule());
+//        SharedPreferences mPref = getPreferences(Context.MODE_PRIVATE);
+//        String loggedInUserJson = mPref.getString("loggedInUserJson", null);
 
-        setContentView(R.layout.home_activity);
+        if (loggedInUserJson == null) {
+            Intent startupIntent = new Intent(this, StartupActivity.class);
+            startActivity(startupIntent);
+        } else {
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ic_logo_with_name);
-        getSupportActionBar().setTitle("");
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());
+            setContentView(R.layout.home_activity);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mHomeTabPagerAdapter);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setIcon(R.drawable.ic_logo_with_name);
+            getSupportActionBar().setTitle("");
+            // Create the adapter that will return a fragment for each of the three
+            // primary sections of the activity.
+            mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
-        tabLayout.setOnTabSelectedListener(this);
+            // Set up the ViewPager with the sections adapter.
+            mViewPager = (ViewPager) findViewById(R.id.container);
+            mViewPager.setAdapter(mHomeTabPagerAdapter);
 
-        FloatingActionButton fabNearbyEvents = (FloatingActionButton) findViewById(R.id.fabNearbyEvents);
-        fabNearbyEvents.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getString(R.string.title_nearby_events), new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Gson gson = new Gson();
-                        String userEventsJson = gson.toJson(userEvents);
-                        Intent mapIntent = new Intent(v.getContext(), MapActivity.class);
-                        mapIntent.putExtra("userEventsJson", userEventsJson);
-                        startActivity(mapIntent);
-                    }
-                });
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(mViewPager);
+            tabLayout.setOnTabSelectedListener(this);
 
-                View sbView = snackbar.getView();
-                sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
-                snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
-                snackbar.show();
-            }
-        });
+            FloatingActionButton fabNearbyEvents = (FloatingActionButton) findViewById(R.id.fabNearbyEvents);
+            fabNearbyEvents.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getString(R.string.title_nearby_events), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Gson gson = new Gson();
+                            String userEventsJson = gson.toJson(userEvents);
+                            Intent mapIntent = new Intent(v.getContext(), MapActivity.class);
+                            mapIntent.putExtra("userEventsJson", userEventsJson);
+                            startActivity(mapIntent);
+                        }
+                    });
 
-        fabMine = (FloatingActionButton) findViewById(R.id.fabMyEvents);
-        fabMine.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
-        fabMine.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (tabLayout.getSelectedTabPosition() == 0) {
-
-                    Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_events), Snackbar.LENGTH_LONG).setAction("", null);
                     View sbView = snackbar.getView();
                     sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
                     snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
                     snackbar.show();
-
-                    eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
-                    eventsFragment.filterMyEvents();
-                    tabLayout.getTabAt(0).select();
-                } else {
-
-                    Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_groups), Snackbar.LENGTH_LONG).setAction("", null);
-                    View sbView = snackbar.getView();
-                    sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
-                    snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
-                    snackbar.show();
-
-                    groupsFragment = (HomeGroupsFragment) getSupportFragmentManager().getFragments().get(1);
-                    groupsFragment.filterMyGroups();
-                    tabLayout.getTabAt(1).select();
                 }
-            }
-        });
+            });
+
+            fabMine = (FloatingActionButton) findViewById(R.id.fabMyEvents);
+            fabMine.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
+            fabMine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (tabLayout.getSelectedTabPosition() == 0) {
+
+                        Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_events), Snackbar.LENGTH_LONG).setAction("", null);
+                        View sbView = snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
+                        snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
+                        snackbar.show();
+
+                        eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
+                        eventsFragment.filterMyEvents();
+                        tabLayout.getTabAt(0).select();
+                    } else {
+
+                        Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_groups), Snackbar.LENGTH_LONG).setAction("", null);
+                        View sbView = snackbar.getView();
+                        sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
+                        snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
+                        snackbar.show();
+
+                        groupsFragment = (HomeGroupsFragment) getSupportFragmentManager().getFragments().get(1);
+                        groupsFragment.filterMyGroups();
+                        tabLayout.getTabAt(1).select();
+                    }
+                }
+            });
+        }
     }
 
     @Override
