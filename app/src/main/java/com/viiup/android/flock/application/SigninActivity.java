@@ -34,6 +34,15 @@ public class SigninActivity extends AppCompatActivity {
 
         textViewCancel = (TextView) findViewById(R.id.textViewCancel);
         textViewCancel.setText(Iconify.compute(this, getString(R.string.icon_fa_cancel)));
+        textViewCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                finish();
+                overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            }
+        });
+
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         buttonSignin = (Button) findViewById(R.id.buttonSignin);
