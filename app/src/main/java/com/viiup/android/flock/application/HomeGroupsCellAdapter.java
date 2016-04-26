@@ -169,7 +169,7 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(context, R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
         }
 
         @Override

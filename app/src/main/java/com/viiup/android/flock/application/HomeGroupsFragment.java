@@ -240,7 +240,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
         ex.printStackTrace();
 
         // display error message
-        Toast.makeText(this.getContext(), R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContext(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
     }
 
     /*
@@ -278,7 +278,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(getContext(), R.string.msg_something_wrong, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
         }
 
         @Override

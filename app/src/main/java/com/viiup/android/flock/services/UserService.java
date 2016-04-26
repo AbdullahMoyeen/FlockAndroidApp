@@ -84,14 +84,14 @@ public class UserService {
         asyncPUTRequest.execute(urlToCall);
     }
 
-    public void signup(UserModel userModel, IAsyncRequestResponse delegate) {
+    public void signup(UserModel user, IAsyncRequestResponse delegate) {
 
         // Post URL for sign up
         String urlToPost = WEBAPIENDPOINT + "/api/user/signup";
 
         // Get the JSON for user model
         Gson gson = new Gson();
-        String newUserJSON = gson.toJson(userModel);
+        String newUserJSON = gson.toJson(user);
 
         // Make POST call on background
         AsyncPostRequest asyncPostRequest = new AsyncPostRequest();

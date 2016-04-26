@@ -7,7 +7,31 @@
     android:background="@color/colorContentBackground"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.viiup.android.flock.application.SigninActivity">
+    tools:context="com.viiup.android.flock.application.SignupActivity">
+
+    <EditText
+        android:id="@+id/editTextFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:hint="@string/prompt_firstname"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/editTextLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:hint="@string/prompt_lastname"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
+        android:singleLine="true" />
 
     <EditText
         android:id="@+id/editTextEmail"
@@ -15,29 +39,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:singleLine="true" />
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"
-        android:hint="@string/prompt_password"
-        android:imeActionId="@+id/login"
-        android:imeActionLabel="@string/action_signin"
-        android:imeOptions="actionUnspecified"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:singleLine="true" />
-
     <Button
-        android:id="@+id/buttonSignin"
+        android:id="@+id/buttonSignup"
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +54,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="25dp"
         android:background="@color/colorButton"
-        android:text="@string/action_signin"
+        android:text="@string/action_signup"
         android:textColor="@color/colorBarText"
         android:textStyle="bold" />
 
@@ -54,35 +63,24 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/textViewForgotPassword"
+            android:id="@+id/textViewCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/action_forgot_password"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/text_link_color" />
-
-        <TextView
-            android:id="@+id/textViewCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
             android:text="@string/action_cancel"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/text_link_color" />
 
         <TextView
-            android:id="@+id/textViewJoin"
+            android:id="@+id/textViewSignin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="10dp"
-            android:text="@string/action_join"
+            android:text="@string/action_signin"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/text_link_color" />
 

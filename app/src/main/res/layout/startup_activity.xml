@@ -19,11 +19,11 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <Button
-            android:id="@+id/buttonSignup"
+            android:id="@+id/buttonJoin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorButton"
-            android:text="@string/action_signup"
+            android:text="@string/action_join"
             android:textColor="@color/colorBarText"
             android:textStyle="bold"
             android:layout_marginLeft="20dp"

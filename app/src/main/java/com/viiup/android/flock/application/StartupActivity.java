@@ -18,15 +18,22 @@ public class StartupActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
-
         setContentView(R.layout.startup_activity);
 
         mStartupTabPagerAdapter = new StartupTabPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mStartupTabPagerAdapter);
 
-        Button buttonSignup = (Button) findViewById(R.id.buttonSignup);
+        Button buttonJoin = (Button) findViewById(R.id.buttonJoin);
+        buttonJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent signupActivityIntent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(signupActivityIntent);
+            }
+        });
+
         TextView textViewSignin = (TextView) findViewById(R.id.textViewSignin);
         textViewSignin.setOnClickListener(new View.OnClickListener() {
             @Override
