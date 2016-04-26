@@ -7,6 +7,7 @@
     <string name="action_signin">SIGN IN</string>
     <string name="action_forgot_password">FORGOT</string>
     <string name="action_cancel">CANCEL</string>
+    <string name="action_submit">SUBMIT</string>
     <string name="fmt_date_format">MM/dd/yyyy hh:mm a</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_email">This email address is invalid</string>
@@ -20,6 +21,7 @@
     <string name="icon_fa_pending">{fa-hourglass-half}</string>
     <string name="image_description">Image</string>
     <string name="msg_password_sent">please check email for temporary password</string>
+    <string name="msg_password_changed">password changed successfully</string>
     <string name="msg_loading_data">loading data, please standby…</string>
     <string name="msg_no_event">no upcoming event</string>
     <string name="msg_no_group">no group found</string>
@@ -32,6 +34,8 @@
     <string name="prompt_lastname">last name</string>
     <string name="prompt_email">email</string>
     <string name="prompt_password">password</string>
+    <string name="prompt_new_password">new password</string>
+    <string name="prompt_re_password">re-enter new password</string>
     <string name="title_search">Search</string>
     <string name="title_activity_event_details">Back</string>
     <string name="title_activity_group_details">Back</string>

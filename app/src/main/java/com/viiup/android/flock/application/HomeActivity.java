@@ -175,6 +175,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+
+            Intent passwordChangeIntent = new Intent(this, PasswordChangeActivity.class);
+            startActivity(passwordChangeIntent);
+
             return true;
         } else if (id == R.id.action_logout) {
 

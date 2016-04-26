@@ -87,7 +87,8 @@
         <activity
             android:name=".SigninActivity"
             android:label="@string/title_activity_signin" />
-        <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".PasswordChangeActivity"></activity>
     </application>
 
 </manifest>
