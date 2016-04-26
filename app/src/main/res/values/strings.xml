@@ -6,7 +6,7 @@
     <string name="action_signup">SIGN UP</string>
     <string name="action_signin">SIGN IN</string>
     <string name="action_forgot_password">FORGOT</string>
-    <string name="action_cancel">CANCEL</string>
+    <string name="action_cancel">X</string>
     <string name="action_submit">SUBMIT</string>
     <string name="fmt_date_format">MM/dd/yyyy hh:mm a</string>
     <string name="error_field_required">This field is required</string>
@@ -14,6 +14,7 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_invalid_login">invalid login</string>
     <string name="error_something_wrong">something went wrong, please report to admin</string>
+    <string name="icon_fa_cancel">{fa-remove}</string>
     <string name="icon_fa_going">{fa-check}</string>
     <string name="icon_fa_not_going">{fa-remove}</string>
     <string name="icon_fa_join">{fa-user-plus}</string>

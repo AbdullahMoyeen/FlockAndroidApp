@@ -8,14 +8,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.models.UserModel;
 import com.viiup.android.flock.services.UserService;
 
 public class SigninActivity extends AppCompatActivity {
 
+    private TextView textViewCancel;
     private EditText editTextEmail;
     private EditText editTextPassword;
     private Button buttonSignin;
@@ -29,6 +32,8 @@ public class SigninActivity extends AppCompatActivity {
 
         setContentView(R.layout.signin_activity);
 
+        textViewCancel = (TextView) findViewById(R.id.textViewCancel);
+        textViewCancel.setText(Iconify.compute(this, getString(R.string.icon_fa_cancel)));
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         buttonSignin = (Button) findViewById(R.id.buttonSignin);
