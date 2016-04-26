@@ -58,8 +58,7 @@ public class UserService {
         }
     }
 
-    public void setUserEventRsvp(int userId, int eventId, boolean isAttending,
-                                 IAsyncRequestResponse delegate) {
+    public void setUserEventRsvp(int userId, int eventId, boolean isAttending, IAsyncRequestResponse delegate) {
         try {
             // Build the URL
             String urlToCall = WEBAPIENDPOINT + "/api/user/events/rsvp?userId=" + userId + "&eventId=" + eventId + "&isAttending=" + isAttending;
@@ -74,8 +73,7 @@ public class UserService {
         }
     }
 
-    public void setUserGroupMembership(int userId, int groupId, boolean isMember,
-                                       IAsyncRequestResponse delegate) {
+    public void setUserGroupMembership(int userId, int groupId, boolean isMember, IAsyncRequestResponse delegate) {
         // Build URL
         String urlToCall = WEBAPIENDPOINT + "/api/user/groups/membership?userId=" + userId +
                 "&groupId=" + groupId + "&isMember=" + isMember;
@@ -86,7 +84,7 @@ public class UserService {
         asyncPUTRequest.execute(urlToCall);
     }
 
-    public void signUpUser(UserModel userModel, IAsyncRequestResponse delegate) {
+    public void signup(UserModel userModel, IAsyncRequestResponse delegate) {
 
         // Post URL for sign up
         String urlToPost = WEBAPIENDPOINT + "/api/user/signup";
@@ -99,6 +97,15 @@ public class UserService {
         AsyncPostRequest asyncPostRequest = new AsyncPostRequest();
         asyncPostRequest.setDelegate(delegate);
         asyncPostRequest.execute(urlToPost, newUserJSON);
+    }
+
+    public UserModel signin(String emailAddress, String password){
+        UserModel authenticatedUser = new UserModel();
+        // call signin api which returns authenticatedUser
+        // TODO: remove this hardcoding after api is implemented
+        authenticatedUser.setUserId(2);
+        //
+        return authenticatedUser;
     }
 
     public void changeUserPassword(UserPasswordChangeModel userPassword, IAsyncRequestResponse delegate) {

@@ -37,7 +37,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
     private List<UserGroupModel> userGroupsFull;
     private ProgressDialog progressDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private UserModel loggedInUser;
+    private UserModel authenticatedUser;
 
     public HomeGroupsFragment() {
     }
@@ -67,13 +67,13 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
         swipeRefreshLayout.setColorSchemeResources(R.color.colorFlockBird1, R.color.colorFlockBird2, R.color.colorFlockBird3, R.color.colorFlockBird4);
 
         SharedPreferences mPref = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        String loggedInUserJson = mPref.getString("loggedInUserJson", null);
+        String authenticatedUserJson = mPref.getString("authenticatedUserJson", null);
 
         Gson gson = new Gson();
-        loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
+        authenticatedUser = gson.fromJson(authenticatedUserJson, UserModel.class);
 
         UserService userService = new UserService();
-        userService.getUserGroupsByUserId(loggedInUser.getUserId(), this);
+        userService.getUserGroupsByUserId(authenticatedUser.getUserId(), this);
 
         groupsListView = getListView();
         groupsListView.setOnItemClickListener(this);
@@ -285,7 +285,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
         public void onRefresh() {
             // Reload groups
             UserService userService = new UserService();
-            userService.getUserGroupsByUserId(loggedInUser.getUserId(), this);
+            userService.getUserGroupsByUserId(authenticatedUser.getUserId(), this);
         }
     }
 }

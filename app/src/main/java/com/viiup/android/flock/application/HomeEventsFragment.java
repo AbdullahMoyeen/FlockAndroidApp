@@ -37,7 +37,7 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
     private List<UserEventModel> userEventsFull;
     private ProgressDialog progressDialog;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private UserModel loggedInUser;
+    private UserModel authenticatedUser;
 
     public HomeEventsFragment() {
     }
@@ -67,13 +67,13 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
         swipeRefreshLayout.setColorSchemeResources(R.color.colorFlockBird1, R.color.colorFlockBird2, R.color.colorFlockBird3, R.color.colorFlockBird4);
 
         SharedPreferences mPref = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        String loggedInUserJson = mPref.getString("loggedInUserJson", null);
+        String authenticatedUserJson = mPref.getString("authenticatedUserJson", null);
 
         Gson gson = new Gson();
-        loggedInUser = gson.fromJson(loggedInUserJson, UserModel.class);
+        authenticatedUser = gson.fromJson(authenticatedUserJson, UserModel.class);
 
         UserService userService = new UserService();
-        userService.getUserEventsByUserId(loggedInUser.getUserId(), this);
+        userService.getUserEventsByUserId(authenticatedUser.getUserId(), this);
 
         eventsListView = getListView();
         eventsListView.setOnItemClickListener(this);
@@ -272,7 +272,7 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
 
             // Reload events
             UserService userService = new UserService();
-            userService.getUserEventsByUserId(loggedInUser.getUserId(), this);
+            userService.getUserEventsByUserId(authenticatedUser.getUserId(), this);
         }
     }
 }

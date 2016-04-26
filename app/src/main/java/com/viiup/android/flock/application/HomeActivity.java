@@ -47,9 +47,9 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         Iconify.with(new FontAwesomeModule());
 
         SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
-        String loggedInUserJson = mPref.getString("loggedInUserJson", null);
+        String authenticatedUserJson = mPref.getString("authenticatedUserJson", null);
 
-        if (loggedInUserJson == null) {
+        if (authenticatedUserJson == null) {
             Intent startupIntent = new Intent(this, StartupActivity.class);
             startActivity(startupIntent);
         } else {

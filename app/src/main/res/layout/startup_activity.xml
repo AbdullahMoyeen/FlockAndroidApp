@@ -19,12 +19,13 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <Button
-            android:id="@+id/buttonSignUp"
+            android:id="@+id/buttonSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorButton"
-            android:text="@string/title_sign_up"
+            android:text="@string/action_signup"
             android:textColor="@color/colorBarText"
+            android:textStyle="bold"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="60dp"
@@ -32,11 +33,11 @@
             android:layout_centerHorizontal="true" />
 
         <TextView
-            android:id="@+id/textViewSignIn"
+            android:id="@+id/textViewSignin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/title_sign_in"
+            android:text="@string/action_signin"
             android:textColor="@color/text_link_color"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"

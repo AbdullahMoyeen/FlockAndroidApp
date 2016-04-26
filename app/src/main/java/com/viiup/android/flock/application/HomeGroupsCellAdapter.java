@@ -95,14 +95,14 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewGroupName.setText(userGroup.group.getGroupName());
             cellItemsViewHolder.textViewGroupMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " joined");
             cellItemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
-            cellItemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getString(R.string.fa_icon_leave)));
-            cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_pending)));
-            cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_pending)));
+            cellItemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getString(R.string.icon_fa_leave)));
+            cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.icon_fa_pending)));
+            cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.icon_fa_pending)));
             cellItemsViewHolder.switchMembership.setEnabled(true);
             if (userGroup.getGroupMembershipStatus().equals("P")) {
                 cellItemsViewHolder.switchMembership.setEnabled(false);
             } else if (userGroup.getGroupMembershipStatus().equals("A")) {
-                cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.fa_icon_join)));
+                cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.icon_fa_join)));
             }
             cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));

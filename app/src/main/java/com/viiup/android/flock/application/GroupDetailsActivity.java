@@ -69,13 +69,13 @@ public class GroupDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewEventsCount.setText(Integer.toString(userGroup.group.getUpcomingEventCount()) + " upcoming");
         itemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByGroupCategory(this, userGroup.group.getGroupCategory()));
-        itemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, getString(R.string.fa_icon_leave)));
-        itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_pending)));
+        itemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, getString(R.string.icon_fa_leave)));
+        itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, getString(R.string.icon_fa_pending)));
         itemsViewHolder.switchMembership.setEnabled(true);
         if (userGroup.getGroupMembershipStatus().equals("P")) {
             itemsViewHolder.switchMembership.setEnabled(false);
         } else if (userGroup.getGroupMembershipStatus().equals("A")) {
-            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, getString(R.string.fa_icon_join)));
+            itemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, getString(R.string.icon_fa_join)));
 
         }
         itemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
