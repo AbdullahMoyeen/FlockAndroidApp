@@ -6,16 +6,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
-import com.viiup.android.flock.models.UserModel;
+import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.services.IAsyncRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
@@ -75,27 +73,6 @@ public class SigninActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isEmailValid(String email) {
-
-        boolean isValid = true;
-
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
-            isValid = false;
-        if (email.replace(getString(R.string.fmt_email_domain), "").trim().equals(""))
-            isValid = false;
-
-        return isValid;
-    }
-
-    private boolean isPasswordValid(String password) {
-
-        boolean isValid = true;
-        if (password.equals(""))
-            isValid = false;
-
-        return isValid;
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -113,9 +90,9 @@ public class SigninActivity extends AppCompatActivity {
             InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-            if (!isEmailValid(editTextEmail.getText().toString()))
+            if (!CommonHelper.isEmailValid(view.getContext(), editTextEmail.getText().toString()))
                 editTextEmail.setError(getString(R.string.error_invalid_email));
-            else if (!isPasswordValid(editTextPassword.getText().toString()))
+            else if (editTextPassword.getText().toString().equals(""))
                 editTextPassword.setError(getString(R.string.error_field_required));
             else {
                 UserService userService = new UserService();

@@ -10,7 +10,19 @@ import com.viiup.android.flock.application.R;
  * Created by AbdullahMoyeen on 4/13/16.
  */
 public class CommonHelper {
-    
+
+    public static boolean isEmailValid(Context context, String email) {
+
+        boolean isValid = true;
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
+            isValid = false;
+        if (email.replace(context.getString(R.string.fmt_email_domain), "").trim().equals(""))
+            isValid = false;
+
+        return isValid;
+    }
+
     public static IconDrawable getIconDrawableByEventCategory(Context context, String eventCategory){
 
         FontAwesomeIcons faIcon;
