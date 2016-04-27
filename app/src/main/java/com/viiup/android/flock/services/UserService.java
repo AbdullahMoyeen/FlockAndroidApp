@@ -99,13 +99,23 @@ public class UserService {
         asyncPostRequest.execute(urlToPost, newUserJSON);
     }
 
-    public UserModel signin(String emailAddress, String password){
+    public void signin(String emailAddress, String password, IAsyncRequestResponse delegate) {
+
+        // Post URL for sign up
+        String urlToPost = WEBAPIENDPOINT + "/api/user/signin";
+
         UserModel authenticatedUser = new UserModel();
-        // call signin api which returns authenticatedUser
-        // TODO: remove this hardcoding after api is implemented
-        authenticatedUser.setUserId(2);
-        //
-        return authenticatedUser;
+        authenticatedUser.setEmailAddress(emailAddress);
+        authenticatedUser.setPassword(password);
+
+        // Get the JSON for user model
+        Gson gson = new Gson();
+        String newUserJSON = gson.toJson(authenticatedUser);
+
+        // Make POST call on background
+        AsyncPostRequest asyncPostRequest = new AsyncPostRequest();
+        asyncPostRequest.setDelegate(delegate);
+        asyncPostRequest.execute(urlToPost, newUserJSON);
     }
 
     public void changeUserPassword(UserPasswordChangeModel userPassword, IAsyncRequestResponse delegate) {
@@ -151,6 +161,7 @@ public class UserService {
             // Make the HTTP POST call
             outputStreamWriter = new OutputStreamWriter(postRequestConnection.getOutputStream(), "UTF-8");
             outputStreamWriter.write(jsonPayload);
+            outputStreamWriter.flush();
             outputStreamWriter.close();
 
             // Get the response
@@ -320,7 +331,7 @@ public class UserService {
         @Override
         protected void onPostExecute(String postResponse) {
             // Post the results if there is no exception
-            if (backGrounndException != null)
+            if (backGrounndException == null)
                 delegate.responseHandler(postResponse);
             else
                 delegate.backGroundErrorHandler(backGrounndException);

@@ -1,5 +1,6 @@
 package com.viiup.android.flock.application;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.viiup.android.flock.models.UserModel;
+import com.viiup.android.flock.services.IAsyncRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 public class SignupActivity extends AppCompatActivity {
@@ -33,24 +35,39 @@ public class SignupActivity extends AppCompatActivity {
         editTextLastName = (EditText) findViewById(R.id.editTextLastName);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         buttonSignup = (Button) findViewById(R.id.buttonSignup);
-        buttonSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        buttonSignup.setOnClickListener(new SignUpButtonClickHandler());
+    }
 
-                UserModel user = new UserModel();
-                user.setFirstName(editTextFirstName.getText().toString());
-                user.setLastName(editTextLastName.getText().toString());
-                user.setEmailAddress(editTextEmail.getText().toString());
+    private class SignUpButtonClickHandler implements Button.OnClickListener, IAsyncRequestResponse {
 
-                UserService userService = new UserService();
-                // replace with async call
-//                userService.signup(user);
-
-                Toast.makeText(view.getContext(), R.string.msg_password_sent, Toast.LENGTH_LONG).show();
+        @Override
+        public void responseHandler(String response) {
+            if (response != null) {
+                Toast.makeText(getApplicationContext(), R.string.msg_password_sent, Toast.LENGTH_LONG).show();
 
                 Intent signinActivityIntent = new Intent(getApplicationContext(), SigninActivity.class);
                 startActivity(signinActivityIntent);
             }
-        });
+        }
+
+        @Override
+        public void backGroundErrorHandler(Exception ex) {
+            // Print stack trace...may be add logging in future releases
+            ex.printStackTrace();
+
+            // display error message
+            Toast.makeText(getApplicationContext(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onClick(View v) {
+            UserModel user = new UserModel();
+            user.setFirstName(editTextFirstName.getText().toString());
+            user.setLastName(editTextLastName.getText().toString());
+            user.setEmailAddress(editTextEmail.getText().toString());
+
+            UserService userService = new UserService();
+            userService.signup(user, this);
+        }
     }
 }

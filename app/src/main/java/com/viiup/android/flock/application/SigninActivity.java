@@ -1,5 +1,6 @@
 package com.viiup.android.flock.application;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.models.UserModel;
+import com.viiup.android.flock.services.IAsyncRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
 public class SigninActivity extends AppCompatActivity {
@@ -46,29 +48,7 @@ public class SigninActivity extends AppCompatActivity {
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         buttonSignin = (Button) findViewById(R.id.buttonSignin);
-        buttonSignin.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                UserService userService = new UserService();
-                UserModel authenticatedUser = userService.signin(editTextEmail.getText().toString(), editTextPassword.getText().toString());
-
-                if (authenticatedUser != null) {
-                    SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
-                    SharedPreferences.Editor mPrefsEditor = mPref.edit();
-
-                    Gson gson = new Gson();
-                    String authenticatedUserJson = gson.toJson(authenticatedUser);
-                    mPrefsEditor.putString("authenticatedUserJson", authenticatedUserJson);
-                    mPrefsEditor.apply();
-
-                    Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(homeActivityIntent);
-                } else {
-                    Toast.makeText(view.getContext(), R.string.error_invalid_login, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        buttonSignin.setOnClickListener(new SignInButtonClickHandler());
     }
 
     private boolean isEmailValid(String email) {
@@ -79,5 +59,43 @@ public class SigninActivity extends AppCompatActivity {
     private boolean isPasswordValid(String password) {
         //TODO: apply business logic
         return password.length() >= 8;
+    }
+
+    /*
+        On click handler for the button click event for Sign In button.
+     */
+    private class SignInButtonClickHandler implements Button.OnClickListener, IAsyncRequestResponse {
+
+        @Override
+        public void onClick(View view) {
+            UserService userService = new UserService();
+            userService.signin(editTextEmail.getText().toString(),
+                    editTextPassword.getText().toString(), this);
+        }
+
+        @Override
+        public void responseHandler(String authenticatedUserJson) {
+            if (authenticatedUserJson != null && authenticatedUserJson.length() > 0) {
+                SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+                SharedPreferences.Editor mPrefsEditor = mPref.edit();
+
+                mPrefsEditor.putString("authenticatedUserJson", authenticatedUserJson);
+                mPrefsEditor.apply();
+
+                Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(homeActivityIntent);
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.error_invalid_login, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void backGroundErrorHandler(Exception ex) {
+            // Print stack trace...may be add logging in future releases
+            ex.printStackTrace();
+
+            // display error message
+            Toast.makeText(getApplicationContext(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
+        }
     }
 }
