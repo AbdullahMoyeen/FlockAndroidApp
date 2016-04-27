@@ -28,7 +28,6 @@ public class StartupActivity extends AppCompatActivity {
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent signupActivityIntent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivity(signupActivityIntent);
             }
@@ -38,7 +37,6 @@ public class StartupActivity extends AppCompatActivity {
         textViewSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent signinActivityIntent = new Intent(getApplicationContext(), SigninActivity.class);
                 startActivity(signinActivityIntent);
             }

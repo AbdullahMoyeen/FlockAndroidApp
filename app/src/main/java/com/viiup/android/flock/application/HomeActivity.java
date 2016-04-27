@@ -188,7 +188,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
             mPrefsEditor.apply();
 
             Intent startupIntent = new Intent(this, StartupActivity.class);
+            startupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(startupIntent);
+
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
 
             return true;
         }
@@ -196,6 +199,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     public boolean onQueryTextChange(String newText) {
         if (tabLayout.getSelectedTabPosition() == 0) {
             eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
@@ -206,11 +210,29 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
+    @Override
     public boolean onQueryTextSubmit(String query) {
         if (tabLayout.getSelectedTabPosition() == 0) {
             return eventsFragment.onQueryTextSubmit(query);
         } else {
             return groupsFragment.onQueryTextSubmit(query);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+
+        SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+        SharedPreferences.Editor mPrefsEditor = mPref.edit();
+        mPrefsEditor.clear();
+        mPrefsEditor.apply();
+
+        Intent startupIntent = new Intent(this, StartupActivity.class);
+        startupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(startupIntent);
+
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 }

@@ -132,6 +132,10 @@ public class UserService {
         asyncPostRequest.execute(urlToPost, newPasswordJSON);
     }
 
+    public void resetUserPassword(String emailAddress) {
+
+    }
+
     /*
         Service method for calling REST API with "POST" request, with JSON payload.
      */

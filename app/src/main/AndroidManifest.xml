@@ -82,13 +82,19 @@
         </activity>
         <activity
             android:name=".StartupActivity"
-            android:label="@string/title_activity_startup"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SigninActivity"
-            android:label="@string/title_activity_signin" />
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".PasswordChangeActivity"></activity>
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".SignupActivity"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".PasswordChangeActivity"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".PasswordResetActivity"
+            android:windowSoftInputMode="stateVisible" />
     </application>
 
 </manifest>

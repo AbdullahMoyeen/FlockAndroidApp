@@ -7,12 +7,15 @@
     <string name="action_signin">SIGN IN</string>
     <string name="action_forgot_password">FORGOT</string>
     <string name="action_cancel">X</string>
+    <string name="action_done">DONE</string>
     <string name="action_submit">SUBMIT</string>
+    <string name="action_reset_password">RESET PASSWORD</string>
     <string name="fmt_date_format">MM/dd/yyyy hh:mm a</string>
+    <string name="fmt_email_domain">\@utdallas.edu</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
-    <string name="error_invalid_login">invalid login</string>
+    <string name="error_login_failed">login failed</string>
     <string name="error_something_wrong">something went wrong, please report to admin</string>
     <string name="icon_fa_cancel">{fa-remove}</string>
     <string name="icon_fa_going">{fa-check}</string>
@@ -21,7 +24,7 @@
     <string name="icon_fa_leave">{fa-user-times}</string>
     <string name="icon_fa_pending">{fa-hourglass-half}</string>
     <string name="image_description">Image</string>
-    <string name="msg_password_sent">please check email for temporary password</string>
+    <string name="msg_password_sent">check email for temporary password and sign in</string>
     <string name="msg_password_changed">password changed successfully</string>
     <string name="msg_loading_data">loading data, please standby…</string>
     <string name="msg_no_event">no upcoming event</string>
