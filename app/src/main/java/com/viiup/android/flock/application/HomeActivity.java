@@ -51,6 +51,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         if (authenticatedUserJson == null) {
             Intent startupIntent = new Intent(this, StartupActivity.class);
+            startupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(startupIntent);
         } else {
 

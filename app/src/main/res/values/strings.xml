@@ -12,8 +12,9 @@
     <string name="action_reset_password">RESET PASSWORD</string>
     <string name="fmt_date_format">MM/dd/yyyy hh:mm a</string>
     <string name="fmt_email_domain">\@utdallas.edu</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_email">valid email required</string>
+    <string name="error_invalid_domain">valid school email required</string>
+    <string name="error_field_required">field required</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_login_failed">login failed</string>
     <string name="error_something_wrong">something went wrong, please report to admin</string>
