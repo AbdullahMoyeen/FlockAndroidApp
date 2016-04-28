@@ -5,6 +5,7 @@
     <color name="colorAccent">#FF2DA7CC</color>
     <color name="colorActionBar">#263238</color>
     <color name="colorSecondaryBar">#0f9d58</color>
+    <color name="colorCanvasBackground">#FFFFFF</color>
     <color name="colorContentBackground">#ecf7f4</color>
     <color name="colorContentIcon">#FF8B8B8B</color>
     <color name="colorBarText">#FFFFFF</color>
