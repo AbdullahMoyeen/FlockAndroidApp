@@ -44,7 +44,7 @@
         </activity>
         <activity
             android:name=".EventDetailsActivity"
-            android:label="@string/title_activity_event_details"
+            android:label="@string/title_back"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -53,7 +53,7 @@
         </activity>
         <activity
             android:name=".GroupDetailsActivity"
-            android:label="@string/title_activity_group_details"
+            android:label="@string/title_back"
             android:parentActivityName=".HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -74,7 +74,7 @@
 
         <activity
             android:name=".MapActivity"
-            android:label="@string/title_activity_location"
+            android:label="@string/title_back"
             android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

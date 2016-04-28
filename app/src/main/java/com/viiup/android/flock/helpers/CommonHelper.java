@@ -23,6 +23,10 @@ public class CommonHelper {
         return isValid;
     }
 
+    public static boolean isDomainValid(Context context, String email) {
+        return email.substring(email.indexOf("@")).equals(context.getString(R.string.fmt_email_domain));
+    }
+
     public static IconDrawable getIconDrawableByEventCategory(Context context, String eventCategory){
 
         FontAwesomeIcons faIcon;

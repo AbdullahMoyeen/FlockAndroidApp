@@ -34,6 +34,8 @@ public class SigninActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        context = this;
+
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
 
         setContentView(R.layout.signin_activity);
@@ -48,21 +50,19 @@ public class SigninActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
-
-        context = this;
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextEmail.setText(R.string.fmt_email_domain);
 
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 
         buttonSignin = (Button) findViewById(R.id.buttonSignin);
-        buttonSignin.setOnClickListener(new SignInButtonClickHandler());
+        buttonSignin.setOnClickListener(new SigninButtonClickHandler());
 
         textViewForgotPassword = (TextView) findViewById(R.id.textViewForgotPassword);
         textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent passwordResetActivityIntent = new Intent(view.getContext(), PasswordResetActivity.class);
+                Intent passwordResetActivityIntent = new Intent(context, PasswordResetActivity.class);
                 startActivity(passwordResetActivityIntent);
             }
         });
@@ -71,7 +71,7 @@ public class SigninActivity extends AppCompatActivity {
         textViewSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signupActivityIntent = new Intent(getApplicationContext(), SignupActivity.class);
+                Intent signupActivityIntent = new Intent(context, SignupActivity.class);
                 startActivity(signupActivityIntent);
             }
         });
@@ -86,7 +86,7 @@ public class SigninActivity extends AppCompatActivity {
     /*
         On click handler for the button click event for Sign In button.
      */
-    private class SignInButtonClickHandler implements Button.OnClickListener, IAsyncRequestResponse {
+    private class SigninButtonClickHandler implements Button.OnClickListener, IAsyncRequestResponse {
 
         @Override
         public void onClick(View view) {
@@ -94,14 +94,13 @@ public class SigninActivity extends AppCompatActivity {
             InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-            if (!CommonHelper.isEmailValid(view.getContext(), editTextEmail.getText().toString()))
+            if (!CommonHelper.isEmailValid(context, editTextEmail.getText().toString()))
                 editTextEmail.setError(getString(R.string.error_invalid_email));
             else if (editTextPassword.getText().toString().equals(""))
                 editTextPassword.setError(getString(R.string.error_field_required));
             else {
                 try {
-                    progressDialog = ProgressDialog.show(context, "SIGN IN",
-                            getString(R.string.msg_processing_request));
+                    progressDialog = ProgressDialog.show(context, getString(R.string.title_signin), getString(R.string.msg_processing_request));
                     UserService userService = new UserService();
                     userService.signin(editTextEmail.getText().toString(), editTextPassword.getText().toString(), this);
                 }catch (Exception ex) {
@@ -121,11 +120,11 @@ public class SigninActivity extends AppCompatActivity {
                 mPrefsEditor.putString("authenticatedUserJson", authenticatedUserJson);
                 mPrefsEditor.apply();
 
-                Intent homeActivityIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                Intent homeActivityIntent = new Intent(context, HomeActivity.class);
                 homeActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(homeActivityIntent);
             } else {
-                Toast.makeText(getApplicationContext(), R.string.error_login_failed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.error_login_failed, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -138,7 +137,7 @@ public class SigninActivity extends AppCompatActivity {
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(getApplicationContext(), R.string.error_login_failed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.error_login_failed, Toast.LENGTH_SHORT).show();
         }
     }
 }

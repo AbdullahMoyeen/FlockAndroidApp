@@ -20,6 +20,8 @@ public class StartupActivity extends AppCompatActivity {
     private TextView textViewDot2;
     private TextView textViewDot3;
     private TextView textViewDot4;
+    private Button buttonJoin;
+    private TextView textViewSignin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class StartupActivity extends AppCompatActivity {
         else
             textViewDot4.setText(Iconify.compute(context, getString(R.string.icon_fa_circle_hollow)));
 
-        Button buttonJoin = (Button) findViewById(R.id.buttonJoin);
+        buttonJoin = (Button) findViewById(R.id.buttonJoin);
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,7 +70,7 @@ public class StartupActivity extends AppCompatActivity {
             }
         });
 
-        TextView textViewSignin = (TextView) findViewById(R.id.textViewSignin);
+        textViewSignin = (TextView) findViewById(R.id.textViewSignin);
         textViewSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

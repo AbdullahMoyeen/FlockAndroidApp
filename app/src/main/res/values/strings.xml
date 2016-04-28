@@ -43,14 +43,12 @@
     <string name="prompt_password">password</string>
     <string name="prompt_new_password">new password</string>
     <string name="prompt_re_password">re-enter new password</string>
+    <string name="title_signup">SIGN UP</string>
+    <string name="title_signin">SIGN IN</string>
     <string name="title_search">Search</string>
-    <string name="title_activity_event_details">Back</string>
-    <string name="title_activity_group_details">Back</string>
-    <string name="title_activity_location">Back</string>
     <string name="title_my_events">MY EVENTS</string>
     <string name="title_my_groups">MY GROUPS</string>
     <string name="title_nearby_events">NEARBY EVENTS</string>
-    <string name="title_activity_startup">START UP</string>
-    <string name="title_activity_signin">SIGN IN</string>
+    <string name="title_back">Back</string>
     <string name="value_o">o</string>
 </resources>
