@@ -120,7 +120,7 @@ public class UserService {
 
     public void changeUserPassword(UserPasswordChangeModel userPassword, IAsyncRequestResponse delegate) {
         // Post URL for sign up
-        String urlToPost = WEBAPIENDPOINT + "/api/user/signup";
+        String urlToPost = WEBAPIENDPOINT + "/api/user/changepassword";
 
         // Get the JSON for user password
         Gson gson = new Gson();
@@ -132,8 +132,14 @@ public class UserService {
         asyncPostRequest.execute(urlToPost, newPasswordJSON);
     }
 
-    public void resetUserPassword(String emailAddress) {
+    public void resetUserPassword(String emailAddress, IAsyncRequestResponse delegate) {
+        // Build URL
+        String urlToCall = WEBAPIENDPOINT + "/api/user/resetpassword?emailAddress=" + emailAddress;
 
+        // Call the URL
+        AsyncPUTRequest asyncPUTRequest = new AsyncPUTRequest();
+        asyncPUTRequest.setDelegate(delegate);
+        asyncPUTRequest.execute(urlToCall);
     }
 
     /*

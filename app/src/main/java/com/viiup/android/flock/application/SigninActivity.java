@@ -1,5 +1,6 @@
 package com.viiup.android.flock.application;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,8 @@ public class SigninActivity extends AppCompatActivity {
     private Button buttonSignin;
     private TextView textViewForgotPassword;
     private TextView textViewSignup;
+    private ProgressDialog progressDialog;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class SigninActivity extends AppCompatActivity {
             }
         });
 
+        context = this;
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextEmail.setText(R.string.fmt_email_domain);
 
@@ -95,13 +99,21 @@ public class SigninActivity extends AppCompatActivity {
             else if (editTextPassword.getText().toString().equals(""))
                 editTextPassword.setError(getString(R.string.error_field_required));
             else {
-                UserService userService = new UserService();
-                userService.signin(editTextEmail.getText().toString(), editTextPassword.getText().toString(), this);
+                try {
+                    progressDialog = ProgressDialog.show(context, "SIGN IN",
+                            getString(R.string.msg_processing_request));
+                    UserService userService = new UserService();
+                    userService.signin(editTextEmail.getText().toString(), editTextPassword.getText().toString(), this);
+                }catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
 
         @Override
         public void responseHandler(String authenticatedUserJson) {
+            if (progressDialog != null) progressDialog.dismiss();
+
             if (authenticatedUserJson != null && authenticatedUserJson.length() > 0) {
                 SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
                 SharedPreferences.Editor mPrefsEditor = mPref.edit();
@@ -119,6 +131,9 @@ public class SigninActivity extends AppCompatActivity {
 
         @Override
         public void backGroundErrorHandler(Exception ex) {
+
+            if (progressDialog != null) progressDialog.dismiss();
+
             // Print stack trace...may be add logging in future releases
             ex.printStackTrace();
 

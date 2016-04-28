@@ -1,5 +1,7 @@
 package com.viiup.android.flock.application;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +19,8 @@ public class PasswordResetActivity extends AppCompatActivity {
     private TextView textViewCancel;
     private EditText editTextEmail;
     private Button buttonReset;
+    private ProgressDialog progressDialog;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,7 @@ public class PasswordResetActivity extends AppCompatActivity {
 
         setContentView(R.layout.password_reset_activity);
 
+        context = this;
         textViewCancel = (TextView) findViewById(R.id.textViewCancel);
         textViewCancel.setText(Iconify.compute(this, getString(R.string.icon_fa_cancel)));
         textViewCancel.setOnClickListener(new View.OnClickListener() {
@@ -51,17 +56,24 @@ public class PasswordResetActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
+            progressDialog = ProgressDialog.show(context, "RESET PASSWORD",
+                    getString(R.string.msg_processing_request));
             UserService userService = new UserService();
-            userService.resetUserPassword(editTextEmail.getText().toString());
+            userService.resetUserPassword(editTextEmail.getText().toString(), this);
         }
 
         @Override
         public void responseHandler(String authenticatedUserJson) {
+
+            if (progressDialog != null) progressDialog.dismiss();
             Toast.makeText(getApplicationContext(), R.string.msg_password_sent, Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void backGroundErrorHandler(Exception ex) {
+
+            if (progressDialog != null) progressDialog.dismiss();
+
             // Print stack trace...may be add logging in future releases
             ex.printStackTrace();
 
