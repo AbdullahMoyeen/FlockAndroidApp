@@ -23,6 +23,8 @@
     <string name="icon_fa_not_going">{fa-remove}</string>
     <string name="icon_fa_join">{fa-user-plus}</string>
     <string name="icon_fa_leave">{fa-user-times}</string>
+    <string name="icon_fa_circle_solid">{fa-circle}</string>
+    <string name="icon_fa_circle_hollow">{fa-circle-o}</string>
     <string name="icon_fa_pending">{fa-hourglass-half}</string>
     <string name="image_description">Image</string>
     <string name="msg_password_sent">check email for temporary password and sign in</string>
