@@ -111,9 +111,11 @@ public class SigninActivity extends AppCompatActivity {
 
         @Override
         public void responseHandler(String authenticatedUserJson) {
+
             if (progressDialog != null) progressDialog.dismiss();
 
             if (authenticatedUserJson != null && authenticatedUserJson.length() > 0) {
+
                 SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
                 SharedPreferences.Editor mPrefsEditor = mPref.edit();
 

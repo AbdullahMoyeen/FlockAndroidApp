@@ -2,6 +2,7 @@ package com.viiup.android.flock.application;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.joanzapata.iconify.Iconify;
+import com.joanzapata.iconify.fonts.FontAwesomeModule;
 
 public class StartupActivity extends AppCompatActivity {
 
@@ -27,6 +29,8 @@ public class StartupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        Iconify.with(new FontAwesomeModule());
 
         setContentView(R.layout.startup_activity);
 
@@ -79,7 +83,6 @@ public class StartupActivity extends AppCompatActivity {
             }
         });
 
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -112,5 +115,13 @@ public class StartupActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+
+        SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+        String authenticatedUserJson = mPref.getString("authenticatedUserJson", null);
+
+        if (authenticatedUserJson != null) {
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            startActivity(homeIntent);
+        }
     }
 }
