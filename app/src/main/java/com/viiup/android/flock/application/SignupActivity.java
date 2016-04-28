@@ -1,5 +1,6 @@
 package com.viiup.android.flock.application;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,8 @@ public class SignupActivity extends AppCompatActivity {
     private EditText editTextLastName;
     private EditText editTextEmail;
     private Button buttonSignup;
+    private ProgressDialog progressDialog;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class SignupActivity extends AppCompatActivity {
 
         setContentView(R.layout.signup_activity);
 
+        context = this;
         editTextFirstName = (EditText) findViewById(R.id.editTextFirstName);
         editTextLastName = (EditText) findViewById(R.id.editTextLastName);
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
@@ -42,6 +46,8 @@ public class SignupActivity extends AppCompatActivity {
 
         @Override
         public void responseHandler(String response) {
+            if (progressDialog != null) progressDialog.dismiss();
+
             if (response != null) {
                 Toast.makeText(getApplicationContext(), R.string.msg_password_sent, Toast.LENGTH_LONG).show();
 
@@ -52,6 +58,9 @@ public class SignupActivity extends AppCompatActivity {
 
         @Override
         public void backGroundErrorHandler(Exception ex) {
+
+            if (progressDialog != null) progressDialog.dismiss();
+
             // Print stack trace...may be add logging in future releases
             ex.printStackTrace();
 
@@ -65,6 +74,9 @@ public class SignupActivity extends AppCompatActivity {
             user.setFirstName(editTextFirstName.getText().toString());
             user.setLastName(editTextLastName.getText().toString());
             user.setEmailAddress(editTextEmail.getText().toString());
+
+            progressDialog = ProgressDialog.show(context, "SIGN UP",
+                    getString(R.string.msg_processing_request));
 
             UserService userService = new UserService();
             userService.signup(user, this);
