@@ -52,4 +52,5 @@
     <string name="title_nearby_events">NEARBY EVENTS</string>
     <string name="title_activity_startup">START UP</string>
     <string name="title_activity_signin">SIGN IN</string>
+    <string name="value_o">o</string>
 </resources>
