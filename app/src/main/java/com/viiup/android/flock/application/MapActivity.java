@@ -113,7 +113,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mMap.clear();
 
-        if(userEvents != null) {
+        if (userEvents != null) {
             for (UserEventModel userEvent : userEvents) {
                 LatLng eventLatLng = new LatLng(userEvent.event.getEventLatitude(), userEvent.event.getEventLongitude());
                 mMap.addMarker(new MarkerOptions().position(eventLatLng).title(userEvent.event.getEventName()).snippet(userEvent.event.getEventDescription()));
@@ -128,39 +128,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         String bestProvider = locationManager.getBestProvider(criteria, true);
         Location location = locationManager.getLastKnownLocation(bestProvider);
 
+        LatLng currentLatLng;
+
         if (location != null) {
-//            onLocationChanged(location);
-            LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
+            currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        } else {
+            currentLatLng = new LatLng(32.986293, -96.750625);
         }
-//        locationManager.requestLocationUpdates(bestProvider, 20000, 0, this);
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
     }
-
-//    @Override
-//    public void onLocationChanged(Location location) {
-//
-//        double latitude = location.getLatitude();
-//        double longitude = location.getLongitude();
-//        LatLng latLng = new LatLng(latitude, longitude);
-//        mMap.addMarker(new MarkerOptions().position(latLng));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-//        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-//    }
-
-//    @Override
-//    public void onProviderDisabled(String provider) {
-//        // TODO Auto-generated method stub
-//    }
-
-//    @Override
-//    public void onProviderEnabled(String provider) {
-//        // TODO Auto-generated method stub
-//    }
-
-//    @Override
-//    public void onStatusChanged(String provider, int status, Bundle extras) {
-//        // TODO Auto-generated method stub
-//    }
 
     private boolean isGooglePlayServicesAvailable() {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
