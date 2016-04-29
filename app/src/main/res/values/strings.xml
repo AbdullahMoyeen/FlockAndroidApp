@@ -55,6 +55,9 @@
     <string name="title_reset_password">RESET PASSWORD</string>
     <string name="title_change_password">CHANGE PASSWORD</string>
     <string name="title_search">Search</string>
+    <string name="title_events_groups">EVENTS AND GROUPS</string>
+    <string name="title_events">EVENTS</string>
+    <string name="title_groups">GROUPS</string>
     <string name="title_my_events">MY EVENTS</string>
     <string name="title_my_groups">MY GROUPS</string>
     <string name="title_nearby_events">NEARBY EVENTS</string>

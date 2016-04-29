@@ -40,6 +40,7 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     private HomeEventsFragment eventsFragment;
     private HomeGroupsFragment groupsFragment;
     public List<UserEventModel> userEvents;
+    public int selectedTabPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +119,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        if (tab.getPosition() == 0) {
+
+        selectedTabPosition = tab.getPosition();
+
+        if (selectedTabPosition == 0) {
             fabMine.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
             eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
             eventsFragment.resetToFull();
@@ -136,7 +140,6 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     @Override
@@ -215,12 +218,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         super.onBackPressed();
 
-        SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
-        SharedPreferences.Editor mPrefsEditor = mPref.edit();
-        mPrefsEditor.clear();
-        mPrefsEditor.apply();
-
         Intent startupIntent = new Intent(this, StartupActivity.class);
+        startupIntent.putExtra("backFromHome", true);
         startupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(startupIntent);
 

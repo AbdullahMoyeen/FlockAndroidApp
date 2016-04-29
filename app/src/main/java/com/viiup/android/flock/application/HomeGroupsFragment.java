@@ -48,7 +48,7 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        progressDialog = ProgressDialog.show(getActivity(), "GROUPS", getString(R.string.msg_loading_data));
+        progressDialog = ProgressDialog.show(getActivity(), getString(R.string.title_events_groups), getString(R.string.msg_loading_data));
         return inflater.inflate(R.layout.home_groups_fragment, container, false);
     }
 
@@ -184,8 +184,8 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
 
                     changedUserGroup.setGroupMembershipStatus("P");
                     changedUserGroup.group.setPendingMemberCount(pendingMemberCount + 1);
-                    for (UserGroupModel userGroupFromFull: userGroupsFull){
-                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()){
+                    for (UserGroupModel userGroupFromFull : userGroupsFull) {
+                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()) {
                             userGroupFromFull.setGroupMembershipStatus(changedUserGroup.getGroupMembershipStatus());
                             userGroupFromFull.group.setPendingMemberCount(changedUserGroup.group.getPendingMemberCount());
                             break;
@@ -195,8 +195,8 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
 
                     changedUserGroup.setGroupMembershipStatus("I");
                     changedUserGroup.group.setActiveMemberCount(activeMemberCount - 1);
-                    for (UserGroupModel userGroupFromFull: userGroupsFull){
-                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()){
+                    for (UserGroupModel userGroupFromFull : userGroupsFull) {
+                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()) {
                             userGroupFromFull.setGroupMembershipStatus(changedUserGroup.getGroupMembershipStatus());
                             userGroupFromFull.group.setActiveMemberCount(changedUserGroup.group.getActiveMemberCount());
                             break;
@@ -235,7 +235,8 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
     public void backGroundErrorHandler(Exception ex) {
 
         // Dismiss progress dialog
-        if (progressDialog != null) progressDialog.dismiss();
+        if (progressDialog != null)
+            progressDialog.dismiss();
 
         // Print stack trace...may be add logging in future releases
         ex.printStackTrace();

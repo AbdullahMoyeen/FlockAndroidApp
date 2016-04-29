@@ -48,7 +48,7 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        progressDialog = ProgressDialog.show(getActivity(), "EVENTS", getString(R.string.msg_loading_data));
+        progressDialog = ProgressDialog.show(getActivity(), getString(R.string.title_events_groups), getString(R.string.msg_loading_data));
         return inflater.inflate(R.layout.home_events_fragment, container, false);
     }
 
@@ -180,8 +180,8 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
                 int attendeeCount = changedUserEvent.event.getAttendeeCount();
                 changedUserEvent.setIsAttending(!changedUserEvent.getIsAttending());
                 changedUserEvent.event.setAttendeeCount(changedUserEvent.getIsAttending() ? attendeeCount + 1 : attendeeCount - 1);
-                for (UserEventModel userEventFromFull: userEventsFull){
-                    if (userEventFromFull.event.getEventId() == changedUserEvent.event.getEventId()){
+                for (UserEventModel userEventFromFull : userEventsFull) {
+                    if (userEventFromFull.event.getEventId() == changedUserEvent.event.getEventId()) {
                         userEventFromFull.setIsAttending(changedUserEvent.getIsAttending());
                         userEventFromFull.event.setAttendeeCount(changedUserEvent.event.getAttendeeCount());
                         break;

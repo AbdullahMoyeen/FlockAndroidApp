@@ -18,6 +18,7 @@ import com.viiup.android.flock.models.UserModel;
 public class StartupActivity extends AppCompatActivity {
 
     private Context context;
+    private boolean backFromHome;
     private StartupTabPagerAdapter mStartupTabPagerAdapter;
     private ViewPager mViewPager;
     private TextView textViewDot1;
@@ -121,7 +122,9 @@ public class StartupActivity extends AppCompatActivity {
         SharedPreferences mPref = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
         String authenticatedUserJson = mPref.getString("authenticatedUserJson", null);
 
-        if (authenticatedUserJson != null) {
+        backFromHome = getIntent().getBooleanExtra("backFromHome", false);
+
+        if (!backFromHome && authenticatedUserJson != null) {
 
             Gson gson = new Gson();
             UserModel authenticatedUser = gson.fromJson(authenticatedUserJson, UserModel.class);
