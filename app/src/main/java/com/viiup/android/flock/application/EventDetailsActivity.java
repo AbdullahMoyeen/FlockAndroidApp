@@ -4,10 +4,16 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -40,6 +46,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private Context context;
     private ItemsViewHolder itemsViewHolder;
     private UserEventModel userEvent;
+    private String userEventFullAddress;
     private boolean isAttendingChanged = false;
     private ProgressDialog progressDialog = null;
 
@@ -60,6 +67,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String userEventJson = getIntent().getStringExtra("userEventJson");
         userEvent = gson.fromJson(userEventJson, UserEventModel.class);
+        userEventFullAddress = userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode();
 
         itemsViewHolder = new ItemsViewHolder();
         itemsViewHolder.textViewSecondaryBar = (TextView) findViewById(R.id.secondaryBar);
@@ -76,14 +84,39 @@ public class EventDetailsActivity extends AppCompatActivity {
         itemsViewHolder.textViewSecondaryBar.setText(userEvent.event.getEventName().toUpperCase());
         itemsViewHolder.textViewAttendeeCount.setText(userEvent.event.getAttendeeCount() + " going");
         itemsViewHolder.textViewEventStartDateTime.setText(dateFormat.format(userEvent.event.getEventStartDatetime()));
+        if (userEvent.getIsAttending()) {
+            itemsViewHolder.textViewEventStartDateTime.setTextColor(ContextCompat.getColor(context, R.color.text_link_color));
+            itemsViewHolder.textViewEventStartDateTime.setPaintFlags(itemsViewHolder.textViewEventStartDateTime.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            itemsViewHolder.textViewEventStartDateTime.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_INSERT)
+                            .setData(CalendarContract.Events.CONTENT_URI)
+                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, userEvent.event.getEventStartDatetime().getTime())
+                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, userEvent.event.getEventEndDatetime().getTime())
+                            .putExtra(CalendarContract.Events.TITLE, userEvent.event.getEventName())
+                            .putExtra(CalendarContract.Events.DESCRIPTION, userEvent.event.getEventDescription())
+                            .putExtra(CalendarContract.Events.EVENT_LOCATION, userEventFullAddress)
+                            .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+                    startActivity(intent);
+                }
+            });
+        }
         itemsViewHolder.textViewEventDescription.setText(userEvent.event.getEventDescription());
         itemsViewHolder.imageViewGroup.setImageDrawable(CommonHelper.getIconDrawableByEventCategory(this, userEvent.event.getEventCategory()));
         itemsViewHolder.textViewGroupName.setText(userEvent.event.getGroupName());
-        itemsViewHolder.textViewEventAddress.setText(userEvent.event.getEventAddressLine1() + ", " + userEvent.event.getEventCity() + ", " + userEvent.event.getEventStateCode() + " " + userEvent.event.getEventPostalCode());
+        itemsViewHolder.textViewEventAddress.setText(userEventFullAddress);
         itemsViewHolder.switchRsvp.setTextOff(Iconify.compute(context, getString(R.string.icon_fa_not_going)));
         itemsViewHolder.switchRsvp.setTextOn(Iconify.compute(context, getString(R.string.icon_fa_going)));
         itemsViewHolder.switchRsvp.setChecked(userEvent.getIsAttending());
         itemsViewHolder.switchRsvp.setOnCheckedChangeListener(new SwitchRsvpOnCheckedChangeListener());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.empty_menu, menu);
+        return true;
     }
 
     @Override
@@ -131,6 +164,28 @@ public class EventDetailsActivity extends AppCompatActivity {
                 userEvent.event.setAttendeeCount(this.isAttending ? attendeeCount + 1 : attendeeCount - 1);
                 isAttendingChanged = !isAttendingChanged;
                 itemsViewHolder.textViewAttendeeCount.setText(userEvent.event.getAttendeeCount() + " going");
+                if (userEvent.getIsAttending()) {
+                    itemsViewHolder.textViewEventStartDateTime.setTextColor(ContextCompat.getColor(context, R.color.text_link_color));
+                    itemsViewHolder.textViewEventStartDateTime.setPaintFlags(itemsViewHolder.textViewEventStartDateTime.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                    itemsViewHolder.textViewEventStartDateTime.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Intent.ACTION_INSERT)
+                                    .setData(CalendarContract.Events.CONTENT_URI)
+                                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, userEvent.event.getEventStartDatetime().getTime())
+                                    .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, userEvent.event.getEventEndDatetime().getTime())
+                                    .putExtra(CalendarContract.Events.TITLE, userEvent.event.getEventName())
+                                    .putExtra(CalendarContract.Events.DESCRIPTION, userEvent.event.getEventDescription())
+                                    .putExtra(CalendarContract.Events.EVENT_LOCATION, userEventFullAddress)
+                                    .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    itemsViewHolder.textViewEventStartDateTime.setTextColor(ContextCompat.getColor(context, R.color.colorContentText));
+                    itemsViewHolder.textViewEventStartDateTime.setPaintFlags(0);
+                    itemsViewHolder.textViewEventStartDateTime.setOnClickListener(null);
+                }
             } else {
                 Toast.makeText(context, R.string.msg_processing_failed, Toast.LENGTH_SHORT).show();
             }

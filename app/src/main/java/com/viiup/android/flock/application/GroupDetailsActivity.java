@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -80,6 +82,13 @@ public class GroupDetailsActivity extends AppCompatActivity {
         }
         itemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
         itemsViewHolder.switchMembership.setOnCheckedChangeListener(new SwitchMembershipOnCheckedChangeListener());
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.empty_menu, menu);
+        return true;
     }
 
     @Override
