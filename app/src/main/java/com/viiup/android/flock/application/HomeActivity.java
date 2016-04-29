@@ -47,74 +47,74 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
         super.onCreate(savedInstanceState);
 
-            setContentView(R.layout.home_activity);
+        setContentView(R.layout.home_activity);
 
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setIcon(R.drawable.ic_logo_with_name);
-            getSupportActionBar().setTitle("");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.ic_logo_with_name);
+        getSupportActionBar().setTitle("");
 
-            mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());
-            mViewPager = (ViewPager) findViewById(R.id.container);
-            mViewPager.setAdapter(mHomeTabPagerAdapter);
-            tabLayout = (TabLayout) findViewById(R.id.tabs);
-            tabLayout.setupWithViewPager(mViewPager);
-            tabLayout.setOnTabSelectedListener(this);
+        mHomeTabPagerAdapter = new HomeTabPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mHomeTabPagerAdapter);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setOnTabSelectedListener(this);
 
-            FloatingActionButton fabNearbyEvents = (FloatingActionButton) findViewById(R.id.fabNearbyEvents);
-            fabNearbyEvents.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getString(R.string.title_nearby_events), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Gson gson = new Gson();
-                            String userEventsJson = gson.toJson(userEvents);
-                            Intent mapIntent = new Intent(v.getContext(), MapActivity.class);
-                            mapIntent.putExtra("userEventsJson", userEventsJson);
-                            startActivity(mapIntent);
-                        }
-                    });
+        FloatingActionButton fabNearbyEvents = (FloatingActionButton) findViewById(R.id.fabNearbyEvents);
+        fabNearbyEvents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG).setAction(getString(R.string.title_nearby_events), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Gson gson = new Gson();
+                        String userEventsJson = gson.toJson(userEvents);
+                        Intent mapIntent = new Intent(v.getContext(), MapActivity.class);
+                        mapIntent.putExtra("userEventsJson", userEventsJson);
+                        startActivity(mapIntent);
+                    }
+                });
 
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
+                snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
+                snackbar.show();
+            }
+        });
+
+        fabMine = (FloatingActionButton) findViewById(R.id.fabMyEvents);
+        fabMine.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
+        fabMine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (tabLayout.getSelectedTabPosition() == 0) {
+
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_events), Snackbar.LENGTH_LONG).setAction("", null);
                     View sbView = snackbar.getView();
                     sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
                     snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
                     snackbar.show();
+
+                    eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
+                    eventsFragment.filterMyEvents();
+                    tabLayout.getTabAt(0).select();
+                } else {
+
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_groups), Snackbar.LENGTH_LONG).setAction("", null);
+                    View sbView = snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
+                    snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
+                    snackbar.show();
+
+                    groupsFragment = (HomeGroupsFragment) getSupportFragmentManager().getFragments().get(1);
+                    groupsFragment.filterMyGroups();
+                    tabLayout.getTabAt(1).select();
                 }
-            });
-
-            fabMine = (FloatingActionButton) findViewById(R.id.fabMyEvents);
-            fabMine.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_calendar).colorRes(R.color.colorBarText));
-            fabMine.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (tabLayout.getSelectedTabPosition() == 0) {
-
-                        Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_events), Snackbar.LENGTH_LONG).setAction("", null);
-                        View sbView = snackbar.getView();
-                        sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
-                        snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
-                        snackbar.show();
-
-                        eventsFragment = (HomeEventsFragment) getSupportFragmentManager().getFragments().get(0);
-                        eventsFragment.filterMyEvents();
-                        tabLayout.getTabAt(0).select();
-                    } else {
-
-                        Snackbar snackbar = Snackbar.make(view, getString(R.string.title_my_groups), Snackbar.LENGTH_LONG).setAction("", null);
-                        View sbView = snackbar.getView();
-                        sbView.setBackgroundColor(ContextCompat.getColor(sbView.getContext(), R.color.colorButton));
-                        snackbar.setActionTextColor(ContextCompat.getColor(sbView.getContext(), R.color.colorBarText));
-                        snackbar.show();
-
-                        groupsFragment = (HomeGroupsFragment) getSupportFragmentManager().getFragments().get(1);
-                        groupsFragment.filterMyGroups();
-                        tabLayout.getTabAt(1).select();
-                    }
-                }
-            });
+            }
+        });
     }
 
     @Override
@@ -216,13 +216,16 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     @Override
     public void onBackPressed() {
 
-        super.onBackPressed();
+        if (selectedTabPosition == 0) {
+            super.onBackPressed();
 
-        Intent startupIntent = new Intent(this, StartupActivity.class);
-        startupIntent.putExtra("backFromHome", true);
-        startupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(startupIntent);
+            Intent startupIntent = new Intent(this, StartupActivity.class);
+            startupIntent.putExtra("backFromHome", true);
+            startupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(startupIntent);
 
-        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
+        } else
+            tabLayout.getTabAt(0).select();
     }
 }
