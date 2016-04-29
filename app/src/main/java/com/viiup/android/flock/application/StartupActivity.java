@@ -124,7 +124,9 @@ public class StartupActivity extends AppCompatActivity {
 
         backFromHome = getIntent().getBooleanExtra("backFromHome", false);
 
-        if (!backFromHome && authenticatedUserJson != null) {
+        if (backFromHome)
+            finish();
+        else if (authenticatedUserJson != null) {
 
             Gson gson = new Gson();
             UserModel authenticatedUser = gson.fromJson(authenticatedUserJson, UserModel.class);
