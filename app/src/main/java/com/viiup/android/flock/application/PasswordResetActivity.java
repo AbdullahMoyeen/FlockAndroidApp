@@ -2,15 +2,18 @@ package com.viiup.android.flock.application;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.joanzapata.iconify.Iconify;
+import com.viiup.android.flock.helpers.CommonHelper;
 import com.viiup.android.flock.services.IAsyncRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
@@ -56,17 +59,30 @@ public class PasswordResetActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            progressDialog = ProgressDialog.show(context, "RESET PASSWORD",
-                    getString(R.string.msg_processing_request));
-            UserService userService = new UserService();
-            userService.resetUserPassword(editTextEmail.getText().toString(), this);
+
+            InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+            if (!CommonHelper.isEmailValid(context, editTextEmail.getText().toString()))
+                editTextEmail.setError(getString(R.string.error_invalid_email));
+            else {
+                progressDialog = ProgressDialog.show(context, getString(R.string.title_reset_password), getString(R.string.msg_processing_request));
+                UserService userService = new UserService();
+                userService.resetUserPassword(editTextEmail.getText().toString(), this);
+            }
         }
 
         @Override
-        public void responseHandler(String authenticatedUserJson) {
+        public void responseHandler(String responseJson) {
 
             if (progressDialog != null) progressDialog.dismiss();
+
             Toast.makeText(getApplicationContext(), R.string.msg_password_sent, Toast.LENGTH_LONG).show();
+
+            Intent signinIntent = new Intent(getApplicationContext(), SigninActivity.class);
+            signinIntent.putExtra("emailAddress", editTextEmail.getText().toString());
+            signinIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(signinIntent);
         }
 
         @Override
@@ -78,7 +94,7 @@ public class PasswordResetActivity extends AppCompatActivity {
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(getApplicationContext(), R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.error_password_reset_failed, Toast.LENGTH_SHORT).show();
         }
     }
 }

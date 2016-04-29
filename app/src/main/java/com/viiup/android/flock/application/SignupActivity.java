@@ -63,8 +63,8 @@ public class SignupActivity extends AppCompatActivity {
         textViewSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signinActivityIntent = new Intent(getApplicationContext(), SigninActivity.class);
-                startActivity(signinActivityIntent);
+                Intent signinIntent = new Intent(getApplicationContext(), SigninActivity.class);
+                startActivity(signinIntent);
             }
         });
     }
@@ -104,13 +104,14 @@ public class SignupActivity extends AppCompatActivity {
 
         @Override
         public void responseHandler(String response) {
+
             if (progressDialog != null) progressDialog.dismiss();
 
             if (response != null) {
                 Toast.makeText(context, R.string.msg_password_sent, Toast.LENGTH_LONG).show();
 
-                Intent signinActivityIntent = new Intent(context, SigninActivity.class);
-                startActivity(signinActivityIntent);
+                Intent signinIntent = new Intent(context, SigninActivity.class);
+                startActivity(signinIntent);
             }
         }
 
@@ -123,7 +124,7 @@ public class SignupActivity extends AppCompatActivity {
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(context, R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.error_signup_failed, Toast.LENGTH_SHORT).show();
         }
     }
 }

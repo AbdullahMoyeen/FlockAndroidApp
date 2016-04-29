@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeModule;
+import com.viiup.android.flock.models.UserModel;
 
 public class StartupActivity extends AppCompatActivity {
 
@@ -69,8 +71,8 @@ public class StartupActivity extends AppCompatActivity {
         buttonJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signupActivityIntent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivity(signupActivityIntent);
+                Intent signupIntent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(signupIntent);
             }
         });
 
@@ -78,8 +80,8 @@ public class StartupActivity extends AppCompatActivity {
         textViewSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signinActivityIntent = new Intent(getApplicationContext(), SigninActivity.class);
-                startActivity(signinActivityIntent);
+                Intent signinIntent = new Intent(getApplicationContext(), SigninActivity.class);
+                startActivity(signinIntent);
             }
         });
 
@@ -120,8 +122,14 @@ public class StartupActivity extends AppCompatActivity {
         String authenticatedUserJson = mPref.getString("authenticatedUserJson", null);
 
         if (authenticatedUserJson != null) {
-            Intent homeIntent = new Intent(this, HomeActivity.class);
-            startActivity(homeIntent);
+
+            Gson gson = new Gson();
+            UserModel authenticatedUser = gson.fromJson(authenticatedUserJson, UserModel.class);
+
+            if (!authenticatedUser.getIsPasswordExpired()) {
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                startActivity(homeIntent);
+            }
         }
     }
 }

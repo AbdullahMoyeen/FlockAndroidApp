@@ -13,8 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.joanzapata.iconify.Iconify;
 import com.viiup.android.flock.helpers.CommonHelper;
+import com.viiup.android.flock.models.UserModel;
 import com.viiup.android.flock.services.IAsyncRequestResponse;
 import com.viiup.android.flock.services.UserService;
 
@@ -40,20 +42,29 @@ public class SigninActivity extends AppCompatActivity {
 
         setContentView(R.layout.signin_activity);
 
+        String emailAddress = getIntent().getStringExtra("emailAddress");
+
         textViewCancel = (TextView) findViewById(R.id.textViewCancel);
         textViewCancel.setText(Iconify.compute(this, getString(R.string.icon_fa_cancel)));
         textViewCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 finish();
                 overridePendingTransition(R.anim.left_in, R.anim.left_out);
             }
         });
-        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
-        editTextEmail.setText(R.string.fmt_email_domain);
 
+        editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+
+        if (emailAddress != null) {
+            editTextEmail.setText(emailAddress);
+            editTextPassword.requestFocus();
+        }
+        else
+            editTextEmail.setText(R.string.fmt_email_domain);
+
+
 
         buttonSignin = (Button) findViewById(R.id.buttonSignin);
         buttonSignin.setOnClickListener(new SigninButtonClickHandler());
@@ -62,8 +73,8 @@ public class SigninActivity extends AppCompatActivity {
         textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent passwordResetActivityIntent = new Intent(context, PasswordResetActivity.class);
-                startActivity(passwordResetActivityIntent);
+                Intent passwordResetIntent = new Intent(context, PasswordResetActivity.class);
+                startActivity(passwordResetIntent);
             }
         });
 
@@ -71,8 +82,8 @@ public class SigninActivity extends AppCompatActivity {
         textViewSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signupActivityIntent = new Intent(context, SignupActivity.class);
-                startActivity(signupActivityIntent);
+                Intent signupIntent = new Intent(context, SignupActivity.class);
+                startActivity(signupIntent);
             }
         });
     }
@@ -103,7 +114,7 @@ public class SigninActivity extends AppCompatActivity {
                     progressDialog = ProgressDialog.show(context, getString(R.string.title_signin), getString(R.string.msg_processing_request));
                     UserService userService = new UserService();
                     userService.signin(editTextEmail.getText().toString(), editTextPassword.getText().toString(), this);
-                }catch (Exception ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -122,11 +133,22 @@ public class SigninActivity extends AppCompatActivity {
                 mPrefsEditor.putString("authenticatedUserJson", authenticatedUserJson);
                 mPrefsEditor.apply();
 
-                Intent homeActivityIntent = new Intent(context, HomeActivity.class);
-                homeActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(homeActivityIntent);
+                Gson gson = new Gson();
+                UserModel authenticatedUser = gson.fromJson(authenticatedUserJson, UserModel.class);
+
+                if (authenticatedUser.getIsPasswordExpired()) {
+
+                    Intent passwordChangeIntent = new Intent(context, PasswordChangeActivity.class);
+                    passwordChangeIntent.putExtra("tempPassword", editTextPassword.getText().toString());
+                    startActivity(passwordChangeIntent);
+                } else {
+
+                    Intent homeIntent = new Intent(context, HomeActivity.class);
+                    homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(homeIntent);
+                }
             } else {
-                Toast.makeText(context, R.string.error_login_failed, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.error_signin_failed, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -139,7 +161,7 @@ public class SigninActivity extends AppCompatActivity {
             ex.printStackTrace();
 
             // display error message
-            Toast.makeText(context, R.string.error_login_failed, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.error_signin_failed, Toast.LENGTH_SHORT).show();
         }
     }
 }
