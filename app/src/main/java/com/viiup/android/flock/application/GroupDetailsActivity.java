@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
@@ -54,6 +52,13 @@ public class GroupDetailsActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         Gson gson = new Gson();
         String userGroupJson = getIntent().getStringExtra("userGroupJson");
         userGroup = gson.fromJson(userGroupJson, UserGroupModel.class);
@@ -85,35 +90,16 @@ public class GroupDetailsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.empty_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (id) {
-            // up button
-            case android.R.id.home:
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("membershipStatus", membershipStatus);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-                overridePendingTransition(R.anim.left_in, R.anim.left_out);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onBackPressed() {
 
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("membershipStatus", membershipStatus);
+        setResult(Activity.RESULT_OK, returnIntent);
+
         super.onBackPressed();
+
+        finish();
+
         overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
@@ -161,7 +147,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
 
-            progressDialog = ProgressDialog.show(context, "MEMBERSHIP", getString(R.string.msg_processing_request));
+            progressDialog = ProgressDialog.show(context, getString(R.string.title_membership), getString(R.string.msg_processing_request));
 
             this.isMember = isOn;
             UserService userService = new UserService();

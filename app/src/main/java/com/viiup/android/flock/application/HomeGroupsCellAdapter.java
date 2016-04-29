@@ -56,6 +56,16 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
     }
 
     @Override
+    public int getViewTypeCount() {
+        return getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public Object getItem(int position) {
         return userGroups.get(position);
     }
@@ -95,14 +105,18 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
             cellItemsViewHolder.textViewGroupName.setText(userGroup.group.getGroupName());
             cellItemsViewHolder.textViewGroupMembersCount.setText(Integer.toString(userGroup.group.getActiveMemberCount()) + " joined");
             cellItemsViewHolder.textViewGroupDescription.setText(userGroup.group.getGroupDescription());
-            cellItemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getString(R.string.icon_fa_leave)));
-            cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.icon_fa_pending)));
-            cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.icon_fa_pending)));
-            cellItemsViewHolder.switchMembership.setEnabled(true);
-            if (userGroup.getGroupMembershipStatus().equals("P")) {
+            if (userGroup.getGroupMembershipStatus().equals("I")) {
+                cellItemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getString(R.string.icon_fa_leave)));
+                cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.icon_fa_pending)));
+                cellItemsViewHolder.switchMembership.setEnabled(true);
+            } else if (userGroup.getGroupMembershipStatus().equals("P")) {
+                cellItemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getString(R.string.icon_fa_leave)));
+                cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.icon_fa_pending)));
                 cellItemsViewHolder.switchMembership.setEnabled(false);
             } else if (userGroup.getGroupMembershipStatus().equals("A")) {
+                cellItemsViewHolder.switchMembership.setTextOff(Iconify.compute(context, context.getString(R.string.icon_fa_leave)));
                 cellItemsViewHolder.switchMembership.setTextOn(Iconify.compute(context, context.getString(R.string.icon_fa_join)));
+                cellItemsViewHolder.switchMembership.setEnabled(true);
             }
             cellItemsViewHolder.switchMembership.setOnCheckedChangeListener(null);
             cellItemsViewHolder.switchMembership.setChecked(!userGroup.getGroupMembershipStatus().equals("I"));
@@ -116,6 +130,19 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
 
         private boolean isMember;
         private int position;
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
+
+            this.isMember = isOn;
+            this.position = listView.getPositionForView(buttonView);
+
+            // Display progress bar
+            progressDialog = ProgressDialog.show(context, buttonView.getResources().getString(R.string.title_membership), buttonView.getResources().getString(R.string.msg_processing_request));
+
+            UserService userService = new UserService();
+            userService.setUserGroupMembership(userGroups.get(position).getUserId(), userGroups.get(position).group.getGroupId(), isOn, this);
+        }
 
         @Override
         public void responseHandler(String response) {
@@ -132,8 +159,8 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
 
                     changedUserGroup.setGroupMembershipStatus("P");
                     changedUserGroup.group.setPendingMemberCount(pendingMemberCount + 1);
-                    for (UserGroupModel userGroupFromFull: userGroupsFull){
-                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()){
+                    for (UserGroupModel userGroupFromFull : userGroupsFull) {
+                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()) {
                             userGroupFromFull.setGroupMembershipStatus(changedUserGroup.getGroupMembershipStatus());
                             userGroupFromFull.group.setPendingMemberCount(changedUserGroup.group.getPendingMemberCount());
                             break;
@@ -145,8 +172,8 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
 
                     changedUserGroup.setGroupMembershipStatus("I");
                     changedUserGroup.group.setActiveMemberCount(activeMemberCount - 1);
-                    for (UserGroupModel userGroupFromFull: userGroupsFull){
-                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()){
+                    for (UserGroupModel userGroupFromFull : userGroupsFull) {
+                        if (userGroupFromFull.group.getGroupId() == changedUserGroup.group.getGroupId()) {
                             userGroupFromFull.setGroupMembershipStatus(changedUserGroup.getGroupMembershipStatus());
                             userGroupFromFull.group.setActiveMemberCount(changedUserGroup.group.getActiveMemberCount());
                             break;
@@ -170,19 +197,6 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
 
             // display error message
             Toast.makeText(context, R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
-
-            this.isMember = isOn;
-            this.position = listView.getPositionForView(buttonView);
-
-            // Display progress bar
-            progressDialog = ProgressDialog.show(context, "MEMBERSHIP", buttonView.getResources().getString(R.string.msg_processing_request));
-
-            UserService userService = new UserService();
-            userService.setUserGroupMembership(userGroups.get(position).getUserId(), userGroups.get(position).group.getGroupId(), isOn, this);
         }
     }
 }

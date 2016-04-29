@@ -187,7 +187,8 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
                         break;
                     }
                 }
-                this.getListView().setAdapter(this.getListView().getAdapter());
+                adapter = new HomeEventsCellAdapter(getActivity(), getListView(), userEvents, userEventsFull);
+                setListAdapter(adapter);
             }
         }
     }

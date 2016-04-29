@@ -204,7 +204,8 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
                     }
                 }
 
-                this.getListView().setAdapter(this.getListView().getAdapter());
+                adapter = new HomeGroupsCellAdapter(getActivity(), getListView(), userGroups, userGroupsFull);
+                setListAdapter(adapter);
             }
         }
     }

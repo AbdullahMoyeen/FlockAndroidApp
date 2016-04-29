@@ -58,6 +58,8 @@
     <string name="title_my_events">MY EVENTS</string>
     <string name="title_my_groups">MY GROUPS</string>
     <string name="title_nearby_events">NEARBY EVENTS</string>
+    <string name="title_rsvp">RSVP</string>
+    <string name="title_membership">MEMBERSHIP</string>
     <string name="title_back">Back</string>
     <string name="value_o">o</string>
 </resources>

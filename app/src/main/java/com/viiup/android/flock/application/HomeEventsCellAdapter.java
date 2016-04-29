@@ -58,6 +58,16 @@ public class HomeEventsCellAdapter extends BaseAdapter {
     }
 
     @Override
+    public int getViewTypeCount() {
+        return getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public Object getItem(int position) {
         return userEvents.get(position);
     }
@@ -109,13 +119,23 @@ public class HomeEventsCellAdapter extends BaseAdapter {
         return convertView;
     }
 
-    /*
-        Helper class acting as OnCheckedChangeListener
-     */
     private class SwitchRsvpOnCheckedChangeListener implements IAsyncRequestResponse, CompoundButton.OnCheckedChangeListener {
 
         private boolean isAttending;
         private int position;
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
+
+            this.isAttending = isOn;
+            this.position = listView.getPositionForView(buttonView);
+
+            // Show the progress bar
+            progressDialog = ProgressDialog.show(context, buttonView.getResources().getString(R.string.title_rsvp), buttonView.getResources().getString(R.string.msg_processing_request));
+
+            UserService userService = new UserService();
+            userService.setUserEventRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn, this);
+        }
 
         @Override
         public void responseHandler(String response) {
@@ -129,8 +149,8 @@ public class HomeEventsCellAdapter extends BaseAdapter {
                 int attendeeCount = changedUserEvent.event.getAttendeeCount();
                 changedUserEvent.setIsAttending(this.isAttending);
                 changedUserEvent.event.setAttendeeCount(this.isAttending ? attendeeCount + 1 : attendeeCount - 1);
-                for (UserEventModel userEventFromFull: userEventsFull){
-                    if (userEventFromFull.event.getEventId() == changedUserEvent.event.getEventId()){
+                for (UserEventModel userEventFromFull : userEventsFull) {
+                    if (userEventFromFull.event.getEventId() == changedUserEvent.event.getEventId()) {
                         userEventFromFull.setIsAttending(changedUserEvent.getIsAttending());
                         userEventFromFull.event.setAttendeeCount(changedUserEvent.event.getAttendeeCount());
                         break;
@@ -152,19 +172,6 @@ public class HomeEventsCellAdapter extends BaseAdapter {
 
             // display error message
             Toast.makeText(context, R.string.error_something_wrong, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isOn) {
-
-            this.isAttending = isOn;
-            this.position = listView.getPositionForView(buttonView);
-
-            // Show the progress bar
-            progressDialog = ProgressDialog.show(context, "RSVP", buttonView.getResources().getString(R.string.msg_processing_request));
-
-            UserService userService = new UserService();
-            userService.setUserEventRsvp(userEvents.get(position).getUserId(), userEvents.get(position).event.getEventId(), isOn, this);
         }
     }
 }
