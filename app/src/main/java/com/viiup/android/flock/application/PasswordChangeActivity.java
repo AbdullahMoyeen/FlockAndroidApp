@@ -67,6 +67,12 @@ public class PasswordChangeActivity extends AppCompatActivity {
         buttonSubmit.setOnClickListener(new OnSubmitButtonClicked());
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+    }
+
     private class OnSubmitButtonClicked implements Button.OnClickListener, IAsyncRequestResponse {
 
         @Override

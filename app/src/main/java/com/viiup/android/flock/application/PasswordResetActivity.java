@@ -52,6 +52,12 @@ public class PasswordResetActivity extends AppCompatActivity {
         buttonReset.setOnClickListener(new ResetButtonClickHandler());
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+    }
+
     /*
         On click handler for the button click event for Reset In button.
      */
