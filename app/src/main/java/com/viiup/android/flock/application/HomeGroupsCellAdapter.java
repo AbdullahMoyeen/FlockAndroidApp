@@ -57,7 +57,8 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
 
     @Override
     public int getViewTypeCount() {
-        return getCount();
+        int count = getCount();
+        return count == 0 ? 1 : count;
     }
 
     @Override
@@ -149,7 +150,7 @@ public class HomeGroupsCellAdapter extends BaseAdapter {
 
             if (progressDialog != null) progressDialog.dismiss();
 
-            if (response.equalsIgnoreCase("OK")) {
+            if (response.equalsIgnoreCase("200")) {
 
                 UserGroupModel changedUserGroup = userGroups.get(position);
                 int pendingMemberCount = changedUserGroup.group.getPendingMemberCount();

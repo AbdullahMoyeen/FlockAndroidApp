@@ -144,7 +144,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             // Dismiss progress dialogue
             if (progressDialog != null) progressDialog.dismiss();
 
-            if (response.equalsIgnoreCase("OK")) {
+            if (response.equalsIgnoreCase("200")) {
 
                 userEvent.setIsAttending(this.isAttending);
                 int attendeeCount = userEvent.event.getAttendeeCount();

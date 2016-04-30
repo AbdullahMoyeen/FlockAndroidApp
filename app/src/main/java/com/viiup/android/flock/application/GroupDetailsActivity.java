@@ -112,7 +112,7 @@ public class GroupDetailsActivity extends AppCompatActivity {
 
             if (progressDialog != null) progressDialog.dismiss();
 
-            if (response.equalsIgnoreCase("OK")) {
+            if (response.equalsIgnoreCase("200")) {
                 if (isMember) {
                     Toast.makeText(context, R.string.msg_join_request_sent, Toast.LENGTH_SHORT).show();
                     int pendingMemberCount = userGroup.group.getPendingMemberCount();

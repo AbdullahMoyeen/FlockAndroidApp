@@ -119,7 +119,10 @@ public class HomeEventsFragment extends ListFragment implements IAsyncEventRespo
             userEvents.clear();
 
             for (UserEventModel userEvent : userEventsFull) {
-                if (userEvent.event.getEventName().toLowerCase().contains(newText.toLowerCase()) || userEvent.event.getEventDescription().toLowerCase().contains(newText.toLowerCase()) || userEvent.event.getEventKeywords().toLowerCase().contains(newText.toLowerCase())) {
+                if (userEvent.event.getEventName().toLowerCase().contains(newText.toLowerCase())
+                        || userEvent.event.getEventDescription().toLowerCase().contains(newText.toLowerCase())
+                        || userEvent.event.getEventKeywords().toLowerCase().contains(newText.toLowerCase())
+                        || userEvent.event.getGroupName().toLowerCase().contains(newText.toLowerCase())) {
                     userEvents.add(userEvent);
                 }
             }

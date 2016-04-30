@@ -83,6 +83,13 @@ public class PasswordResetActivity extends AppCompatActivity {
 
             if (progressDialog != null) progressDialog.dismiss();
 
+            if (responseJson.equals("400")) {
+                Toast.makeText(getApplicationContext(), R.string.error_password_reset_no_account, Toast.LENGTH_SHORT).show();
+                return;
+            } else if (responseJson.equals("500")) {
+                Toast.makeText(getApplicationContext(), R.string.error_password_reset_failed, Toast.LENGTH_SHORT).show();
+                return;
+            }
             Toast.makeText(getApplicationContext(), R.string.msg_password_sent, Toast.LENGTH_LONG).show();
 
             Intent signinIntent = new Intent(getApplicationContext(), SigninActivity.class);

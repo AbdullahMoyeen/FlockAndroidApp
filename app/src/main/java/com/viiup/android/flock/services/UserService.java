@@ -224,7 +224,7 @@ public class UserService {
             String respMsg = putRequestConnection.getResponseMessage();
 
             // Return response
-            return respMsg;
+            return Integer.toString(respCode);
 
         } catch (Exception e) {
             System.out.println(e.getMessage());

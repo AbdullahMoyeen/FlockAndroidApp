@@ -119,7 +119,9 @@ public class HomeGroupsFragment extends ListFragment implements IAsyncGroupRespo
             userGroups.clear();
 
             for (UserGroupModel userGroup : userGroupsFull) {
-                if (userGroup.group.getGroupName().toLowerCase().contains(newText.toLowerCase()) || userGroup.group.getGroupDescription().toLowerCase().contains(newText.toLowerCase())) {
+                if (userGroup.group.getGroupName().toLowerCase().contains(newText.toLowerCase())
+                        || userGroup.group.getGroupDescription().toLowerCase().contains(newText.toLowerCase())
+                        || userGroup.group.getGroupCategory().toLowerCase().contains(newText.toLowerCase())) {
                     userGroups.add(userGroup);
                 }
             }
